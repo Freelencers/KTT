@@ -34,13 +34,56 @@
             $this->load->model("System/M_Account");
             $queryData = $this->M_Account->getAccountById($accId);
             $queryData = $queryData->result();
-            // $dataRow = json_decode(json_encode((object) $queryData[0]), FALSE);
-            $dataRow = (object) $queryData[0];
+            $dataRow = json_decode(json_encode((object) $queryData[0]), FALSE);
+            // $dataRow = (object) $queryData[0];
 
             $json['status'] = 200;
             $json['msg'] = "hello";
             $json['response']['dataRow'] = $dataRow;
 
+            echo json_encode($json);
+        }
+
+        public function getAllAccount() {
+            $currentPage = $this->input->post("currentPage");
+            $limitPage = $this->input->post("limitPage");
+            $this->load->model("System/M_Account");
+            $queryPages = $this->M_Account->countRowAccount($limitPage);
+            
+            $pages = $queryPages;
+            $startPage = $currentPage-3;
+            $endPage = $currentPage+3;
+
+            if($startPage <= 0) {
+                $startPage = 1;
+            } 
+            if($endPage > $pages) {
+                $endPage = $pages;
+            }
+            $pagination = array();
+
+            for($i = $startPage; $i <= $endPage; $i++){
+                if($i == $currentPage){
+                    $perPages = array (
+                        "page" => $i,
+                        "status" => "active"
+                    );
+                   
+                } else {
+                    $perPages = array (
+                        "page" => $i,
+                        "status" => ""
+                    );
+                }
+                array_push($pagination, $perPages);
+            }
+
+            $queryData = $this->M_Account->getAllAccount($currentPage, $limitPage);
+            $dataList = $queryData->result();
+            
+            // print_r($dataList);
+            $json['response']['pagination'] = $pagination;
+            $json['response']['dataList'] = $dataList;
             echo json_encode($json);
         }
     }

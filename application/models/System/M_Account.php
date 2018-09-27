@@ -49,6 +49,25 @@ class M_Account extends CI_Model {
 
         return $query;
     }
+
+    public function countRowAccount($limitPage) {
+        $rows = $this->db->query('SELECT * FROM account');
+        $rowcount = $rows->num_rows();
+        $pages = round(($rowcount / $limitPage));
+    
+        return $pages;
+    }
+
+    public function getAllAccount($perPages = 1, $limitPage = 1) {
+        $offset = ($perPages-1)*$limitPage;
+
+        $this->db->select('accId, accFirstname, accLastname, accUsername, DATE_FORMAT(accCreatedate, "%d/%m/%y") as accCreatedate');
+        $this->db->limit($limitPage, $offset);
+        $query = $this->db->get('account');
+
+        return $query;
+    }
+    
     
 }
 ?>
