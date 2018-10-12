@@ -18,6 +18,24 @@ class Account extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function __construct(){
+
+		parent::__construct();
+
+		// Check Authentication
+		if(!$this->session->userdata("accUsername")){
+
+			redirect("/Font-end/Auth/signIn/0");
+		}
+
+		//lang load
+		$languaue = $this->session->userdata("languaue");
+		$this->lang->load('ktt', $languaue);
+
+		//echo $this->lang->line("signInFail");
+	}
+
 	public function index()
 	{
 		$session = $this->session->userdata();
@@ -28,7 +46,23 @@ class Account extends CI_Controller {
 		$dataList["menuList"] = $this->M_menu->getAccessModule();
 		$this->load->view("sideBar", $dataList);
 
-		$this->load->view("body");
-		$this->load->view("footer");
+		// Languae Setting
+		$word["pageTitle"] 			= $this->lang->line("moduleSystemAccount");
+		$word["firstname"] 			= $this->lang->line("systemAccountFirstname");
+		$word["lastname"] 			= $this->lang->line("systemAccountLastname");
+		$word["username"] 			= $this->lang->line("systemAccountUsername");
+		$word["password"] 			= $this->lang->line("systemAccountPassword");
+		$word["registerDate"] 		= $this->lang->line("systemAccountCreatedate");
+		$word["modalTitle"] 		= $this->lang->line("systemAccountModal");
+		$word["save"] 				= $this->lang->line("generalSave");
+		$word["close"] 				= $this->lang->line("generalClose");
+		$word["action"] 			= $this->lang->line("generalAction");
+		$word["no"] 				= $this->lang->line("generalNo");
+		$word["createNewAccount"] 	= $this->lang->line("systemAccountNewAccount");
+
+		// JS file
+		$file["js"] = ["assets/application/system/account.js"];
+		$this->load->view("System/Account", $word);
+		$this->load->view("footer", $file);
 	}
 }

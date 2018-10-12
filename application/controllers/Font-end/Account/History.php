@@ -18,6 +18,24 @@ class History extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function __construct(){
+
+		parent::__construct();
+
+		// Check Authentication
+		if(!$this->session->userdata("accUsername")){
+
+			redirect("/Font-end/Auth/signIn/0");
+		}
+
+		//lang load
+		$languaue = $this->session->userdata("languaue");
+		$this->lang->load('ktt', $languaue);
+
+		//echo $this->lang->line("signInFail");
+	}
+
 	public function index()
 	{
 		$session = $this->session->userdata();
@@ -28,7 +46,21 @@ class History extends CI_Controller {
 		$dataList["menuList"] = $this->M_menu->getAccessModule();
 		$this->load->view("sideBar", $dataList);
 
-		$this->load->view("body");
+		// Languae Setting
+		$word["pageTitle"] 			= $this->lang->line("moduleAccountOrder");
+		$word["date"] 				= $this->lang->line("accountOrderDate");
+		$word["code"] 				= $this->lang->line("accountOrderCode");
+		$word["fanshineName"] 		= $this->lang->line("accountOrderFanshineName");
+		$word["amount"] 			= $this->lang->line("accountOrderAmount");
+		$word["status"] 			= $this->lang->line("accountOrderStatus");
+		$word["createNewOrder"] 	= $this->lang->line("accountOrderCreateNewOrder");
+
+		$word["save"] 				= $this->lang->line("generalSave");
+		$word["close"] 				= $this->lang->line("generalClose");
+		$word["action"] 			= $this->lang->line("generalAction");
+		$word["no"] 				= $this->lang->line("generalNo");
+
+		$this->load->view("Account/History", $word);
 		$this->load->view("footer");
 	}
 }

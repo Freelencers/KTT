@@ -23,7 +23,7 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
 
 		// Check Authentication
-		if(!$this->session->userdata()){
+		if(!$this->session->userdata("accUsername")){
 
 			redirect("/Font-end/Auth/signIn/0");
 		}
@@ -44,7 +44,19 @@ class Dashboard extends CI_Controller {
 		$dataList["menuList"] = $this->M_menu->getAccessModule();
 		$this->load->view("sideBar", $dataList);
 
-		$this->load->view("Dashboard/Dashboard");
-		$this->load->view("footer");
+		// Languae Setting
+		$word["pageTitle"] 			= $this->lang->line("moduleDashboardDashboard");
+		$word["shippingCount"] 		= $this->lang->line("shippingCount");
+		$word["payCount"] 			= $this->lang->line("payCount");
+		$word["newFanshineCount"] 	= $this->lang->line("newFanshineCount");
+		$word["stockRefilsCount"] 	= $this->lang->line("stockRefilsCount");
+		$word["fanshineTree"] 		= $this->lang->line("fanshineTree");
+		$word["orderToday"] 		= $this->lang->line("orderToday");
+		$word["orderAmount"]		= $this->lang->line("orderAmount");
+		$word["orderCount"]			= $this->lang->line("orderCount");
+
+		$this->load->view("Dashboard/Dashboard", $word);
+		$file["js"] = ["assets/application/dashboard/dashboard.js"];
+		$this->load->view("footer", $file);
 	}
 }

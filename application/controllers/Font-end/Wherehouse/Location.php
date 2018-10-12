@@ -18,6 +18,24 @@ class Location extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function __construct(){
+
+		parent::__construct();
+
+		// Check Authentication
+		if(!$this->session->userdata("accUsername")){
+
+			redirect("/Font-end/Auth/signIn/0");
+		}
+
+		//lang load
+		$languaue = $this->session->userdata("languaue");
+		$this->lang->load('ktt', $languaue);
+
+		//echo $this->lang->line("signInFail");
+	}
+
 	public function index()
 	{
 		$session = $this->session->userdata();
@@ -27,6 +45,21 @@ class Location extends CI_Controller {
 
 		$dataList["menuList"] = $this->M_menu->getAccessModule();
 		$this->load->view("sideBar", $dataList);
+
+		// Languae Setting
+		$word["pageTitle"] 			= $this->lang->line("moduleWherehouseLocation");
+		$word["no"] 				= $this->lang->line("wherehouseLocationNo");
+		$word["name"] 				= $this->lang->line("wherehouseLocationName");
+		$word["description"] 		= $this->lang->line("wherehouseLocationDescription");
+		$word["createNewLocation"] 	= $this->lang->line("wherehouseLocationCreateNewLocation");
+		$word["modalTitle"] 		= $this->lang->line("wherehouseLocationModalTitle");
+
+		$word["save"] 				= $this->lang->line("generalSave");
+		$word["close"] 				= $this->lang->line("generalClose");
+		$word["action"] 			= $this->lang->line("generalAction");
+		$word["no"] 				= $this->lang->line("generalNo");
+
+		$this->load->view("Wherehouse/Location", $word);
 
 		$this->load->view("body");
 		$this->load->view("footer");

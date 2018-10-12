@@ -15,6 +15,8 @@
 <script src="<?= base_url('assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js');?>"></script>
 <!-- FastClick -->
 <script src="<?= base_url('assets/bower_components/fastclick/lib/fastclick.js');?>"></script>
+<!-- General Function -->
+<script src="<?= base_url('assets/application/general.js');?>"></script>
 <!-- AdminLTE App -->
 <script src="<?= base_url('assets/dist/js/adminlte.min.js');?>"></script>
 <!-- AdminLTE for demo purposes -->
@@ -26,3 +28,34 @@
 </script>
 </body>
 </html>
+
+<!-- General Modal -->
+<div class="modal fade modal-danger" id="modal-deleteConfirm" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title"><?=$this->lang->line("generalMessage")?></h4>
+            </div>
+            <div class="modal-body">
+              <p><?=$this->lang->line("generalDeleteConfirm")?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><?=$this->lang->line("generalClose")?></button>
+                <button type="button" class="btn btn-outline" id="deleteButtonConfirm" data-id=""><?=$this->lang->line("generalDelete")?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<?php
+    if(isset($js)){
+        
+        foreach($js as $file){
+            echo "<script src='".base_url($file)."?refres=".date("s")."'></script>";
+        }
+    }
+?>

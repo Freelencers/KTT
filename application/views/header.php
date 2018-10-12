@@ -24,9 +24,13 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <style>
+    .template{
+      display: none;
+    }
+  </style>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -83,3 +87,14 @@
         </div>
       </nav>
     </header>
+
+<!-- Template -->
+<div class="template" id="noDataRow">
+  <tr>
+    <td colspan="{colspan}"><?=$this->lang->line("generalNoData")?></td>
+  </tr>
+</div>
+<!-- Global variable -->
+<script>
+  var base_url = "<?=base_url()?>" + "index.php";
+</script>
