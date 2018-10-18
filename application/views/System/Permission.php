@@ -24,15 +24,15 @@
                                 <th><?=$registerDate?></th>
                                 <th><?=$action?></th>
                             </thead>
-                            <tbody>
-                                <tr id="accountColumnTemplate">
+                            <tbody id="tbodyAccountList">
+                                <tr class="template">
                                     <td>{no}</td>
                                     <td>{accFirstname}</td>
                                     <td>{accLastname}</td>
                                     <td>{accUsername}</td>
                                     <td>{accCreatedate}</td>
                                     <td>
-                                        <i class="fa fa-fw fa-lock" data-accId="{accId}" id="permissionModal"></i>
+                                        <i class="fa fa-fw fa-lock permissionModal" data-accId="{accId}"></i>
                                     </td>
                                 </tr>
                             </tbody>

@@ -59,7 +59,9 @@ class Permission extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/system/permission.js"];
 		$this->load->view("System/Permission", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

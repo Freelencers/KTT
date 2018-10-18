@@ -1,36 +1,10 @@
 // On load
 loadTable(1, 10, "");
-
 // on action
 
-$("#modalSaveButton").click(function(){
+$(document).on("click", ".permissionModal", function(){
 
-    createNewAccount();
-});
-
-$("#deleteButtonConfirm").click(function(){
-
-    var accId = $(this).data("id");
-    $.post(base_url + "/System/Account/deleteAccount", {"accId" : accId}, function(resp){
-
-        $("#modal-deleteConfirm").modal("hide");
-        loadTable();
-    });
-});
-
-$(document).on("click", ".updateAccount", function(){
-
-    var accId = $(this).attr("accId");
-
-    // assign to local storage
-    localStorage.setItem("accId", accId);
-    localStorage.setItem("createStatus", "update");
-
-    $.post(base_url + "/System/Account/getAccountById", {"accId": accId}, function(resp){
-
-        pushDataForm("#createNewAccountForm", resp.response.dataRow);
-        $("#modal-createNewAccount").modal("show");
-    },"json");
+    $("#modal-permissionSetting").modal();
 });
 
 // Definition
