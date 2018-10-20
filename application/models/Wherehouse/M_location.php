@@ -103,14 +103,21 @@
     
             return $pages;
        }
-       public function getLocationList($currentPage, $limitPage) {
+       public function getLocationList($currentPage, $limitPage, $search) {
             
             $offset = ($currentPage-1)*$limitPage;
-            $this->db->select('locId, locName, locDetail');
+            $this->db->select('locId, locName, locDetail')
+            ->from("location");
+
+            if($search){ 
+                $this->db->group_start();
+                $this->db->like('%locName%', $search);
+                $this->db->or_like('%locDetail%', $search);
+                $this->db->group_end();
+            }
+
             $this->db->limit($limitPage, $offset);
-            $query = $this->db->get('location');
-    
-            return $query;
+            return $this->db->get();
        }
     }
 ?>

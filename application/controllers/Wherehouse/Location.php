@@ -62,10 +62,12 @@
         public function getLocationList(){
             $currentPage = $this->input->post("currentPage");
             $limitPage = $this->input->post("limitPage");
+            $search = $this->input->post("search");
+
             $this->load->model("Wherehouse/M_location");
             $allPageNumber = $this->M_location->countRowLocation($limitPage);
 
-            $queryData = $this->M_location->getLocationList($currentPage, $limitPage);
+            $queryData = $this->M_location->getLocationList($currentPage, $limitPage, $search);
             $dataList = $queryData->result();
 
             $json['response']['pagination'] = genPagination($currentPage, $allPageNumber);
