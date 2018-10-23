@@ -11,10 +11,9 @@ class M_Setting extends CI_Model {
 
    public function getSettingHistory($currentPage, $limitPage, $search){
 
-        $currentPage    = $currentPage * 10;
-        $limitPage      = $currentPage * 10;
+        $limitPage      = $limitPage * 10;
 
-        $this->db->select("sscId, ssgCreatedate, sscValue, sscName, ssgId, ssgDateStart, ssgDateEnd")
+        $this->db->select("sscId, ssgCreatedate, sscValue, sscName, ssgId, DATE(ssgDateStart) as ssgDateStart, DATE(ssgDateEnd) as ssgDateEnd")
         ->from("settingScheduleGroup")
         ->join("settingSchedule", "sscSsgId = ssgId");
 
@@ -38,7 +37,7 @@ class M_Setting extends CI_Model {
             $start = 1;
         }
 
-        $this->db->order_by("ssgCreatedate", "DESC")
+        $this->db->order_by("ssgId", "DESC")
         ->limit($limitPage, $start);
 
         return $this->db->get();
@@ -53,12 +52,12 @@ class M_Setting extends CI_Model {
    }
 
    public function getSettingScheduleList($currentPage, $limitPage, $search){
-        $currentPage    = $currentPage * 10;
-        $limitPage      = $currentPage * 10;
 
-        $this->db->select("sscId, ssgCreatedate, sscValue, sscName, ssgId, ssgDateStart, ssgDateEnd")
+        $limitPage = 10 * $limitPage;
+
+        $this->db->select("sscId, ssgCreatedate, sscValue, sscName, ssgId, DATE(ssgDateStart) as ssgDateStart, DATE(ssgDateEnd) as ssgDateEnd")
         ->from("settingScheduleGroup")
-        ->join("settingSchedule", "sscSsgId = ssgId");
+        ->join("settingSchedule", "sscSsgId = ssgId", "inner");
 
         // search 
         if($search){ 
@@ -81,19 +80,46 @@ class M_Setting extends CI_Model {
         }
 
         $this->db->where('ssgDateEnd IS NOT NULL', null, false)
-        ->order_by("ssgCreatedate", "DESC")
+        ->order_by("ssgId", "DESC")
         ->limit($limitPage, $start);
 
         return $this->db->get();
    }
 
-   public function convertScheduleDataFormat(){
+   public function getSettingScheduleById($ssgId){
 
-    // get Group id
-    $this->db->select("ssgId")
-    ->from("settingScheduleGroup");
+        $this->db->select("ssgId, ssgDateStart, ssgDateEnd, sscId, sscName, sscValue")
+        ->from("settingScheduleGroup")
+        ->join("settingSchedule", "ssgId = sscSsgId", "inner")
+        ->where("ssgId", $ssgId);
 
-    // push field to group
+        return $this->db->get();
+   }
+
+   public function updateSettingSchedule($ssgId, $ssgDateStart, $ssgDateEnd, $shceduleList){
+
+        // Update at settingShceduleGroup
+        $settingScheduleGroupData["ssgDateStart"]   = $ssgDateStart;
+        $settingScheduleGroupData["ssgDateEnd"]     = $ssgDateEnd;
+
+        $this->db->where("ssgId", $ssgId)
+        ->update("settingScheduleGroup", $settingScheduleGroupData);
+
+        // Update settingSchedule
+        $settingScheduleList = json_decode($shceduleList, true);
+        $this->db->update_batch('settingSchedule',$settingScheduleList, 'sscId');
+
+        return true;
+   }
+
+   public function deleteSettingSchedule($ssgId){
+
+        $updateList["ssgDeletedate"] = date("Y-m-d");
+        $updateList["ssgDeleteBy"]   = $this->session->userdata("accId");
+        $result = $this->db->where("ssgId", $ssgId)
+        ->update("settingScheduleGroup", $updateList);
+
+        return $result;
    }
 }
 ?>
