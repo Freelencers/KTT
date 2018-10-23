@@ -121,5 +121,58 @@ class M_Setting extends CI_Model {
 
         return $result;
    }
+
+   public function createSettingSchedule($ssgDateStart, $ssgDateEnd, $sscList){
+
+        $this->db->trans_start();
+
+        // create group of schedule
+        $ssgData["ssgDateStart"] = $ssgDateStart;
+        $ssgData["ssgDateEnd"]   = $ssgDateEnd;
+        $ssgData["ssgCreatedate"]= date("Y-m-d H:i:s");
+        $ssgData["ssgCreateBy"]  = $this->session->userdata("accId");
+        $this->db->insert("settingScheduleGroup", $ssgData);
+
+        // create setting shcedule list
+        $ssgId   = $this->db->insert_id();
+        $sscList = json_decode($sscList, true);
+
+        // add ssgId
+        for($i=0;$i<count($sscList);$i++){
+
+            $sscList[$i]["sscSsgId"] = $ssgId;
+        }
+
+        $this->db->insert_batch("settingSchedule", $sscList);
+
+        $this->db->trans_complete();
+
+        return $this->db->trans_status();
+   }
+
+   public function updateSettingDefault($ssgDateStart, $ssgDateEnd, $sedList){
+
+        // Update default
+        $sedListJson = json_decode($sedList, true);
+        $this->db->trans_start();
+        $this->db->update_batch("settingDefault", $sedListJson, "sedId");
+        $this->db->trans_complete();
+
+        // create group and save
+        $sscList = str_replace("sed", "ssc", $sedList);
+        $sscListJson = json_decode($sscList, true);
+
+        // Remove sscId
+        for($i=0;$i<count($sscListJson);$i++){
+
+            unset($sscListJson[$i]["sscId"]);
+        }
+
+        // Convert json to string
+        $sscListString = json_encode($sscListJson);
+        $result = $this->createSettingSchedule($ssgDateStart, $ssgDateEnd, $sscListString);
+
+        return $this->db->trans_status() && $result;
+   }
 }
 ?>

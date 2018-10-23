@@ -179,5 +179,51 @@
 
             echo json_encode($json);
         }
+
+        public function createSettingSchedule(){
+
+            $ssgDateStart   = $this->input->post("ssgDateStart");
+            $ssgDateEnd     = $this->input->post("ssgDateEnd");
+            $sscList        = $this->input->post("sscList");
+
+            $result = $this->M_Setting->createSettingSchedule($ssgDateStart, $ssgDateEnd, $sscList);
+
+            if($result){
+
+                $json["status"]     = 200;
+                $json["msg"]        = "sucess";
+                $json["response"]   = "";
+            }else{
+
+                $json["status"]     = 200;
+                $json["msg"]        = "Insert fails";
+                $json["response"]   = "";
+            }
+
+            echo json_encode($json);
+        }
+
+        public function updateSettingDefault(){
+
+            $ssgDateStart   = date("Y-m-d H:i:s");
+            $ssgDateEnd     = null;
+            $sedList        = $this->input->post("sedList");
+
+            $result = $this->M_Setting->updateSettingDefault($ssgDateStart, $ssgDateEnd, $sedList);
+
+            if($result){
+
+                $json["status"]     = 200;
+                $json["msg"]        = "sucess";
+                $json["response"]   = "";
+            }else{
+
+                $json["status"]     = 200;
+                $json["msg"]        = "Insert fails";
+                $json["response"]   = "";
+            }
+
+            echo json_encode($json);
+        }
     }
 ?>
