@@ -39,6 +39,11 @@ $lang["generalDeleteConfirm"]       = "Are you sure?";
 $lang["generalMessage"]             = "Message";
 $lang["generalDate"]                = "Date";
 $lang["generalNoDate"]              = "No Data";
+$lang["generalAutoSave"]            = "Auto Save";
+$lang["generalDateStart"]           = "Start Date";
+$lang["generalDateEnd"]             = "End Date";
+$lang["generalSucess"]              = "Your action is success";
+$lang["generalDone"]                = "Done";
 
 //####################
 //Dashboard
@@ -75,7 +80,8 @@ $lang["systemPermissionCreatedate"] = "Register Date";
 // Setting
 $lang["systemSettingDefaultSetting"]= "Default Setting";
 $lang["systemSettingMoneyToPoint"]  = "Money to Point";
-$lang["systemSettingPointToMoney"]  = "Point to Money";
+$lang["systemSettingPointToMoneyLevelS"]  = "Point to Money Lv. S";
+$lang["systemSettingPointToMoneyLevelL"]  = "Point to Money Lv. L";
 $lang["systemSettingTax"]           = "Tax";
 $lang["systemSettingMemberFee"]     = "Member Fee";
 $lang["systemSettingSpecialCondition"] = " Special Condition";
@@ -85,6 +91,8 @@ $lang["systemSettingRefer"]         = "Refer";
 $lang["systemSettingStandardPoint"] = "Standard Point";
 $lang["systemSettingSchedule"]      = "Schedule";
 $lang["systemSettingHistory"]       = "History";
+$lang["systemSettingCreateSchedule"]= "Create Schedule";
+$lang["systemSettingModalTitle"]    = "Setting Detail";
 
 
 //#####################

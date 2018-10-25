@@ -8,6 +8,8 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="<?= base_url('assets/bower_components/bootstrap/dist/css/bootstrap.min.css'); ?>">
+  <!-- Date Rang Picker -->
+  <link rel="stylesheet" href="<?= base_url('assets/bower_components/bootstrap-daterangepicker/daterangepicker.css'); ?>">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?= base_url('assets/bower_components/font-awesome/css/font-awesome.min.css');?>">
   <!-- Ionicons -->
@@ -29,6 +31,9 @@
   <style>
     .template{
       display: none;
+    }
+    .pointer{
+      cursor: pointer;
     }
   </style>
 </head>
@@ -97,4 +102,5 @@
 <!-- Global variable -->
 <script>
   var base_url = "<?=base_url()?>" + "index.php";
+  var sessionAccId = <?=$this->session->userdata("accId")?>
 </script>

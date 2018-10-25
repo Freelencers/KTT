@@ -11,6 +11,7 @@ class M_Permission extends CI_Model {
                             ->get();
         $havePermission = $havePermission->num_rows();
 
+        //echo $havePermission." : ".$access."<BR>";
         if($havePermission){
 
             if($access == 0){
@@ -51,6 +52,7 @@ class M_Permission extends CI_Model {
 
             array_push($modId, $permission->perModId);
         }
+        //echo json_encode($modId);
 
         // Convert to new format
         $json = array();
@@ -79,7 +81,8 @@ class M_Permission extends CI_Model {
 
             // initial module name and permission in current section
             $tempArray["modName"] = $mod->modName;
-            if(array_search( $mod->modId, $modId)){
+            $tempArray["modId"] = $mod->modId;
+            if(array_search( $mod->modId, $modId) !== FALSE){
 
                 $tempArray["modPermission"] = 1;
             }else{

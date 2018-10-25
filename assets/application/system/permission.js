@@ -1,12 +1,48 @@
 // On load
-loadTable(1, 10, "");
+var currentPage = 1;
+var limitPage = 10;
+
+loadTable(currentPage, limitPage, "");
+
 // on action
 
 $(document).on("click", ".permissionModal", function(){
 
-    $("#modal-permissionSetting").modal();
+    var accId = $(this).attr("data-accId");
+    localStorage.setItem("accId", accId);
+    getModulePermission(accId);
 });
 
+$(document).on("click", ".paginate_button", function(){
+
+    currentPage = $(this).data("page");
+    loadTable(currentPage, limitPage, "");
+});
+
+$(document).on("click", ".permissionAssign", function(){
+
+    var accId = localStorage.getItem("accId");
+
+    //access
+    if($(this).is(':checked')){
+
+        access = 1;
+    }else{
+
+        access = 0;
+    }
+    
+    // set data json
+    var json = {
+        "accId" : accId,
+        "modId" : $(this).attr("data-modId"),
+        "access" :access 
+    };
+
+    $.post(base_url + "/System/Permission/changePermission", json, function(resp){
+    
+    },"json");
+});
 // Definition
 
 function loadTable(currentPage, limitPage, search){
@@ -18,8 +54,8 @@ function loadTable(currentPage, limitPage, search){
     };
     $.post(base_url + "/System/Account/getAllAccount", json, function(resp){
 
-        var columnTemplate = $("#tbodyAccountList").html();
-        var no = 1;
+        var columnTemplate = $("#rowTemplate tbody").html();
+        var no = (currentPage - 1) * limitPage;
         var tbody = "";
         if(!resp.response.dataList.length){
 
@@ -29,7 +65,7 @@ function loadTable(currentPage, limitPage, search){
         resp.response.dataList.forEach(function(row){
 
             replace = {
-                "{no}" : no,
+                "{no}" : no + 1,
                 "{accId}" : row.accId,
                 "{accFirstname}" : row.accFirstname,
                 "{accLastname}" : row.accLastname,
@@ -40,29 +76,76 @@ function loadTable(currentPage, limitPage, search){
             tbody += replaceAll(columnTemplate, replace);
         });
         $("#tbodyAccountList").html(tbody);
+
+        // pagination
+        var pagination = genPagination(resp.response.pagination);
+        $(".paginationList").html(pagination);
     },"json");
 }
 
-function createNewAccount(){
 
-    // get value from
-    var json = getDataForm("#createNewAccountForm");
+function getModulePermission(accId){
 
-    // Check status of add
-    var status = localStorage.getItem("createStatus");
-    if(status == "update"){
+    var templateSectionLabel = $("#templateSectionLabel").html();
+    var templateCheckbox     = $("#templateCheckbox").html();
+    var rowComponent         = $("#rowComponent").html();
 
-        json["accId"] = localStorage.getItem("accId");
-        $.post(base_url + "/System/Account/updateAccount", json, function(){
+    var innerDiv             = "";
+    var modalBody            = "";
+    var replace              = "";
+    var checked              = "";
 
-            $("#modal-createNewAccount").modal("hide");
-            clearDataForm();
+    $.post(base_url + "/System/Permission/getModuleList", {"accId" : accId}, function(resp){
+
+        var disabled = "";
+        response = resp.response;
+        response.permissionList.forEach(permissionList => {
+
+            replace = {
+                "{section}" : permissionList.permissionSection
+            };
+            modalBody += replaceAll(templateSectionLabel, replace);
+
+            // Clear old value
+            innerDiv = "";
+
+            permissionList.moduleList.forEach(moduleList => {
+
+                // checked 
+                if(moduleList.modPermission){
+
+                    checked = "checked";
+                }else{
+
+                    checked = "";
+                }
+
+                // User can not set permission of own Permission Module
+                disabled = "";
+                console.log(accId + " : " + sessionAccId);
+                if(accId == sessionAccId){
+
+                    console.log(moduleList.modId);
+                    if(moduleList.modId == 3){
+                        // Permission Module
+                        disabled = "disabled";
+                    }
+                }
+                replace = {
+                    "{modId}" : moduleList.modId,
+                    "{checked}" : checked,
+                    "{modName}" : moduleList.modName,
+                    "{disabled}" : disabled
+                };
+                innerDiv += replaceAll(templateCheckbox, replace);
+                //console.log(templateCheckbox);
+            });
+            replace = {
+                "{innerDiv}" : innerDiv
+            };
+            modalBody += replaceAll(rowComponent, replace);
         });
-    }else{
-        $.post(base_url + "/System/Account/createNewAccount", json, function(resp){
-
-            $("#modal-createNewAccount").modal("hide");
-            clearDataForm();
-        },"json");
-    }
+        $("#modal-permissionSetting .modal-body #bodyModal").html(modalBody);
+        $("#modal-permissionSetting").modal();
+    },"json");
 }

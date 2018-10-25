@@ -15,7 +15,8 @@ class M_Setting extends CI_Model {
 
         $this->db->select("sscId, ssgCreatedate, sscValue, sscName, ssgId, DATE(ssgDateStart) as ssgDateStart, DATE(ssgDateEnd) as ssgDateEnd")
         ->from("settingScheduleGroup")
-        ->join("settingSchedule", "sscSsgId = ssgId");
+        ->join("settingSchedule", "sscSsgId = ssgId")
+        ->where("ssgDeleteBy IS NULL");
 
         // search 
         if($search){ 
@@ -43,10 +44,21 @@ class M_Setting extends CI_Model {
         return $this->db->get();
    }
 
-   public function getSettingHistoryPageNumber(){
+   public function getSettingRows($mode){
 
-        $this->db->select("sscId")
-        ->from("settingSchedule");
+        $this->db->select("ssgId")
+        ->from("settingScheduleGroup")
+        ->where("ssgDeleteBy IS NULL");
+
+        if($mode == "HISTORY"){
+
+            // history mode
+            $this->db->where("ssgDateEnd IS NULL");
+        }else{
+
+            // schedule mode
+            $this->db->where("ssgDateEnd IS NOT NULL");
+        }
 
         return $this->db->get()->num_rows();
    }
@@ -57,7 +69,8 @@ class M_Setting extends CI_Model {
 
         $this->db->select("sscId, ssgCreatedate, sscValue, sscName, ssgId, DATE(ssgDateStart) as ssgDateStart, DATE(ssgDateEnd) as ssgDateEnd")
         ->from("settingScheduleGroup")
-        ->join("settingSchedule", "sscSsgId = ssgId", "inner");
+        ->join("settingSchedule", "sscSsgId = ssgId", "inner")
+        ->where("ssgDeleteBy IS NULL");
 
         // search 
         if($search){ 
@@ -88,7 +101,7 @@ class M_Setting extends CI_Model {
 
    public function getSettingScheduleById($ssgId){
 
-        $this->db->select("ssgId, ssgDateStart, ssgDateEnd, sscId, sscName, sscValue")
+        $this->db->select("ssgId, DATE(ssgDateStart) AS ssgDateStart, DATE(ssgDateEnd) AS ssgDateEnd, sscId, sscName, sscValue")
         ->from("settingScheduleGroup")
         ->join("settingSchedule", "ssgId = sscSsgId", "inner")
         ->where("ssgId", $ssgId);
@@ -96,7 +109,7 @@ class M_Setting extends CI_Model {
         return $this->db->get();
    }
 
-   public function updateSettingSchedule($ssgId, $ssgDateStart, $ssgDateEnd, $shceduleList){
+   public function updateSettingSchedule($ssgId, $ssgDateStart, $ssgDateEnd, $scheduleList){
 
         // Update at settingShceduleGroup
         $settingScheduleGroupData["ssgDateStart"]   = $ssgDateStart;
@@ -106,8 +119,7 @@ class M_Setting extends CI_Model {
         ->update("settingScheduleGroup", $settingScheduleGroupData);
 
         // Update settingSchedule
-        $settingScheduleList = json_decode($shceduleList, true);
-        $this->db->update_batch('settingSchedule',$settingScheduleList, 'sscId');
+        $this->db->update_batch('settingSchedule', $scheduleList, 'sscId');
 
         return true;
    }
@@ -135,7 +147,7 @@ class M_Setting extends CI_Model {
 
         // create setting shcedule list
         $ssgId   = $this->db->insert_id();
-        $sscList = json_decode($sscList, true);
+        //$sscList = json_decode($sscList, true);
 
         // add ssgId
         for($i=0;$i<count($sscList);$i++){
@@ -153,13 +165,12 @@ class M_Setting extends CI_Model {
    public function updateSettingDefault($ssgDateStart, $ssgDateEnd, $sedList){
 
         // Update default
-        $sedListJson = json_decode($sedList, true);
         $this->db->trans_start();
-        $this->db->update_batch("settingDefault", $sedListJson, "sedId");
+        $this->db->update_batch("settingDefault", $sedList, "sedId");
         $this->db->trans_complete();
 
         // create group and save
-        $sscList = str_replace("sed", "ssc", $sedList);
+        $sscList = str_replace("sed", "ssc", json_encode($sedList));
         $sscListJson = json_decode($sscList, true);
 
         // Remove sscId
@@ -169,8 +180,8 @@ class M_Setting extends CI_Model {
         }
 
         // Convert json to string
-        $sscListString = json_encode($sscListJson);
-        $result = $this->createSettingSchedule($ssgDateStart, $ssgDateEnd, $sscListString);
+        //$sscListString = json_encode($sscListJson);
+        $result = $this->createSettingSchedule($ssgDateStart, $ssgDateEnd, $sscListJson);
 
         return $this->db->trans_status() && $result;
    }

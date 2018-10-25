@@ -1,6 +1,7 @@
 function replaceAll(str,mapObj){
     var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
 
+    // search if have template class will remove
     str = str.replace("template", "");
     return str.replace(re, function(matched){
 
@@ -43,4 +44,38 @@ function pushDataForm(elementId, value){
 
         $(this).val(value[$(this).attr("id")]);
     });
+}
+
+function genPagination(paginationList){
+
+    var paginationButton = $("#paginationTemplate");
+    paginationButton = paginationButton.removeClass("template");
+    paginationButton = paginationButton.html();
+
+    var paginationHtml = "";
+    var replace = {};
+    paginationList.forEach(element => {
+
+        replace = {
+            "{status}" : element.status,
+            "{page}" : element.page
+        };
+        paginationHtml += replaceAll(paginationButton, replace);
+    });
+
+    return paginationHtml;
+}
+
+function convertDateToHuman(date){
+
+    // From yyyy-mm-dd to dd/mm/yyyy
+    date = date.split("-");
+    return date[2] + "/" + date[1] + "/" + date[0];
+}
+
+function convertDateToDatabase(date){
+
+    // From dd/mm/yyyy to yyyy-mm-dd
+    date = date.split("/");
+    return date[2] + "-" + date[1] + "-" + date[0];
 }

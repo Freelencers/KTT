@@ -7,6 +7,7 @@
             parent::__construct();
             $this->load->model("System/M_Permission");
         }
+        
         public function changePermission() {
 
             $accId = $this->input->post("accId");
@@ -19,17 +20,23 @@
 
                 $json["status"] = 200;
                 $json["msg"] = "Success";
-                $json["response"]["error"] = "";
+            }else{
+
+                $json["status"] = 200;
+                $json["msg"] = "Action to database false";
             }
             echo json_encode($json);
         }
 
         public function getModuleList(){
 
-            $accId = $this->input->post("accId");
+            $accId = $this->input->post("accId"); 
             $moduleList = $this->M_Permission->getModuleList($accId);
 
-            echo json_encode($moduleList);
+            $json["status"] = 200;
+            $json["msg"] = "Success";
+            $json["response"] = $moduleList;
+            echo json_encode($json);
         }
     }
 ?>

@@ -31,10 +31,15 @@ class M_Account extends CI_Model {
             'accFirstname' => $accFirstname,
             'accLastname' => $accLastname,
             'accUsername' => $accUsername,
-            'accPassword' => hash("sha256", $accPassword),
             'accCreatedate' => date('Y-m-d H:i:s'),
             'accUpdateBy' => "1"
         );
+
+        // Check if have new password
+        if($accPassword != ""){
+            
+            $dataList["accPassword"] = hash("sha256", $accPassword);
+        }
 
         $this->db->set($dataList);
         $this->db->where('accId', $accId);
@@ -51,7 +56,10 @@ class M_Account extends CI_Model {
     }
 
     public function countRowAccount($limitPage) {
-        $rows = $this->db->query('SELECT * FROM account');
+        $rows = $this->db->select("accId")
+                ->from("account")
+                ->where("accDeleteBy IS NULL")
+                ->get();
         $rowcount = $rows->num_rows();
         $pages = round(($rowcount / $limitPage));
     
@@ -62,6 +70,7 @@ class M_Account extends CI_Model {
         $offset = ($perPages-1)*$limitPage;
 
         $this->db->select('accId, accFirstname, accLastname, accUsername, DATE_FORMAT(accCreatedate, "%d/%m/%y") as accCreatedate');
+        $this->db->where("accDeleteBy IS NULL");
         $this->db->limit($limitPage, $offset);
         $query = $this->db->get('account');
 

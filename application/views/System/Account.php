@@ -14,12 +14,29 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-2 pull-right">
-                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewAccount?></button>
+                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom"><?=$createNewAccount?></button>
                             </div>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+                        <!-- template -->
+                        <table class="template" id="rowTemplate">
+                            <tbody>
+                                <tr> 
+                                    <td>{no}</td>
+                                    <td>{accFirstname}</td>
+                                    <td>{accLastname}</td>
+                                    <td>{accUsername}</td>
+                                    <td>{accCreatedate}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-edit updateAccount pointer" accId="{accId}"></i>
+                                        <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({accId})"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <table class="table table-bordered table-hover dataTable">
                             <thead>
                                 <th><?=$no?></th>
@@ -30,33 +47,11 @@
                                 <th><?=$action?></th>
                             </thead>
                             <tbody id="tbodyAccountList">
-                                <tr class="template"> 
-                                    <td>{no}</td>
-                                    <td>{accFirstname}</td>
-                                    <td>{accLastname}</td>
-                                    <td>{accUsername}</td>
-                                    <td>{accCreatedate}</td>
-                                    <td>
-                                        <i class="fa fa-fw fa-edit updateAccount" accId="{accId}"></i>
-                                        <i class="fa fa-fw fa-trash" onclick="deleteConfirmBox({accId})"></i>
-                                    </td>
-                                </tr>
+                                <!-- append here -->
                             </tbody>
                         </table>
                         <div class="col-md-12">
-                            <ul class="pagination pull-right">
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button ">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
+                            <ul class="pagination paginationList pull-right">
                             </ul>
                         </div>
                     </div>

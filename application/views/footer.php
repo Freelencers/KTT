@@ -51,6 +51,41 @@
     <!-- /.modal-dialog -->
 </div>
 
+<!-- Success Modal -->
+<div class="modal modal-success fade" id="modal-success" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title"><?=$this->lang->line("generalMessage")?></h4>
+            </div>
+            <div class="modal-body">
+            <p><?=$this->lang->line("generalSucess")?></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-dismiss="modal"><?=$this->lang->line("generalDone")?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- General Pagination -->
+<div class="template" id="paginationTemplate">
+    <li class="paginate_button {status} template" data-page="{page}">
+        <a href="#">{page}</a>
+    </li>
+</div>
+
+<!-- row component -->
+<div class="tempalte" id="rowComponent">
+    <div class="template row pb-4">
+        {innerDiv}
+    </div>
+</div>
+
 <?php
     if(isset($js)){
         

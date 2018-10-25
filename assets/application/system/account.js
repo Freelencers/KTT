@@ -1,5 +1,9 @@
 // On load
-loadTable(1, 10, "");
+var currentPage = 1;
+var limitPage = 10;
+
+loadTable(currentPage, limitPage, "");
+
 
 // on action
 
@@ -14,7 +18,7 @@ $("#deleteButtonConfirm").click(function(){
     $.post(base_url + "/System/Account/deleteAccount", {"accId" : accId}, function(resp){
 
         $("#modal-deleteConfirm").modal("hide");
-        loadTable();
+        loadTable(currentPage, limitPage, "");
     });
 });
 
@@ -33,6 +37,18 @@ $(document).on("click", ".updateAccount", function(){
     },"json");
 });
 
+$("#createNewAcountButtom").click(function(){
+
+    localStorage.setItem("createStatus", "CREATE"); 
+    $("#modal-createNewAccount").modal("show");
+});
+
+$(document).on("click", ".paginate_button", function(){
+
+    currentPage = $(this).data("page");
+    loadTable(currentPage, limitPage, "");
+});
+
 // Definition
 
 function loadTable(currentPage, limitPage, search){
@@ -44,8 +60,8 @@ function loadTable(currentPage, limitPage, search){
     };
     $.post(base_url + "/System/Account/getAllAccount", json, function(resp){
 
-        var columnTemplate = $("#tbodyAccountList").html();
-        var no = 1;
+        var columnTemplate = $("#rowTemplate tbody").html();
+        var no = (currentPage - 1) * limitPage;
         var tbody = "";
         if(!resp.response.dataList.length){
 
@@ -55,7 +71,7 @@ function loadTable(currentPage, limitPage, search){
         resp.response.dataList.forEach(function(row){
 
             replace = {
-                "{no}" : no,
+                "{no}" : no + 1,
                 "{accId}" : row.accId,
                 "{accFirstname}" : row.accFirstname,
                 "{accLastname}" : row.accLastname,
@@ -66,6 +82,11 @@ function loadTable(currentPage, limitPage, search){
             tbody += replaceAll(columnTemplate, replace);
         });
         $("#tbodyAccountList").html(tbody);
+
+        // pagination
+        var pagination = genPagination(resp.response.pagination);
+        $(".paginationList").html(pagination);
+
     },"json");
 }
 
@@ -91,4 +112,6 @@ function createNewAccount(){
             clearDataForm();
         },"json");
     }
+
+    loadTable(currentPage, limitPage, "");
 }

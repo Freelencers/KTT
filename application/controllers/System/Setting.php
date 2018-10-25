@@ -30,18 +30,18 @@
             $setting = $setting->result();
 
             // get page number
-            $allPageNumber =  $this->M_Setting->getSettingHistoryPageNumber();
+            $allPageNumber =  $this->M_Setting->getSettingRows("HISTORY") / $limitPage;
 
             // Repare Response
             $json["status"] = 200;
             $json["msg"] = "Success";
-            $json["pagination"] = genPagination($currentPage, $allPageNumber);
+            $json["response"]["pagination"] = genPagination($currentPage, $allPageNumber);
             $json["response"]["dataList"] = $this->convertFormat($setting);
 
             echo json_encode($json);
         }
 
-        public function getSettingSheduleList(){
+        public function getSettingScheduleList(){
 
             // Parameter
             $currentPage    = $this->input->post("currentPage");
@@ -53,14 +53,13 @@
             $setting = $setting->result();
 
             // get page number
-            $allPageNumber =  $this->M_Setting->getSettingHistoryPageNumber();
+            $allPageNumber =  round($this->M_Setting->getSettingRows("SCHEDULE") / $limitPage);
 
             // Repare Response
             $json["status"] = 200;
             $json["msg"] = "Success";
-            $json["pagination"] = genPagination($currentPage, $allPageNumber);
+            $json["response"]["pagination"] = genPagination($currentPage, $allPageNumber);
             $json["response"]["dataList"] = $this->convertFormat($setting);
-            //$json["response"]["dataList"] = $setting;
 
             echo json_encode($json);
         }
@@ -79,43 +78,43 @@
                     $index++;
                     
                     // initial data
-                    $settingNewFormat[$index]["ssgId"]                  = $row->ssgId;
-                    $settingNewFormat[$index]["ssgDateStart"]           = $row->ssgDateStart;
-                    $settingNewFormat[$index]["ssgDateEnd"]             = $row->ssgDateEnd;
+                    $settingNewFormat[$index]["ssgId"]                 = $row->ssgId;
+                    $settingNewFormat[$index]["dateStart"]             = $row->ssgDateStart;
+                    $settingNewFormat[$index]["dateEnd"]               = $row->ssgDateEnd;
 
-                    $settingNewFormat[$index]["StandardPoint"]          = 0;
-                    $settingNewFormat[$index]["pointToMoneyLevel-S"]    = 0;
-                    $settingNewFormat[$index]["pointToMoneyLevel-L"]    = 0;
-                    $settingNewFormat[$index]["Reward"]                 = 0;
-                    $settingNewFormat[$index]["moneyToPoint"]           = 0;
-                    $settingNewFormat[$index]["Refer"]                  = 0;
-                    $settingNewFormat[$index]["PreOrder"]               = 0;
-                    $settingNewFormat[$index]["Tax"]                    = 0;
-                    $settingNewFormat[$index]["M-Fee"]                  = 0;
-                    $settingNewFormat[$index]["L-Fee"]                  = 0;
+                    $settingNewFormat[$index]["standardPoint"]         = 0;
+                    $settingNewFormat[$index]["pointToMoneyLevelS"]    = 0;
+                    $settingNewFormat[$index]["pointToMoneyLevelL"]    = 0;
+                    $settingNewFormat[$index]["commission"]            = 0;
+                    $settingNewFormat[$index]["moneyToPoint"]          = 0;
+                    $settingNewFormat[$index]["refer"]                 = 0;
+                    $settingNewFormat[$index]["pounderWeight"]         = 0;
+                    $settingNewFormat[$index]["tax"]                   = 0;
+                    $settingNewFormat[$index]["sFee"]                  = 0;
+                    $settingNewFormat[$index]["lFee"]                  = 0;
                 }
 
                 switch($row->sscName){
 
-                    case "pointToMoneyLevel-S" :   $settingNewFormat[$index]["pointToMoneyLevel-S"]    = $row->sscValue; 
+                    case "pointToMoneyLevelS" :   $settingNewFormat[$index]["pointToMoneyLevelS"]    = $row->sscValue; 
                                                     break;
-                    case "pointToMoneyLevel-L" :   $settingNewFormat[$index]["pointToMoneyLevel-L"]    = $row->sscValue; 
+                    case "pointToMoneyLevelL" :   $settingNewFormat[$index]["pointToMoneyLevelL"]    = $row->sscValue; 
                                                     break;
-                    case "Reward"              :   $settingNewFormat[$index]["Reward"]                 = $row->sscValue;
+                    case "commission"          :   $settingNewFormat[$index]["commission"]             = $row->sscValue;
                                                     break;
-                    case "moneyToPoint"        :   $settingNewFormat[$index]["moneyToPoint"]           = $row->sscValue;
+                    case "moneyToPoint"        :   $settingNewFormat[$index]["moneyToPoint"]          = $row->sscValue;
                                                     break;
-                    case "Refer"               :   $settingNewFormat[$index]["Refer"]                  = $row->sscValue;
+                    case "refer"               :   $settingNewFormat[$index]["refer"]                 = $row->sscValue;
                                                     break;
-                    case "PreOrder"            :   $settingNewFormat[$index]["PreOrder"]               = $row->sscValue;
+                    case "pounderWeight"       :   $settingNewFormat[$index]["pounderWeight"]         = $row->sscValue;
                                                     break;
-                    case "Tax"                 :   $settingNewFormat[$index]["Tax"]                    = $row->sscValue;
+                    case "tax"                 :   $settingNewFormat[$index]["tax"]                   = $row->sscValue;
                                                     break;
-                    case "M-Fee"               :   $settingNewFormat[$index]["M-Fee"]                  = $row->sscValue;
+                    case "sFee"               :   $settingNewFormat[$index]["sFee"]                  = $row->sscValue;
                                                     break;
-                    case "L-Fee"               :   $settingNewFormat[$index]["L-Fee"]                  = $row->sscValue;
+                    case "lFee"               :   $settingNewFormat[$index]["lFee"]                  = $row->sscValue;
                                                     break;
-                    case "StandardPoint"       :   $settingNewFormat[$index]["StandardPoint"]          = $row->sscValue;
+                    case "standardPoint"       :   $settingNewFormat[$index]["standardPoint"]         = $row->sscValue;
                                                     break;
                 }
 
@@ -157,9 +156,9 @@
             $ssgId       = $this->input->post("ssgId");
             $ssgDateStart   = $this->input->post("ssgDateStart");
             $ssgDateEnd     = $this->input->post("ssgDateEnd");
-            $shceduleList   = $this->input->post("scheduleList");
+            $sscList   = $this->input->post("sscList");
 
-            $result = $this->M_Setting->updateSettingSchedule($ssgId, $ssgDateStart, $ssgDateEnd, $shceduleList);
+            $result = $this->M_Setting->updateSettingSchedule($ssgId, $ssgDateStart, $ssgDateEnd, $sscList);
             
             $json["status"]     = 200;
             $json["msg"]        = "success";

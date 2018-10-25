@@ -5,13 +5,13 @@ function genPagination($currentPage, $allPageNumber){
     $rang       = 3;
     $startPage  = $currentPage - $rang;
     $endPage    = $currentPage + $rang;
-
+    
     if($startPage < 1){
 
         $startPage = 1;
     }
 
-    if($endPage > $allPageNumber){
+    if($endPage >= $allPageNumber){
 
         $endPage = $allPageNumber;
     }

@@ -58,6 +58,7 @@ class Permission extends CI_Controller {
 		$word["close"] 				= $this->lang->line("generalClose");
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
+		$word["autoSave"] 			= $this->lang->line("generalAutoSave");
 
 		// JS file
 		$file["js"] = ["assets/application/system/permission.js"];

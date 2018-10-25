@@ -9,12 +9,20 @@
 
             $this->load->model("System/M_Account");
             $result = $this->M_Account->createNewAccount($accFirstname, $accLastname, $accUsername, $accPassword);
+            
+            $json["status"] = 200;
+            $json["msg"] = "Success";
+            echo json_encode($json);
         }
         public function deleteAccount() {
             $accId = $this->input->post("accId");
 
             $this->load->model("System/M_Account");
             $result = $this->M_Account->deleteAccount($accId);
+
+            $json["status"] = 200;
+            $json["msg"] = "Success";
+            echo json_encode($json);
         }
 
         public function updateAccount() {
@@ -26,6 +34,10 @@
 
             $this->load->model("System/M_Account");
             $result = $this->M_Account->updateAccount($accId, $accFirstname, $accLastname, $accUsername, $accPassword);
+            
+            $json["status"] = 200;
+            $json["msg"] = "Success";
+            echo json_encode($json);
         }
 
         public function getAccountById() {
@@ -48,38 +60,13 @@
             $limitPage = $this->input->post("limitPage");
             $this->load->model("System/M_Account");
             $queryPages = $this->M_Account->countRowAccount($limitPage);
-            $pages = $queryPages;
-            $startPage = $currentPage-3;
-            $endPage = $currentPage+3;
-            
-            if($startPage <= 0) {
-                $startPage = 1;
-            } 
-            if($endPage > $pages) {
-                $endPage = $pages;
-            }
-            $pagination = array();
-
-            for($i = $startPage; $i <= $endPage; $i++){
-                if($i == $currentPage){
-                    $perPages = array (
-                        "page" => $i,
-                        "status" => "active"
-                    );       
-                } else {
-                    $perPages = array (
-                        "page" => $i,
-                        "status" => ""
-                    );
-                }
-                array_push($pagination, $perPages);
-            }
 
             $queryData = $this->M_Account->getAllAccount($currentPage, $limitPage);
             $dataList = $queryData->result();
             
-            $json['response']['pagination'] = $pagination;
+            $json['response']['pagination'] = genPagination($currentPage,$queryPages);
             $json['response']['dataList'] = $dataList;
+            
             echo json_encode($json);
         }
     }

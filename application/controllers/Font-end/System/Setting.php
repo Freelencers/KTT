@@ -50,7 +50,8 @@ class Setting extends CI_Controller {
 		$word["pageTitle"] 			= $this->lang->line("moduleSystemSetting");
 		$word["defaultSetting"] 	= $this->lang->line("systemSettingDefaultSetting");
 		$word["moneyToPoint"]		= $this->lang->line("systemSettingMoneyToPoint");
-		$word["pointToMoney"]		= $this->lang->line("systemSettingPointToMoney");
+		$word["pointToMoneyLevelS"]	= $this->lang->line("systemSettingPointToMoneyLevelS");
+		$word["pointToMoneyLevelL"]	= $this->lang->line("systemSettingPointToMoneyLevelL");
 		$word["tax"]				= $this->lang->line("systemSettingTax");
 		$word["memberFee"]			= $this->lang->line("systemSettingMemberFee");
 		$word["specialCondition"]	= $this->lang->line("systemSettingSpecialCondition");
@@ -61,13 +62,23 @@ class Setting extends CI_Controller {
 		$word["schedule"]			= $this->lang->line("systemSettingSchedule");
 		$word["history"]			= $this->lang->line("systemSettingHistory");
 		$word["date"]				= $this->lang->line("generalDate");
+		$word["dateStart"]			= $this->lang->line("generalDateStart");
+		$word["dateEnd"]			= $this->lang->line("generalDateEnd");
+		$word["createSchedule"]		= $this->lang->line("systemSettingCreateSchedule");
+		$word["modalTitle"]			= $this->lang->line("systemSettingModalTitle");
 
 		$word["save"] 				= $this->lang->line("generalSave");
 		$word["close"] 				= $this->lang->line("generalClose");
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = [
+			"assets/bower_components/moment/min/moment.min.js",
+			"assets/bower_components/bootstrap-daterangepicker/daterangepicker.js",
+			"assets/application/system/setting.js"]
+		;
 		$this->load->view("System/Setting", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }
