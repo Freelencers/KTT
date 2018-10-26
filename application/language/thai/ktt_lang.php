@@ -107,6 +107,9 @@ $lang["fanshineCustomerLevel"]          = "ระดับ";
 $lang["fanshineCustomerCreadtedate"]    = "วันที่สมัค";
 $lang["fanshineCustomerCreateNewFanshine"] = "สร้างแฟรนไชน์ใหม่";
 $lang["fanshineCustomerModalTitle"]     = "รายละเอียดแฟรนไชน์";
+$lang["fanshineCustomerNewUser"]        = "มือใหม่";
+$lang["fanshineCustomerProUser"]        = "เชี่ยวชาญ";
+$lang["fanshineCustomerBirthday"]       = "วันเกิด";
 
 $lang["fanshineCustomerFanshineName"]   = "ชื่อแฟรนไชน์";
 $lang["fanshineCustomerDay"]            = "วัน";

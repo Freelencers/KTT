@@ -107,6 +107,9 @@ $lang["fanshineCustomerLevel"]          = "Level";
 $lang["fanshineCustomerCreadtedate"]    = "Register Date";
 $lang["fanshineCustomerCreateNewFanshine"] = "Create New Fanshine";
 $lang["fanshineCustomerModalTitle"]     = "Fanshine Detail";
+$lang["fanshineCustomerNewUser"]        = "New";
+$lang["fanshineCustomerProUser"]        = "Pro";
+$lang["fanshineCustomerBirthday"]       = "Birthday";
 
 $lang["fanshineCustomerFanshineName"]   = "Fanshine Name";
 $lang["fanshineCustomerDay"]            = "Day";

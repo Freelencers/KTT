@@ -14,24 +14,17 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-2 pull-right">
-                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewFanshine?></button>
+                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom"><?=$createNewFanshine?></button>
                             </div>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table class="table table-bordered table-hover dataTable">
-                            <thead>
-                                <th><?=$code?></th>
-                                <th><?=$fullName?></th>
-                                <th><?=$createdate?></th>
-                                <th><?=$status?></th>
-                                <th><?=$level?></th>
-                                <th><?=$action?></th>
-                            </thead>
+                        <!-- template -->
+                        <table class="template" id="rowTemplate">
                             <tbody>
-                                <tr id="accountColumnTemplate">
-                                    <td>{code}</td>
+                                <tr>
+                                    <td>{cusCode}</td>
                                     <td>{cusFullName}</td>
                                     <td>{cusCreatedate}</td>
                                     <td>{cusStatus}</td>
@@ -43,20 +36,22 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <table class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <th><?=$code?></th>
+                                <th><?=$fullName?></th>
+                                <th><?=$createdate?></th>
+                                <th><?=$status?></th>
+                                <th><?=$level?></th>
+                                <th><?=$action?></th>
+                            </thead>
+                            <tbody id="tbodyDataList">
+                                
+                            </tbody>
+                        </table>
                         <div class="col-md-12">
-                            <ul class="pagination pull-right">
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button ">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
+                            <ul class="pagination paginationList pull-right">
+                            
                             </ul>
                         </div>
                     </div>
@@ -81,62 +76,57 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label><?=$fanshineName?></label>
-                                <input type="text" class="form-control" id="cusFanshineName">
+                                <input type="text" class="form-control autoGet cusList" id="cusFanshineName">
                             </div>
                             <div class="form-group">
                                 <label><?=$fullName?></label>
-                                <input type="text" class="form-control" id="cusFullName">
+                                <input type="text" class="form-control autoGet cusList" id="cusFullName">
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <label><?=$day?></label>
-                                        <select class="form-control" id="cusDayBirth">
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label><?=$month?></label>
-                                        <select class="form-control" id="cusMonthBirth">
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label><?=$year?></label>
-                                        <select class="form-control" id="cusYearBirth">
-                                        </select>
+                                    <div class="col-md-9">
+                                        <label><?=$birthday?></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control datemask" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="">
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <label><?=$level?></label>
-                                        <select class="form-control" id="cusLevel">
+                                        <select class="form-control autoGet cusList" id="cusLevel">
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$country?></label>
-                                <input type="text" class="form-control" id="cusCountry">
+                                <select class="form-control autoGet cusList" id="cusCountry">
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label><?=$passportId?></label>
-                                <input type="text" class="form-control" id="cusPassportId">
+                                <input type="text" class="form-control autoGet cusList" id="cusPassportId">
                             </div>
                             <div class="form-group">
                                 <label><?=$personalId?></label>
-                                <input type="text" class="form-control" id="cusPersonalId">
+                                <input type="text" class="form-control autoGet cusList" id="cusPersonalId">
                             </div>
                             <div class="form-group">
                                 <label><?=$address?></label>
-                                <input type="text" class="form-control" id="cusAddress">
+                                <input type="text" class="form-control autoGet addList addProfile" id="addDetail">
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$province?></label>
-                                        <select class="form-control" id="cusProvince">
+                                        <select class="form-control autoGet addList addProfile" id="addProvince">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$district?></label>
-                                        <select class="form-control" id="cusDistrict">
+                                        <select class="form-control autoGet addList addProfile" id="addDistrict">
                                         </select>
                                     </div>
                                 </div>
@@ -145,30 +135,30 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label><?=$postcode?></label>
-                                <input type="text" class="form-control" id="cusPostcode">
+                                <input type="text" class="form-control autoGet addList addProfile" id="addPostcode">
                             </div>
                             <div class="form-group">
                                 <label><?=$phoneNumber?></label>
-                                <input type="text" class="form-control" id="cusPhoneNumber">
+                                <input type="text" class="form-control autoGet contactList" id="conPhone">
                             </div>
                             <div class="form-group">
                                 <label><?=$email?></label>
-                                <input type="text" class="form-control" id="cusEmail">
+                                <input type="text" class="form-control autoGet contactList" id="conEmail">
                             </div>
                             <div class="form-group">
                                 <label><?=$deliveryAddress?></label>
-                                <input type="text" class="form-control" id="cusDeliveryAddress">
+                                <input type="text" class="form-control autoGet addList addDelivery" id="addDetail">
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$province?></label>
-                                        <select class="form-control" id="cusDeliveryProvince">
+                                        <select class="form-control autoGet addList addDelivery" id="addProvince">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$district?></label>
-                                        <select class="form-control" id="cusDeliveryDistrict">
+                                        <select class="form-control autoGet addList addDelivery" id="addDistrict">
                                         </select>
                                     </div>
                                 </div>
@@ -177,46 +167,46 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$bank?></label>
-                                        <select class="form-control" id="cusBank">
+                                        <select class="form-control autoGet bankList" id="bacBanId">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$bankAccount?></label>
-                                        <input type="text" class="form-control" id="cusBankAccount">
+                                        <input type="text" class="form-control autoGet bankList" id="bacNumber">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$branch?></label>
-                                <input type="text" class="form-control" id="cusBranch">
+                                <input type="text" class="form-control autoGet bankList" id="bacBranch">
                             </div>
                             <div class="form-group">
                                 <label><?=$accountName?></label>
-                                <input type="text" class="form-control" id="cusAccountName">
+                                <input type="text" class="form-control autoGet bankList" id="bacName">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label><?=$refer?></label>
-                                <select class="form-control" id="cusRefer">
+                                <select class="form-control autoGet" id="cusRefer">
                                 </select>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$maritalStatus?></label>
-                                        <select class="form-control" id="cusMaritalStatus">
+                                        <select class="form-control autoGet" id="cusMaritalStatus">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$child?></label>
-                                        <input type="text" class="form-control" id="cusChild">
+                                        <input type="text" class="form-control autoGet" id="cusChild">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$descendantName?></label>
-                                <input type="text" class="form-control" id="cusDescendantName">
+                                <input type="text" class="form-control autoGet" id="cusDescendantName">
                             </div>
                         </div>
                     </form>

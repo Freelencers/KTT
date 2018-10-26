@@ -57,9 +57,7 @@ class Customer extends CI_Controller {
 		
 		$word["modalTitle"] 		= $this->lang->line("fanshineCustomerModalTitle");
 		$word["fanshineName"] 		= $this->lang->line("fanshineCustomerFanshineName");
-		$word["day"] 				= $this->lang->line("fanshineCustomerDay");
-		$word["month"] 				= $this->lang->line("fanshineCustomerMonth");
-		$word["year"] 				= $this->lang->line("fanshineCustomerYear");
+		$word["birthday"] 			= $this->lang->line("fanshineCustomerBirthday");
 		$word["country"] 			= $this->lang->line("fanshineCustomerCountry");
 		$word["passportId"] 		= $this->lang->line("fanshineCustomerPassportId");
 		$word["personalId"] 		= $this->lang->line("fanshineCustomerPersonalId");
@@ -84,8 +82,13 @@ class Customer extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = [
+			"assets/plugins/input-mask/jquery.inputmask.js",
+			"assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
+			"assets/plugins/input-mask/jquery.inputmask.extensions.js",
+			"assets/application/fanshine/customer.js"];
 		$this->load->view("Fanshine/Customer", $word);
-		$this->load->view("body");
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

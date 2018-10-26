@@ -132,4 +132,4 @@ $autoload['language'] = array('ktt');
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('M_menu');
+$autoload['model'] = array('M_menu', 'M_general');
