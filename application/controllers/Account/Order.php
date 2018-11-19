@@ -103,5 +103,53 @@ class Order extends CI_controller {
         echo json_encode($result);
 
     }
+
+    public function deleteOrder(){
+        $ordId = $this->input->post("ordId");
+        $resultData = $this->M_order->deleteOrder($ordId);
+
+        if($resultData) {
+            $json['status'] = 200;
+            $json['msg'] = "Success";
+            echo json_encode($json);
+        }else{
+            $json['status'] = 200;
+            $json['msg'] = "Error";
+            echo json_encode($json);
+        }
+
+    }
+
+    public function removeFromCart(){
+        $sodId = $this->input->post("sodId");
+        $resultData = $this->M_order->removeFromCart($sodId);
+
+        if($resultData) {
+            $json['status'] = 200;
+            $json['msg'] = "Success";
+            echo json_encode($json);
+        }else{
+            $json['status'] = 200;
+            $json['msg'] = "Error";
+            echo json_encode($json);
+        }
+    }
+
+    public function updateOrderStatus($ordId){
+        $ordId = $this->input->post("ordId");
+        $resultData = $this->M_order->updateOrderStatus($sodId);
+
+        if($resultData) {
+            $json['status'] = 200;
+            $json['msg'] = "Success";
+            echo json_encode($json);
+        }else{
+            $json['status'] = 200;
+            $json['msg'] = "Error";
+            echo json_encode($json);
+        }
+    }
+
 }
+
 ?>
