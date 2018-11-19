@@ -7,7 +7,7 @@ class Order extends CI_controller {
             // Your own constructor code
             $this->load->model("Account/M_order");
         }
-    public function deleteOrder($ordId){
+    public function deleteOrder(){
         $ordId = $this->input->post("ordId");
         $resultData = $this->M_order->deleteOrder($ordId);
 
@@ -22,7 +22,7 @@ class Order extends CI_controller {
         }
 
     }
-    public function removeFromCart($sodId){
+    public function removeFromCart(){
         $sodId = $this->input->post("sodId");
         $resultData = $this->M_order->removeFromCart($sodId);
 

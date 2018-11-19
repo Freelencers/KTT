@@ -1,5 +1,5 @@
 <?php
-class M_customer extends CI_Model {
+class M_order extends CI_Model {
 
     public function deleteOrder($ordId){
 
@@ -64,10 +64,6 @@ class M_customer extends CI_Model {
         return $this->db->trans_status();
 
     }  
-    public function addToCart(){
-        
-
-    }
 }
 
 ?>
