@@ -3,39 +3,73 @@ class M_product extends CI_Model {
 
     public function getProductDetailById($productID){
 
-        $result = $this->db->select("matId,matName,matCode,matUntId,matMin,matMax,matType")
+        $result = $this->db->select("matId,matName,matCode,matUntId,matMin,matMax,matType,matLocId,matUntId")
         ->from("material")
-        ->join("location",'matId = locId')
-        ->join("unit",'matId = untId')
+        ->join("location",'matUntId = locId', "inner")
+        ->join("unit",'matUntId = untId', "inner")
         ->where("matId",$productID);
 
         return $this->db->get();
     }
-    public function getProductList($currentPage,$limitPage,$search,$matType,$orlimit){
+    public function getProductList($currentPage,$limitPage,$search,$matType="",$orlimit){
+
         $offset = ($currentPage-1)*$limitPage;
-        $result = $this->db->select("matId,matName,matCode,matUntId,matMin,matMax,matType")
+        $result = $this->db->select("matCode, matId,matName,matCode,untName,matMin,matMax,matType,locName")
         ->from("material")
-        ->join("location",'matId = locId')
-        ->join("unit",'matId = untId')
-        ->where("matType",$matType)
+        ->join("location",'matLocId = locId', "inner")
+        ->join("unit",'matUntId = untId', "inner")
         ->where("matDeleteBy IS NULL");
+
+        if($matType){
+
+            $this->db->where("matType",$matType);
+        }
     
         if($search){ 
             $this->db->group_start();
-            $this->db->like('%matId%', $search);
-            $this->db->or_like('%matName%', $search);
-            $this->db->or_like('%matCode%', $search);
-            $this->db->or_like('%matUntId%', $search);
-            $this->db->or_like('%matMin%', $search);
-            $this->db->or_like('%matMax%', $search);
-            $this->db->or_like('%matType%', $search);
+            $this->db->like('matId', $search);
+            $this->db->or_like('matName', $search);
+            $this->db->or_like('matCode', $search);
+            $this->db->or_like('matUntId', $search);
+            $this->db->or_like('matMin', $search);
+            $this->db->or_like('matMax', $search);
+            $this->db->or_like('matType', $search);
             $this->db->group_end();
         }
         if($orlimit == "dataList"){
-            $this->db->limit($limitPage, $offset);    
+            $this->db->order_by("matId", "DESC")
+            ->limit($limitPage, $offset);    
         }
         return $this->db->get();
     }
+
+    public function getAllRows($search,$matType=""){
+
+        $result = $this->db->select("matId")
+        ->from("material")
+        ->join("location",'matLocId = locId', "inner")
+        ->join("unit",'matUntId = untId', "inner")
+        ->where("matDeleteBy IS NULL");
+
+        if($matType){
+
+            $this->db->where("matType",$matType);
+        }
+    
+        if($search){ 
+            $this->db->group_start();
+            $this->db->like('matId', $search);
+            $this->db->or_like('matName', $search);
+            $this->db->or_like('matCode', $search);
+            $this->db->or_like('matUntId', $search);
+            $this->db->or_like('matMin', $search);
+            $this->db->or_like('matMax', $search);
+            $this->db->or_like('matType', $search);
+            $this->db->group_end();
+        }
+        return $this->db->get()->num_rows();
+    }
+
     public function deleteProduct($matId){
         $sesUrl = $this->session->userdata("accId");
         $dataList = array(
@@ -49,11 +83,10 @@ class M_product extends CI_Model {
          
          return $updateDate;
     }
-    public function updateProduct($matId,$matName,$matCode,$matType,$matMin,$matMax,$matLocId,$matUntId){
+    public function updateProduct($matId,$matName,$matType,$matMin,$matMax,$matLocId,$matUntId){
 
         $dataList = array(
             'matName' => $matName,
-            'matCode'  => $matCode,
             'matType'  => $matType,
             'matMin'  => $matMin,
             'matMax'  => $matMax,
@@ -80,10 +113,29 @@ class M_product extends CI_Model {
             'marCreatedate' => date('Y-m-d H:i:s')
          );
         $insertDate = $this->db->insert('material',$dataList);
+        $insertId = $this->db->insert_id();
+
+        // Generate Code 
+        $update["matCode"] = "MT" . str_pad($insertId, 5, "0");
+        $this->db->where("matId", $insertId)
+        ->update("material", $update);
 
         return $insertDate;
-
     }
+
+    public function getUnitList($search){
+
+        $this->db->select("*")
+        ->from("unit");
+
+        if($search){
+
+            $this->db->like("untName", $search);
+        }
+
+        return $this->db->get();
+    }
+
 
 }
 ?>

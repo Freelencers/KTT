@@ -76,6 +76,9 @@ class Customer extends CI_Controller {
 		$word["child"] 				= $this->lang->line("fanshineCustomerChild");
 		$word["descendantName"] 	= $this->lang->line("fanshineCustomerDescendantName");
 		$word["bank"] 				= $this->lang->line("fanshineCustomerBank");
+		$word["accountType"] 		= $this->lang->line("fanshineCustomerAccountType");
+		$word["savingAccount"] 		= $this->lang->line("fanshineCustomerAccountSaving");
+		$word["currentAccount"] 	= $this->lang->line("fanshineCustomerAccountCurrent");
 
 		$word["save"] 				= $this->lang->line("generalSave");
 		$word["close"] 				= $this->lang->line("generalClose");

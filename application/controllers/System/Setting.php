@@ -52,6 +52,14 @@
             $setting = $this->M_Setting->getSettingScheduleList($currentPage, $limitPage, $search);
             $setting = $setting->result();
 
+            $setting = convertSettingFormat($setting);
+
+            // check data to lock delete and updte
+            for($i=0;$i<count($setting);$i++){
+
+                $setting[$i]["isLock"] = $this->isLock($setting[$i]["dateStart"], $setting[$i]["dateEnd"]);
+            }
+        
             // get page number
             $allPageNumber =  round($this->M_Setting->getSettingRows("SCHEDULE") / $limitPage);
 
@@ -59,7 +67,7 @@
             $json["status"] = 200;
             $json["msg"] = "Success";
             $json["response"]["pagination"] = genPagination($currentPage, $allPageNumber);
-            $json["response"]["dataList"] = convertSettingFormat($setting);
+            $json["response"]["dataList"] = $setting;
 
             echo json_encode($json);
         }
@@ -164,6 +172,16 @@
             }
 
             echo json_encode($json);
+        }
+
+        public function isLock($dateStart, $dateEnd){
+
+            if($dateStart <= date("Y-m-d") && $dateEnd >= date("Y-m-d")){
+
+                return true;
+            }
+
+            return false;
         }
     }
 ?>

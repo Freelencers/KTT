@@ -15,6 +15,8 @@
 <script src="<?= base_url('assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js');?>"></script>
 <!-- FastClick -->
 <script src="<?= base_url('assets/bower_components/fastclick/lib/fastclick.js');?>"></script>
+<!-- Datepicker -->
+<script src="<?= base_url('assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",');?>"></script>
 <!-- General Function -->
 <script src="<?= base_url('assets/application/general.js');?>"></script>
 <!-- AdminLTE App -->
@@ -72,6 +74,27 @@
     <!-- /.modal-dialog -->
 </div>
 
+<!-- message modal -->
+<div class="modal fade" id="modal-message" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title"><?=$this->lang->line("generalMessage")?></h4>
+            </div>
+            <div class="modal-body">
+            <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal"><?=$this->lang->line("generalClose")?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <!-- General Pagination -->
 <div class="template" id="paginationTemplate">
     <li class="paginate_button {status} template" data-page="{page}">
@@ -84,6 +107,11 @@
     <div class="template row pb-4">
         {innerDiv}
     </div>
+</div>
+
+<!-- template -->
+<div class="template" id="option">
+    <option value="{value}" {selected}>{title}</option>
 </div>
 
 <?php

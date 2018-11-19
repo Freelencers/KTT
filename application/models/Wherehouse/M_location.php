@@ -97,17 +97,23 @@
        }
 
        public function countRowLocation($limitPage) {
-            $rows = $this->db->query('SELECT * FROM location');
+            $rows = $this->db->select("*")
+            ->from("location")
+            ->where("locDeleteBy IS NULL")
+            ->get();
+
             $rowcount = $rows->num_rows();
             $pages = round(($rowcount / $limitPage));
     
             return $pages;
        }
+       
        public function getLocationList($currentPage, $limitPage, $search) {
             
             $offset = ($currentPage-1)*$limitPage;
             $this->db->select('locId, locName, locDetail')
-            ->from("location");
+            ->from("location")
+            ->where("locDeleteBy IS NULL");
 
             if($search){ 
                 $this->db->group_start();

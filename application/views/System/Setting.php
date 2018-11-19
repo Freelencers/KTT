@@ -136,8 +136,8 @@
                                         <td>{refer}</td>
                                         <td>{standardPoint}</td>
                                         <td>
-                                            <i class="fa fa-fw fa-edit pointer changeSettingDetail" ssgId="{ssgId}"></i>
-                                            <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({ssgId})"></i>
+                                            <i class="fa fa-fw fa-edit pointer changeSettingDetail {disabled}" ssgId="{ssgId}"></i>
+                                            <i class="fa fa-fw fa-trash pointer {disabled}" onclick="deleteConfirmBox({ssgId})"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -245,8 +245,7 @@
                         <form role="form">
                             <!-- text input -->
                             <div class="form-group">
-                                <label>Date and time range:</label>
-
+                                <label><?=$dateStart." - ".$dateEnd?></label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>

@@ -39,6 +39,9 @@ $(document).on("click", ".updateAccount", function(){
 
 $("#createNewAcountButtom").click(function(){
 
+    // clear form
+    console.log("clear");
+    clearDataForm(".modal-body");
     localStorage.setItem("createStatus", "CREATE"); 
     $("#modal-createNewAccount").modal("show");
 });
@@ -65,7 +68,7 @@ function loadTable(currentPage, limitPage, search){
         var tbody = "";
         if(!resp.response.dataList.length){
 
-            tbody = $("#noDataRow").html();
+            tbody = $("#noDataRow tbody").html();
             tbody = tbody.replace("{colspan}", "6");
         }
         resp.response.dataList.forEach(function(row){
@@ -102,16 +105,18 @@ function createNewAccount(){
         json["accId"] = localStorage.getItem("accId");
         $.post(base_url + "/System/Account/updateAccount", json, function(){
 
+            loadTable(currentPage, limitPage, "");
             $("#modal-createNewAccount").modal("hide");
             clearDataForm();
         });
     }else{
         $.post(base_url + "/System/Account/createNewAccount", json, function(resp){
 
+            loadTable(currentPage, limitPage, "");
             $("#modal-createNewAccount").modal("hide");
             clearDataForm();
         },"json");
     }
 
-    loadTable(currentPage, limitPage, "");
+   
 }

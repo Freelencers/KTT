@@ -10,9 +10,9 @@ class Customer extends CI_controller {
     public function createNewCustomer(){
 
         $customerData   = $this->input->post("CustomerData");
-        $customerDataJson = json_decode($customerData, true);
+        //$customerDataJson = json_decode($customerData, true);
 
-        $resultData = $this->M_customer->createNewCustomer($customerDataJson);
+        $resultData = $this->M_customer->createNewCustomer($customerData);
 
         if($resultData) {
 
@@ -32,9 +32,8 @@ class Customer extends CI_controller {
     public function updateCustomerDetail(){
 
         $customerData   = $this->input->post("CustomerData");
-        $customerDataJson = json_decode($customerData, true);
 
-        $resultData = $this->M_customer->updateCustomerDetail($customerDataJson);
+        $resultData = $this->M_customer->updateCustomerDetail($customerData);
 
         if($resultData) {
 
@@ -140,6 +139,100 @@ class Customer extends CI_controller {
 
             $json["status"] = 200;
             $json["msg"] = "error";
+
+        }
+
+        echo json_encode($json);
+    }
+
+    public function getProvince(){
+
+        $result = $this->M_customer->getProvince()->result();
+        if($result){
+
+            $json["status"] = 200;
+            $json["msg"] = "successs";
+            $json["response"]["dataList"] = $result;
+        }else{
+
+            $json["status"] = 200;
+            $json["msg"] = "error";
+            $json["response"]["dataList"] = array();
+        }
+
+        echo json_encode($json);
+    }
+
+    public function getDistrict(){
+
+        $prvId = $this->input->post("disPrvId");
+        $result = $this->M_customer->getDistrict($prvId)->result();
+        if($result){
+
+            $json["status"] = 200;
+            $json["msg"] = "successs";
+            $json["response"]["dataList"] = $result;
+        }else{
+
+            $json["status"] = 200;
+            $json["msg"] = "error";
+            $json["response"]["dataList"] = array();
+        }
+
+        echo json_encode($json);
+    }
+
+    public function getCountry(){
+
+        $result = $this->M_customer->getCountry()->result();
+        if($result){
+
+            $json["status"] = 200;
+            $json["msg"] = "successs";
+            $json["response"]["dataList"] = $result;
+        }else{
+
+            $json["status"] = 200;
+            $json["msg"] = "error";
+            $json["response"]["dataList"] = array();
+        }
+
+        echo json_encode($json);
+    }
+
+    public function getBank(){
+  
+        $result = $this->M_customer->getBank()->result();
+        if($result){
+
+            $json["status"] = 200;
+            $json["msg"] = "successs";
+            $json["response"]["dataList"] = $result;
+        }else{
+
+            $json["status"] = 200;
+            $json["msg"] = "error";
+        }
+
+        echo json_encode($json);
+    }
+
+    public function getRefer(){
+
+        $search = $this->input->post("search");
+        $except = $this->input->post("except");
+
+        $result = $this->M_customer->getRefer($search, $except)->result();
+        if($result){
+
+            $json["status"] = 200;
+            $json["msg"] = "successs";
+            $json["response"]["dataList"] = $result;
+        }else{
+
+            $json["status"] = 200;
+            $json["msg"] = "error";
+            $json["response"]["dataList"] = array();
         }
 
         echo json_encode($json);

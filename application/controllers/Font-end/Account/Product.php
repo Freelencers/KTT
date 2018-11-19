@@ -55,6 +55,7 @@ class Product extends CI_Controller {
 		$word["price"] 				= $this->lang->line("accountProductPrice");
 		$word["discount"] 			= $this->lang->line("accountProductDiscount");
 		$word["point"] 				= $this->lang->line("accountProductPoint");
+		$word["total"] 				= $this->lang->line("accountProductTotal");
 		$word["createNewProduct"] 	= $this->lang->line("accountProductCreateNewProduct");
 
 		$word["save"] 				= $this->lang->line("generalSave");
@@ -62,7 +63,9 @@ class Product extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/Account/product.js"];
 		$this->load->view("Account/Product", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

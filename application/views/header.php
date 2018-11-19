@@ -12,6 +12,10 @@
   <link rel="stylesheet" href="<?= base_url('assets/bower_components/bootstrap-daterangepicker/daterangepicker.css'); ?>">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?= base_url('assets/bower_components/font-awesome/css/font-awesome.min.css');?>">
+  <!-- Datepicker -->
+  <link rel="stylesheet" href="<?= base_url('assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css');?>">
+  <!-- I Check -->
+  <link rel="stylesheet" href="<?= base_url('assets/plugins/iCheck/all.css');?>">
   <!-- Ionicons -->
   <link rel="stylesheet" href="<?= base_url('assets/bower_components/Ionicons/css/ionicons.min.css');?>">
   <!-- Theme style -->
@@ -94,13 +98,14 @@
     </header>
 
 <!-- Template -->
-<div class="template" id="noDataRow">
+<table class="template" id="noDataRow">
   <tr>
-    <td colspan="{colspan}"><?=$this->lang->line("generalNoData")?></td>
+    <td colspan="{colspan}"><center><?=$this->lang->line("generalNoData")?></center></td>
   </tr>
-</div>
+</table>
 <!-- Global variable -->
 <script>
   var base_url = "<?=base_url()?>" + "index.php";
-  var sessionAccId = <?=$this->session->userdata("accId")?>
+  var sessionAccId = "<?=$this->session->userdata("accId")?>";
+  var language = "<?=$this->session->userdata("languaue")?>";
 </script>

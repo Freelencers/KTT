@@ -35,7 +35,7 @@ class M_Setting extends CI_Model {
             $start = ($currentPage - 1) * $limitPage + 1;
         }else{
         
-            $start = 1;
+            $start = 0;
         }
 
         $this->db->order_by("ssgId", "DESC")
@@ -89,7 +89,7 @@ class M_Setting extends CI_Model {
             $start = ($currentPage - 1) * $limitPage + 1;
         }else{
         
-            $start = 1;
+            $start = 0;
         }
 
         $this->db->where('ssgDateEnd IS NOT NULL', null, false)

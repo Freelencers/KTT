@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $lang['signInFail']			= 'Username or Password is incorrect please try again!';
 
 // Module
-$lang['moduleDashboardDashboard']            = 'Dashboard';
+$lang['moduleDashboardDashboard']   = 'Dashboard';
 $lang['moduleSystemAccount']        = 'Account';
 $lang['moduleSystemPermission']     = 'Permission';
 $lang['moduleSystemSetting']        = 'Setting';
@@ -44,6 +44,8 @@ $lang["generalDateStart"]           = "Start Date";
 $lang["generalDateEnd"]             = "End Date";
 $lang["generalSucess"]              = "Your action is success";
 $lang["generalDone"]                = "Done";
+$lang["generalNoData"]              = "No Data";
+$lang["generalScheduleLock"]        = "This schedule now working. You can not do anything.";
 
 //####################
 //Dashboard
@@ -133,23 +135,29 @@ $lang["fanshineCustomerMaritalStatus"]  = "Marital Status";
 $lang["fanshineCustomerChild"]          = "Child";
 $lang["fanshineCustomerDescendantName"] = "Descendant Name";
 $lang["fanshineCustomerBank"]           = "Bank";
+$lang["fanshineCustomerAccountType"]    = "Account Type";
+$lang["fanshineCustomerAccountSaving"]  = "Saving";
+$lang["fanshineCustomerAccountCurrent"] = "Current";
+
+$lang["fanshineCustomerSingle"]           = "Single";
+$lang["fanshineCustomerMarried"]          = "Married";
 
 // Commissoin
-$lang["fanshineCustomerCommissionTime"]   = "Commission Time";
-$lang["fanshineCustomerCommissionAmount"] = "Commission Amount";
-$lang["fanshineCustomerFilterTitle"]      = "Filter Title";
-$lang["fanshineCustomerSearchTitle"]      = "Search Title";
-$lang["fanshineCustomerReport"]           = "Report";
+$lang["fanshineCommissionCommissionTime"]   = "Commission Time";
+$lang["fanshineCommissionCommissionAmount"] = "Commission Amount";
+$lang["fanshineCommissionFilterTitle"]      = "Filter Title";
+$lang["fanshineCommissionSearchTitle"]      = "Search Title";
+$lang["fanshineCommissionReport"]           = "Report";
 
-$lang["fanshineCustomerCycleDate"]        = "Cycle Date";
-$lang["fanshineCustomerCode"]             = "Code";
-$lang["fanshineCustomerName"]             = "Fanshine Name";
-$lang["fanshineCustomerBank"]             = "Bank";
-$lang["fanshineCustomerBankAccount"]      = "Account";
-$lang["fanshineCustomerPrivatePoint"]     = "Private Point";
-$lang["fanshineCustomerCompanyPoint"]     = "Company Point";
-$lang["fanshineCustomerAmount"]           = "Amount";
-$lang["fanshineCustomerCommission"]       = "Commission";
+$lang["fanshineCommissionCycleDate"]        = "Cycle Date";
+$lang["fanshineCommissionCode"]             = "Code";
+$lang["fanshineCommissionName"]             = "Fanshine Name";
+$lang["fanshineCommissionBank"]             = "Bank";
+$lang["fanshineCommissionBankAccount"]      = "Account";
+$lang["fanshineCommissionPrivatePoint"]     = "Private Point";
+$lang["fanshineCommissionCompanyPoint"]     = "Company Point";
+$lang["fanshineCommissionAmount"]           = "Amount";
+$lang["fanshineCommissionCommission"]       = "Commission";
 
 //################
 // Wherehouse
@@ -172,6 +180,8 @@ $lang["wherehouseProductMax"]               = "Max";
 $lang["wherehouseProductType"]              = "Type";
 $lang["wherehouseProductModalTitle"]        = "Product Detail";
 $lang["wherehouseProductCreateNewProduct"]  = "Create New Product";
+$lang["wherehouseProductMaterial"]          = "Material";
+$lang["wherehouseProductProduct"]           = "Product";
 
 // Stock
 $lang["wherehouseStockRefils"]              = "Refils";
@@ -216,6 +226,7 @@ $lang["accountProductPrice"]             = "Price";
 $lang["accountProductDiscount"]          = "Discount";
 $lang["accountProductPoint"]             = "Point";
 $lang["accountProductModalTitle"]        = "Product Detail";
+$lang["accountProductTotal"]             = "Toal";
 
 //Order
 $lang["accountOrderDate"]                =   "Date";
@@ -224,6 +235,19 @@ $lang["accountOrderFanshineName"]        =   "Fanshine Name";
 $lang["accountOrderAmount"]              =   "Amount";
 $lang["accountOrderStatus"]              =   "Status";
 $lang["accountOrderCreateNewOrder"]      =   "Create New Order";
+
+$lang["accountOrderOrderCreate"]        =   "Create Order";
+$lang["accountOrderCustomer"]           =   "Customer";
+$lang["accountOrderGoToShop"]           =   "Go to Shop";
+$lang["accountOrderInvoid"]             =   "Invoid";
+$lang["accountOrderPoint"]              =   "Point";
+$lang["accountOrderAmount"]             =   "Amount";
+$lang["accountOrderCheckOut"]           =   "Check Out";
+$lang["accountOrderProduct"]            =   "Product";
+$lang["accountOrderMyOrder"]            =   "My Order";
+$lang["accountOrderCode"]               =   "Code";
+$lang["accountOrderPrice"]              =   "Price";
+$lang["accountOrderStock"]              =   "Stock";
 
 //Expense
 $lang["accountExpenseDate"]             =   "Date";

@@ -12,13 +12,14 @@ class Product extends CI_controller {
         
         $productID  = $this->input->post("matId");
         $result = $this->M_product->getProductDetailById($productID);
-        $result = $result->result();
+        $result = $result->row();
 
         $json["status"]="";
         $json["msg"]="";
         $json["response"]["dataRow"]= $result;
         echo json_encode($json);
     }
+
     public function getProductList(){
         $currentPage  = $this->input->post("currentPage");
         $limitPage   = $this->input->post("limitPage");
@@ -31,14 +32,12 @@ class Product extends CI_controller {
        $resultData = $this->M_product->getProductList($currentPage,$limitPage,$search,$matType,$limitDataList);
        $resultData = $resultData->result();
 
-       $resultPage = $this->M_product->getProductList($currentPage,$limitPage,$search,$matType,$limitPagination);
-       $resultPage = $resultPage->result();
-
-
+       $allRows = $this->M_product->getAllRows($search,$matType);
+       $allPage = round($allRows / $limitPage);
 
        $json["status"]="";
        $json["msg"]="";
-       $json["response"]["pagination"]= genPagination($currentPage, $resultPage);
+       $json["response"]["pagination"]= genPagination($currentPage, $allPage);
        $json["response"]["dataList"]= $resultData;
 
        echo json_encode($json);
@@ -61,14 +60,13 @@ class Product extends CI_controller {
     public function updateProduct(){
         $matId  = $this->input->post("matId");
         $matName = $this->input->post("matName");
-        $matCode  = $this->input->post("matCode");
         $matType  = $this->input->post("matType");
         $matMin  = $this->input->post("matMin");
         $matMax  = $this->input->post("matMax");
         $matLocId  = $this->input->post("matLocId");
         $matUntId  = $this->input->post("matUntId");
 
-        $resultData = $this->M_product->updateProduct($matId,$matName,$matCode,$matType,$matMin,$matMax,$matLocId,$matUntId);
+        $resultData = $this->M_product->updateProduct($matId,$matName,$matType,$matMin,$matMax,$matLocId,$matUntId);
 
         if($resultData) {
             $json['status'] = 200;
@@ -95,11 +93,30 @@ class Product extends CI_controller {
         if($resultData) {
             $json['status'] = 200;
             $json['msg'] = "Success";
-            echo json_encode($resultData);
+            echo json_encode($json);
         } else {
             $json['status'] = 200;
             $json['msg'] = "Error";
-            echo json_encode($resultData);
+            echo json_encode($json);
+        }
+    }
+
+    public function getUnitList(){
+
+        $search = $this->input->post("search");
+        $result = $this->M_product->getUnitList($search);
+
+        if($result) {
+
+            $json['status'] = 200;
+            $json['msg'] = "Success";
+            $json['response']["dataList"] = $result->result();
+            echo json_encode($json);
+        }else{
+
+            $json['status'] = 200;
+            $json['msg'] = "Error";
+            echo json_encode($json);
         }
     }
 }

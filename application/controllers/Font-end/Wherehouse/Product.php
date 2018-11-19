@@ -46,7 +46,7 @@ class Product extends CI_Controller {
 		$this->load->view("sideBar", $dataList);
 
 		// Languae Setting
-		$word["pageTitle"] 			= $this->lang->line("moduleWherehouseLocation");
+		$word["pageTitle"] 			= $this->lang->line("moduleWherehouseProduct");
 		$word["sku"] 				= $this->lang->line("wherehouseProductSKU");
 		$word["productName"] 		= $this->lang->line("wherehouseProductName");
 		$word["location"] 			= $this->lang->line("wherehouseProductLocaiton");
@@ -62,7 +62,9 @@ class Product extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/Wherehouse/product.js"];
 		$this->load->view("Wherehouse/Product", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

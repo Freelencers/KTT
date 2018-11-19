@@ -14,17 +14,39 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-2 pull-right">
-                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewProduct?></button>
+                                <button type="button" class="btn btn-block btn-primary" id="createNewProductButton" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewProduct?></button>
                             </div>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+
+                        <!-- template -->
+                        <table class="template" id="rowTemplate">
+                            <tbody>
+                                <tr>
+                                    <td>{no}</td>
+                                    <td>{matCode}</td>
+                                    <td>{matName}</td>
+                                    <td>{matType}</td>
+                                    <td>{locName}</td>
+                                    <td>{untName}</td>
+                                    <td>{matMin}</td>
+                                    <td>{matMax}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-edit changMaterialDetail pointer" matId="{matId}"></i>
+                                        <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({matId})"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <table class="table table-bordered table-hover dataTable">
                             <thead>
                                 <th><?=$no?></th>
                                 <th><?=$sku?></th>
                                 <th><?=$productName?></th>
+                                <th><?=$type?></th>
                                 <th><?=$location?></th>
                                 <th><?=$unit?></th>
                                 <th><?=$min?></th>
@@ -32,35 +54,13 @@
                                 <th><?=$action?></th>
                             </thead>
                             <tbody>
-                                <tr id="locationColumnTemplate">
-                                    <td>{no}</td>
-                                    <td>{proCode}</td>
-                                    <td>{proName}</td>
-                                    <td>{locName}</td>
-                                    <td>{untName}</td>
-                                    <td>{proMin}</td>
-                                    <td>{proMax}</td>
-                                    <td>
-                                        <i class="fa fa-fw fa-edit" data-accId="{proId}"></i>
-                                        <i class="fa fa-fw fa-trash" onclick="deleteConfirmBox({proId})"></i>
-                                    </td>
-                                </tr>
+                                <tbody id="tbodyAccountList">
+                                    <!-- append here -->
+                                </tbody>
                             </tbody>
                         </table>
                         <div class="col-md-12">
-                            <ul class="pagination pull-right">
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button ">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
+                            <ul class="pagination paginationList pull-right">
                             </ul>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
     <!-- /.content -->
 </div>
 
-<div class="modal fade" id="modal-createNewAccount" style="display: none;">
+<div class="modal fade" id="modal-createNewProduct" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -80,34 +80,36 @@
                 <h4 class="modal-title"><?=$modalTitle?></h4>
             </div>
             <div class="modal-body">
-                <form role="form">
+                <form role="form" id="materialForm">
                     <!-- text input -->
                     <div class="form-group">
                         <label><?=$productName?></label>
-                        <input type="text" class="form-control" id="locName">
+                        <input type="text" class="form-control autoGet" id="matName">
                     </div>
                     <div class="form-group">
                         <label><?=$location?></label>
-                        <select class="form-control" id="proLocId">
+                        <select class="form-control autoGet" id="matLocId">
                         </select>
                     </div>
                     <div class="form-group">
                         <label><?=$unit?></label>
-                        <select class="form-control" id="proUntId">
+                        <select class="form-control autoGet" id="matUntId">
                         </select>
                     </div>
                     <div class="form-group">
                         <label><?=$type?></label>
-                        <select class="form-control" id="proType">
+                        <select class="form-control autoGet" id="matType">
+                            <option value="MATERIAL"><?=$this->lang->line("wherehouseProductMaterial");?></option>
+                            <option value="PRODUCT"><?=$this->lang->line("wherehouseProductProduct");?></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label><?=$min?></label>
-                        <input type="text" class="form-control" id="proMin">
+                        <input type="text" class="form-control autoGet" id="matMin">
                     </div>
                     <div class="form-group">
                         <label><?=$max?></label>
-                        <input type="text" class="form-control" id="proMax">
+                        <input type="text" class="form-control autoGet" id="matMax">
                     </div>
                 </form>
             </div>

@@ -80,7 +80,10 @@ class M_Permission extends CI_Model {
             }
 
             // initial module name and permission in current section
-            $tempArray["modName"] = $mod->modName;
+            $languaue = $this->session->userdata("languaue");
+            $this->lang->load('ktt', $languaue);
+            
+            $tempArray["modName"] = $this->lang->line("module" . ucwords($mod->modSection) . ucwords($mod->modName));
             $tempArray["modId"] = $mod->modId;
             if(array_search( $mod->modId, $modId) !== FALSE){
 

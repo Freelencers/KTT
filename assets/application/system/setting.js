@@ -1,26 +1,66 @@
 // On load
 var currentPage = 1;
 var limitPage = 10;
-
+var local = "";
 loadSettingDefault();
 loadScheduleTable(currentPage, limitPage, "");
 loadHistoryTable(currentPage, limitPage, "");
 
+if(language == "thai"){
+    local = {
+        format: 'DD/M/Y',
+        applyLabel: "ตกลง",
+        cancelLabel: "ยกเลิก",
+        fromLabel: "จาก",
+        toLabel: "ถึง",
+        customRangeLabel: "Custom",
+        daysOfWeek: [
+            "จ",
+            "อ",
+            "พ",
+            "พฤ",
+            "ศ",
+            "ส",
+            "อา"
+        ],
+        monthNames: [
+            "มกราคม",
+            "กุมภาพันธ์",
+            "มีนาคม",
+            "เมษายน",
+            "พฤษภาคม",
+            "มิถุนายน",
+            "กรกฎาคม",
+            "สิงหาคม",
+            "กันยายน",
+            "ตุลาคม",
+            "พฤศจิกายน",
+            "ธันวาคม"
+        ],
+        "firstDay": 1
+    }
+}else{
+
+    local = {
+        format: 'DD/M/Y'
+    }
+}
+
 $('.dateRang').daterangepicker({
 
     opens: 'left',
-    locale: {
-        format: 'DD/M/Y'
-      }
+    locale: local,
 }, function(start, end, label) {
     
     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    console.log(start);
 });
 
 // on action
 $("#createScheduleButton").click(function(){
 
     localStorage.setItem("modalStatus", "CREATE");
+    $(".modal-body .autoGet").val("");
     $("#modal-createSchedule").modal();
 });
 
@@ -114,6 +154,18 @@ $(document).on("click", ".changeSettingDetail", function(){
     localStorage.setItem("ssgId", ssgId);
     localStorage.setItem("modalStatus", "UPDATE");
 
+    // check this schedule is working
+    if($(this).attr("class").search("disabled")){
+
+        $.post(base_url + "/General/getLangLine", {"str": "generalScheduleLock"}, function(resp){
+
+            modalMessage(resp.response);
+        },"json");
+
+        // Stop this function
+        return true;
+    }
+
     $.post(base_url + "/System/Setting/getSettingScheduleById", {"ssgId": ssgId}, function(resp){
 
         resp.response.settingScheduleGroup.settingSchedule.forEach(element => {
@@ -122,13 +174,27 @@ $(document).on("click", ".changeSettingDetail", function(){
             $(".modal-body #" + element.sscName ).attr("sscId", element.sscId);
         });
 
-        var dateRang = convertDateToHuman(resp.response.settingScheduleGroup.ssgDateEnd) + " - " + convertDateToHuman(resp.response.settingScheduleGroup.ssgDateEnd);
+        var dateRang = convertDateToHuman(resp.response.settingScheduleGroup.ssgDateStart) + " - " + convertDateToHuman(resp.response.settingScheduleGroup.ssgDateEnd);
+        console.log(dateRang);
         $(".modal-body #scheduleDateRang").val(dateRang);
         $("#modal-createSchedule").modal();
     },"json");
 });
 
 $("#deleteButtonConfirm").click(function(){
+
+    // check this schedule is working
+    if($(this).attr("class").search("disabled")){
+
+        $("#modal-deleteConfirm").modal("hide");
+        $.post(base_url + "/General/getLangLine", {"str": "generalScheduleLock"}, function(resp){
+
+            modalMessage(resp.response);
+        },"json");
+
+        // Stop this function
+        return true;
+    }
 
     var ssgId = $(this).data("id");
     $.post(base_url + "/System/Setting/deleteSettingSchedule", {"ssgId" : ssgId}, function(resp){
@@ -166,11 +232,18 @@ function loadScheduleTable(currentPage, limitPage, search){
         var tbody = "";
         if(!resp.response.dataList.length){
 
-            tbody = $("#noDataRow").html();
+            tbody = $("#noDataRow tbody").html();
             tbody = tbody.replace("{colspan}", "13");
         }
         resp.response.dataList.forEach(function(row){
 
+            if(row.isLock){
+
+                disabled = "disabled";
+            }else{
+
+                disabled = "";
+            }
             replace = {
                 "{ssgId}"               : row.ssgId,
                 "{no}"                  : no + 1,
@@ -185,7 +258,8 @@ function loadScheduleTable(currentPage, limitPage, search){
                 "{pounderWeight}"       : row.pounderWeight,
                 "{commission}"          : row.commission,
                 "{refer}"               : row.refer,
-                "{standardPoint}"       : row.standardPoint
+                "{standardPoint}"       : row.standardPoint,
+                "{disabled}"            : disabled
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);
@@ -212,7 +286,7 @@ function loadHistoryTable(currentPage, limitPage, search){
         var tbody = "";
         if(!resp.response.dataList.length){
 
-            tbody = $("#noDataRow").html();
+            tbody = $("#noDataRow tbody").html();
             tbody = tbody.replace("{colspan}", "13");
         }
         resp.response.dataList.forEach(function(row){

@@ -47,21 +47,21 @@ class Commission extends CI_Controller {
 		$this->load->view("sideBar", $dataList);
 		// Languae Setting
 		$word["pageTitle"] 			= $this->lang->line("moduleFanshineCommission");
-		$word["commissionTime"] = $this->lang->line("fanshineCustomerCommissionTime");
-		$word["commissionAmount"] = $this->lang->line("fanshineCustomerCommissionAmount");
-		$word["filterTitle"] = $this->lang->line("fanshineCustomerFilterTitle");
-		$word["searchTitle"] = $this->lang->line("fanshineCustomerSearchTitle");
-		$word["cycleReport"] = $this->lang->line("fanshineCustomerReport");
+		$word["commissionTime"] = $this->lang->line("fanshineCommissionCommissionTime");
+		$word["commissionAmount"] = $this->lang->line("fanshineCommissionCommissionAmount");
+		$word["filterTitle"] = $this->lang->line("fanshineCommissionFilterTitle");
+		$word["searchTitle"] = $this->lang->line("fanshineCommissionSearchTitle");
+		$word["cycleReport"] = $this->lang->line("fanshineCommissionReport");
 		
-		$word["cycleDate"] = $this->lang->line("fanshineCustomerCycleDate");
-		$word["code"] = $this->lang->line("fanshineCustomerCode");
-		$word["name"] = $this->lang->line("fanshineCustomerName");
-		$word["bank"] = $this->lang->line("fanshineCustomerBank");
-		$word["bankAccount"] = $this->lang->line("fanshineCustomerBankAccount");
-		$word["privatePoint"] = $this->lang->line("fanshineCustomerPrivatePoint");
-		$word["companyPoint"] = $this->lang->line("fanshineCustomerCompanyPoint");
-		$word["amount"] = $this->lang->line("fanshineCustomerAmount");
-		$word["commission"] = $this->lang->line("fanshineCustomerCommission");
+		$word["cycleDate"] = $this->lang->line("fanshineCommissionCycleDate");
+		$word["code"] = $this->lang->line("fanshineCommissionCode");
+		$word["name"] = $this->lang->line("fanshineCommissionName");
+		$word["bank"] = $this->lang->line("fanshineCommissionBank");
+		$word["bankAccount"] = $this->lang->line("fanshineCommissionBankAccount");
+		$word["privatePoint"] = $this->lang->line("fanshineCommissionPrivatePoint");
+		$word["companyPoint"] = $this->lang->line("fanshineCommissionCompanyPoint");
+		$word["amount"] = $this->lang->line("fanshineCommissionAmount");
+		$word["commission"] = $this->lang->line("fanshineCommissionCommission");
 
 		$word["save"] 				= $this->lang->line("generalSave");
 		$word["close"] 				= $this->lang->line("generalClose");

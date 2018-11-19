@@ -14,12 +14,27 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-2 pull-right">
-                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewLocation?></button>
+                                <button type="button" class="btn btn-block btn-primary" id="createLocatinoButton"><?=$createNewLocation?></button>
                             </div>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+                        <!-- template -->
+                        <table class="template" id="rowTemplate">
+                            <tbody>
+                                <tr>
+                                    <td>{no}</td>
+                                    <td>{locName}</td>
+                                    <td>{locDescription}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-edit pointer changeLocationDetail" locId="{locId}"></i>
+                                        <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({locId})"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <table class="table table-bordered table-hover dataTable">
                             <thead>
                                 <th><?=$no?></th>
@@ -28,31 +43,13 @@
                                 <th><?=$action?></th>
                             </thead>
                             <tbody>
-                                <tr id="locationColumnTemplate">
-                                    <td>{no}</td>
-                                    <td>{locName}</td>
-                                    <td>{locDescription}</td>
-                                    <td>
-                                        <i class="fa fa-fw fa-edit" data-accId="{locId}"></i>
-                                        <i class="fa fa-fw fa-trash" onclick="deleteConfirmBox({locId})"></i>
-                                    </td>
-                                </tr>
+                                <tbody id="tbodyAccountList">
+                                    <!-- append here -->
+                                </tbody>
                             </tbody>
                         </table>
                         <div class="col-md-12">
-                            <ul class="pagination pull-right">
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button ">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
+                            <ul class="pagination paginationList pull-right">
                             </ul>
                         </div>
                     </div>
@@ -63,7 +60,7 @@
     <!-- /.content -->
 </div>
 
-<div class="modal fade" id="modal-createNewAccount" style="display: none;">
+<div class="modal fade" id="modal-createNewLocation" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -72,15 +69,15 @@
                 <h4 class="modal-title"><?=$modalTitle?></h4>
             </div>
             <div class="modal-body">
-                <form role="form">
+                <form role="form" id="locationForm">
                     <!-- text input -->
                     <div class="form-group">
                         <label><?=$name?></label>
-                        <input type="text" class="form-control" id="locName">
+                        <input type="text" class="form-control autoGet" id="locName">
                     </div>
                     <div class="form-group">
                         <label><?=$description?></label>
-                        <textarea class="form-control" id="locDescription">
+                        <textarea class="form-control autoGet" id="locDetail">
                         </textarea>
                     </div>
                 </form>

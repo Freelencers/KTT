@@ -1,3 +1,9 @@
+
+// ON LOAD SECTION
+$('.datepicker').datepicker({});
+
+// DEFINATION
+
 function replaceAll(str,mapObj){
     var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
 
@@ -23,7 +29,7 @@ function getDataForm(elementId){
 
 function clearDataForm(elementId){
 
-    $(elementId).find(".autoGet").each(function(element){
+    $(elementId).find(".autoGet").each(function(){
 
         $(this).val("");
     });
@@ -70,7 +76,7 @@ function convertDateToHuman(date){
 
     // From yyyy-mm-dd to dd/mm/yyyy
     date = date.split("-");
-    return date[2] + "/" + date[1] + "/" + date[0];
+    return date[2] + "/" + date[1] + "/" + (parseInt(date[0]) + 543);
 }
 
 function convertDateToDatabase(date){
@@ -78,4 +84,19 @@ function convertDateToDatabase(date){
     // From dd/mm/yyyy to yyyy-mm-dd
     date = date.split("/");
     return date[2] + "-" + date[1] + "-" + date[0];
+}
+
+function modalMessage(message){
+
+    $("#modalMessage").text(message);
+    $("#modal-message").modal();
+}
+
+
+function getLangLine(str){
+
+    $.post(base_url + "/General/getLangLine", {"str": str}, function(resp){
+
+        return resp.response;
+    },"json");
 }

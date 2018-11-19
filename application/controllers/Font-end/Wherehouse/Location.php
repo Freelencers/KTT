@@ -59,9 +59,9 @@ class Location extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/Wherehouse/location.js"];
 		$this->load->view("Wherehouse/Location", $word);
-
-		$this->load->view("body");
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

@@ -69,13 +69,13 @@
                 <div class="template" id="templateSectionLabel">
                     <div class="row template">
                         <div class="col-md-12">
-                            <label>{section}</label>
+                            <h3>{section}</h3>
                         </div>
                     </div>
                 </div>
                 <div class="template" id="templateCheckbox">
                     <div class="col-md-3 template">
-                        <input type="checkbox" data-modId="{modId}" class="permissionAssign " {disabled} {checked}> {modName}
+                        <input type="checkbox" data-modId="{modId}" class="permissionAssign iCheck-helper" {disabled} {checked}> {modName}
                     </div>
                 </div>
                 <div id="bodyModal">

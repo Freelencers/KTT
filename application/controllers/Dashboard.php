@@ -106,7 +106,7 @@ class Dashboard extends CI_Controller {
 
         $json["status"]="";
         $json["msg"]="";
-        $json["response"]["sotckRefils"]= $result;
+        $json["response"]["stockRefils"]= $result;
         echo json_encode($json);
     }
 }

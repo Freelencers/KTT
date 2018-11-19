@@ -59,7 +59,7 @@ function loadTable(currentPage, limitPage, search){
         var tbody = "";
         if(!resp.response.dataList.length){
 
-            tbody = $("#noDataRow").html();
+            tbody = $("#noDataRow tbody").html();
             tbody = tbody.replace("{colspan}", "6");
         }
         resp.response.dataList.forEach(function(row){
@@ -122,10 +122,8 @@ function getModulePermission(accId){
 
                 // User can not set permission of own Permission Module
                 disabled = "";
-                console.log(accId + " : " + sessionAccId);
                 if(accId == sessionAccId){
 
-                    console.log(moduleList.modId);
                     if(moduleList.modId == 3){
                         // Permission Module
                         disabled = "disabled";

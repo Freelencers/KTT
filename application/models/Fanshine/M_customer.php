@@ -38,7 +38,10 @@ class M_customer extends CI_Model {
         }
         $this->db->insert_batch('address', $customerDataJson["cusAddList"]); 
         $this->db->insert_batch('contact', $customerDataJson["cusContactList"]); 
-        $this->db->insert_batch('bankaccount', $customerDataJson["bankAccountDetail"]); 
+        $this->db->insert_batch('bankAccount', $customerDataJson["bankAccountDetail"]); 
+
+        // Create levelup log
+        $this->upgradeCustomerLevel($cusId, $dataListCustomer["cusLevel"]);
 
         // Create expense list 
 
@@ -72,7 +75,7 @@ class M_customer extends CI_Model {
 
         $this->db->update_batch('address', $customerDataJson["cusAddList"], "addId"); 
         $this->db->update_batch('contact', $customerDataJson["cusContactList"], "conId"); 
-        $this->db->update_batch('bankaccount', $customerDataJson["bankAccountDetail"], "bacId"); 
+        $this->db->update_batch('bankAccount', $customerDataJson["bankAccountDetail"], "bacId"); 
 
         $this->db->trans_complete();
         
@@ -92,11 +95,11 @@ class M_customer extends CI_Model {
 
     public function getCustomerList($currentPage, $limitPage, $search){
 
-        $this->db->select(" CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode, cusId, cusFanshineName, cusFullName, cusLevel, DATE(cusCreatedate) AS cusCreatedate, DATEDIFF(NOW(),lvuDate) AS lvuDate")
+        $cusCode = "CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode";
+        $this->db->select($cusCode . ", cusId, cusFanshineName, cusFullName, cusLevel, DATE(cusCreatedate) AS cusCreatedate, DATEDIFF(NOW(),lvuDate) AS lvuDate")
         ->from("customer")
         ->join("levelUp", "cusId = lvuCusId", "inner")
-        ->where("cusDeleteBy IS NULL")
-        ->group_by("cusId");
+        ->where("cusDeleteBy IS NULL");
 
         // search 
         if($search){ 
@@ -116,11 +119,12 @@ class M_customer extends CI_Model {
             $start = ($currentPage - 1) * $limitPage + 1;
         }else{
         
-            $start = 1;
+            $start = 0;
         }
 
         $this->db->order_by("cusId", "DESC")
-        ->limit($limitPage, $start);
+        ->limit($limitPage, $start)
+        ->group_by("cusId");
 
         return $this->db->get();
     }
@@ -159,6 +163,12 @@ class M_customer extends CI_Model {
         $dataList["lvuTo"]      = $cusLevel;
         $dataList["lvuDate"]    = date("Y-m-d H:i:s");
         $dataList["lvuPay"]     = $this->M_general->getSettingValue();
+
+        // new user case
+        if($dataList["lvuFrom"] == $cusLevel){
+
+            $dataList["lvuFrom"]  = null;
+        }
 
         if($cusLevel == "S"){
 
@@ -203,6 +213,63 @@ class M_customer extends CI_Model {
                                          ->result();
 
         return $response;
+    }
+
+    public function getProvince(){
+
+        $this->db->select("*")
+        ->from("province");
+
+        return $this->db->get();
+    }
+
+    public function getDistrict($prvId){
+
+        $this->db->select("*")
+        ->from("district")
+        ->where("disPrvId", $prvId);
+
+        return $this->db->get();
+    }
+
+    public function getCountry(){
+
+        $this->db->select("*")
+        ->from("country");
+
+        return $this->db->get();
+    }
+
+    public function getBank(){
+
+        $this->db->select("*")
+        ->from("bank");
+
+        return $this->db->get();
+    }
+
+    public function getRefer($search, $except){
+
+        $cusCode = "CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode";
+        $this->db->select($cusCode .", cusId, cusFanshineName, cusFullName")
+        ->from("customer")
+        ->where("cusDeletedate IS NULL");
+
+        if($except){
+
+            $this->db->where("cusId !=", $except);
+        }
+
+        // search 
+        if($search){ 
+
+            $this->db->group_start();
+            $this->db->like('cusFanshineName', $search);
+            $this->db->or_having('cusCode', $search);
+            $this->db->group_end();
+        }
+
+        return $this->db->get();
     }
     
     

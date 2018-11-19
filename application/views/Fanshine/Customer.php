@@ -30,8 +30,9 @@
                                     <td>{cusStatus}</td>
                                     <td>{cusLevel}</td>
                                     <td>
-                                        <i class="fa fa-fw fa-edit" data-cusId="{cusId}"></i>
-                                        <i class="fa fa-fw fa-trash" onclick="deleteConfirmBox({cusId})"></i>
+                                        <i class="fa fa-fw fa-arrow-circle-up levelUp pointer" cusId="{cusId}" cusLevel="{cusLevel}"></i>
+                                        <i class="fa fa-fw fa-edit changeCustomerDetail pointer" data-cusId="{cusId}"></i>
+                                        <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({cusId})"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -62,6 +63,50 @@
     <!-- /.content -->
 </div>
 
+<div class="modal fade" id="modal-levelUp" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title"><?=$modalTitle?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box box-solid bg-maroon pointer levelUpButton" id="buttonLevelS" level="S">
+
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <center>
+                                    <h1 style="font-size: 300px">S</h1>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="box box-solid bg-purple pointer levelUpButton" id="buttonLevelL" level="L">
+
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <center>
+                                    <h1 style="font-size: 300px">L</h1>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><?=$close?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
 <div class="modal fade" id="modal-createNewAccount" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -90,19 +135,21 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control datemask" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="">
+                                            <input type="text" class="form-control datemask cusList" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" id="cusDateOfBirth">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <label><?=$level?></label>
                                         <select class="form-control autoGet cusList" id="cusLevel">
+                                            <option value="S">S</option>
+                                            <option value="L">L</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$country?></label>
-                                <select class="form-control autoGet cusList" id="cusCountry">
+                                <select class="form-control autoGet cusList" id="cusCouId">
                                 </select>
                             </div>
                             <div class="form-group">
@@ -121,12 +168,12 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$province?></label>
-                                        <select class="form-control autoGet addList addProfile" id="addProvince">
+                                        <select class="form-control autoGet addList addProfile province" id="addProvince">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$district?></label>
-                                        <select class="form-control autoGet addList addProfile" id="addDistrict">
+                                        <select class="form-control autoGet addList addProfile districtProfile" id="addDistrict">
                                         </select>
                                     </div>
                                 </div>
@@ -153,60 +200,77 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$province?></label>
-                                        <select class="form-control autoGet addList addDelivery" id="addProvince">
+                                        <select class="form-control autoGet addList addDelivery province" id="addProvince">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$district?></label>
-                                        <select class="form-control autoGet addList addDelivery" id="addDistrict">
+                                        <select class="form-control autoGet addList addDelivery districtDelivery" id="addDistrict">
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label><?=$postcode?></label>
+                                <input type="text" class="form-control autoGet addList addDelivery" id="addPostcode">
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$bank?></label>
-                                        <select class="form-control autoGet bankList" id="bacBanId">
+                                        <select class="form-control autoGet bankAccountDetail" id="bacBanId">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$bankAccount?></label>
-                                        <input type="text" class="form-control autoGet bankList" id="bacNumber">
+                                        <input type="text" class="form-control autoGet bankAccountDetail" id="bacNumber">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$branch?></label>
-                                <input type="text" class="form-control autoGet bankList" id="bacBranch">
-                            </div>
-                            <div class="form-group">
-                                <label><?=$accountName?></label>
-                                <input type="text" class="form-control autoGet bankList" id="bacName">
+                                <input type="text" class="form-control autoGet bankAccountDetail" id="bacBranch">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label><?=$accountType?></label>
+                                        <select class="form-control autoGet bankAccountDetail" id="bacType">
+                                            <option value="SAVING"><?=$savingAccount?></option>
+                                            <option value="CURRENT"><?=$currentAccount?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><?=$accountName?></label>
+                                <input type="text" class="form-control autoGet bankAccountDetail" id="bacName">
+                            </div>
+                            <div class="form-group">
                                 <label><?=$refer?></label>
-                                <select class="form-control autoGet" id="cusRefer">
+                                <select class="form-control autoGet cusList" id="cusReferId">
                                 </select>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$maritalStatus?></label>
-                                        <select class="form-control autoGet" id="cusMaritalStatus">
+                                        <select class="form-control autoGet cusList" id="cusMarital">
+                                            <option value="MARRIED"><?=$this->lang->line("fanshineCustomerSingle")?></option>
+                                            <option value="SINGLE"><?=$this->lang->line("fanshineCustomerMarried")?></option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$child?></label>
-                                        <input type="text" class="form-control autoGet" id="cusChild">
+                                        <input type="text" class="form-control autoGet cusList" id="cusChild">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$descendantName?></label>
-                                <input type="text" class="form-control autoGet" id="cusDescendantName">
+                                <input type="text" class="form-control autoGet cusList" id="cusDescedant">
                             </div>
                         </div>
                     </form>

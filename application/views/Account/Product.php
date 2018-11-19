@@ -14,12 +14,28 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-2 pull-right">
-                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewProduct?></button>
+                                <button type="button" class="btn btn-block btn-primary" id="createNewProductButton" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewProduct?></button>
                             </div>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+
+                        <!-- template -->
+                        <table class="template" id="rowTemplate">
+                            <tbody>
+                                <tr>
+                                    <td>{no}</td>
+                                    <td>{prdMatCode}</td>
+                                    <td>{prdMatName}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-edit pointer changProductDetail" prdId="{prdId}"></i>
+                                        <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({prdId})"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <table class="table table-bordered table-hover dataTable">
                             <thead>
                                 <th><?=$no?></th>
@@ -27,32 +43,12 @@
                                 <th><?=$productName?></th>
                                 <th><?=$action?></th>
                             </thead>
-                            <tbody>
-                                <tr id="locationColumnTemplate">
-                                    <td>{no}</td>
-                                    <td>{proCode}</td>
-                                    <td>{proName}</td>
-                                    <td>
-                                        <i class="fa fa-fw fa-edit" data-accId="{proId}"></i>
-                                        <i class="fa fa-fw fa-trash" onclick="deleteConfirmBox({proId})"></i>
-                                    </td>
-                                </tr>
+                            <tbody id="tbodyProductList">
+                                
                             </tbody>
                         </table>
                         <div class="col-md-12">
-                            <ul class="pagination pull-right">
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button ">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
+                            <ul class="pagination paginationList pull-right">
                             </ul>
                         </div>
                     </div>
@@ -63,7 +59,7 @@
     <!-- /.content -->
 </div>
 
-<div class="modal fade" id="modal-createNewAccount" style="display: none;">
+<div class="modal fade" id="modal-createNewProduct" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -72,69 +68,73 @@
                 <h4 class="modal-title"><?=$modalTitle?></h4>
             </div>
             <div class="modal-body">
-                <form role="form">
+                <form role="form" >
                     <!-- text input -->
-                    <div class="form-group">
-                        <label><?=$productName?></label>
-                        <input type="text" class="form-control" id="prdName">
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label><?=$price?></label>
-                                <input type="text" class="form-control" id="prdPrice">
+                    <div id="productForm">
+                        <div class="form-group" >
+                            <div class="form-group" id="showMatName">
+                                <label><?=$productName?></label>
+                                <input type="text" class="form-control autoGet" id="matName" disabled>
                             </div>
-                            <div class="col-md-4">
-                                <label><?=$discount?></label>
-                                <input type="text" class="form-control" id="prdDiscount">
-                            </div>
-                            <div class="col-md-4">
-                                <label></label>
-                                <input type="text" class="form-control" id="prdTotal">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label><?=$price?></label>
+                                    <input type="number" class="form-control autoGet" min="0" id="prdFullPrice">
+                                </div>
+                                <div class="col-md-4">
+                                    <label><?=$discount?></label>
+                                    <input type="number" class="form-control autoGet" min="0" id="prdDiscount">
+                                </div>
+                                <div class="col-md-4">
+                                    <label><?=$total?></label>
+                                    <input type="number" class="form-control autoGet" min="0" id="prdTotal">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label><?=$point?></label>
-                        <input type="text" class="form-control" id="prdPoint">
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <input type="text" placeholder="Search" id="searchKeyword">
+                        <div class="form-group">
+                            <label><?=$point?></label>
+                            <input type="number" class="form-control autoGet" min="0" id="prdPoint">
                         </div>
+                    </div>
+                    
+                    <div class="form-group" id="materialTable">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" placeholder="Search" id="searchMaterial">
+                            </div>
+                        </div>
+                        <br>
                         <div class="row">
                             <div class="col-md-12">
-                                <table class="table table-bordered table-hover">
+
+                                <!-- template -->
+                                <table class="template" id="materialTemplate">
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="radio" class="autoGet matIdRadio" name="matId"  value="{matId}"></td>
+                                            <td>{matCode}</td>
+                                            <td>{matName}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-bordered table-hover pb-0">
                                     <thead>
-                                        <th><input type="radio"></th>
+                                        <th><input type="radio" disabled></th>
                                         <th><?=$sku?></th>
                                         <th><?=$productName?></th>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="radio" name="productId" value="{prdId}"></td>
-                                            <td>{sku}</td>
-                                            <td>{productName}</td>
-                                        </tr>
+                                    <tbody id="tbodyMatarialList">
+                                       
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <ul class="pagination pull-right">
-                                    <li class="paginate_button">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button active">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button ">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button">
-                                        <a href="#">1</a>
-                                    </li>
+                            <div class="col-sm-12 m-0 p-0">
+                                <ul class="pagination pagination-sm no-margin paginationMaterialList pull-right">
+                                  
                                 </ul>
                             </div>
                         </div>

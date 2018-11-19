@@ -44,6 +44,8 @@ $lang["generalDateStart"]           = "วันเริ่มต้น";
 $lang["generalDateEnd"]             = "วันสิ้นสุด";
 $lang["generalSucess"]              = "ทำรายการสำเร็จแล้ว";
 $lang["generalDone"]                = "เสร็จสิ้น";
+$lang["generalNoData"]              = "ไม่มีข้อมูล";
+$lang["generalScheduleLock"]        = "ไม่สามารถดำเนินการได้เนื่องจากรายการนี้กำลังทำงานอยู่";
 
 //####################
 //Dashboard
@@ -87,8 +89,8 @@ $lang["systemSettingTax"]           = "ภาษี";
 $lang["systemSettingMemberFee"]     = "ค่าธรรมเนียมสมาชิก";
 $lang["systemSettingSpecialCondition"] = "เงื่อนไขพิเศษ";
 $lang["systemSettingPounderWeight"] = "น้ำหนักแป้ง";
-$lang["systemSettingCommission"]    = "ค่าคอมมิสชัน";
-$lang["systemSettingRefer"]         = "ค่าแนะนำ";
+$lang["systemSettingCommission"]    = "เงินรางวัลจากการทำยอด";
+$lang["systemSettingRefer"]         = "เงินรางวัลจากการแนะนำ";
 $lang["systemSettingStandardPoint"] = "มาตรฐานคะแนนขั้นต่ำ";
 $lang["systemSettingSchedule"]      = "กำหนดการตั้งค่า";
 $lang["systemSettingHistory"]       = "ประวัติการตั้งค่า";
@@ -133,23 +135,30 @@ $lang["fanshineCustomerMaritalStatus"]  = "สถานะการแต่ง�
 $lang["fanshineCustomerChild"]          = "จำนวนบุตร";
 $lang["fanshineCustomerDescendantName"] = "ชื่อผู้รับมรดก";
 $lang["fanshineCustomerBank"]           = "ธนาคาร";
+$lang["fanshineCustomerAccountType"]    = "ประเภทบัญชี";
+$lang["fanshineCustomerAccountSaving"]  = "ออมทรัพย์";
+$lang["fanshineCustomerAccountCurrent"] = "กระแสรายวัน";
+
+$lang["fanshineCustomerSingle"]           = "โสด";
+$lang["fanshineCustomerMarried"]          = "แต่งงาน";
 
 // Commissoin
-$lang["fanshineCustomerCommissionTime"]   = "ระยะเวลาคอมมิสชัน";
-$lang["fanshineCustomerCommissionAmount"] = "ยอดรวมคอมมินชัน";
-$lang["fanshineCustomerFilterTitle"]      = "ตัวคัดกรอง";
-$lang["fanshineCustomerSearchTitle"]      = "ค้นหา";
-$lang["fanshineCustomerReport"]           = "รายงาน";
+$lang["fanshineCommissionCommissionTime"]   = "ระยะเวลาคอมมิสชัน";
 
-$lang["fanshineCustomerCycleDate"]        = "วันตัดยอด";
-$lang["fanshineCustomerCode"]             = "รหัส";
-$lang["fanshineCustomerName"]             = "ชื่อเต็ม";
-$lang["fanshineCustomerBank"]             = "ธนาคาร";
-$lang["fanshineCustomerBankAccount"]      = "บัญชี";
-$lang["fanshineCustomerPrivatePoint"]     = "คะแนนส่วนตัว";
-$lang["fanshineCustomerCompanyPoint"]     = "คะแนนองค์กร";
-$lang["fanshineCustomerAmount"]           = "ยอดรวม";
-$lang["fanshineCustomerCommission"]       = "คอมมิสชัน";
+$lang["fanshineCommissionCommissionAmount"] = "ยอดรวมคอมมินชัน";
+$lang["fanshineCommissionFilterTitle"]      = "ตัวคัดกรอง";
+$lang["fanshineCommissionSearchTitle"]      = "ค้นหา";
+$lang["fanshineCommissionReport"]           = "รายงาน";
+
+$lang["fanshineCommissionCycleDate"]        = "วันตัดยอด";
+$lang["fanshineCommissionCode"]             = "รหัส";
+$lang["fanshineCommissionName"]             = "ชื่อเต็ม";
+$lang["fanshineCommissionBank"]             = "ธนาคาร";
+$lang["fanshineCommissionBankAccount"]      = "หมายเลขบัญชี";
+$lang["fanshineCommissionPrivatePoint"]     = "คะแนนส่วนตัว";
+$lang["fanshineCommissionCompanyPoint"]     = "คะแนนองค์กร";
+$lang["fanshineCommissionAmount"]           = "ยอดรวม";
+$lang["fanshineCommissionCommission"]       = "คอมมิสชัน";
 
 //################
 // Wherehouse
@@ -172,6 +181,8 @@ $lang["wherehouseProductMax"]               = "จำนวนสูงสุด
 $lang["wherehouseProductType"]              = "ประเภท";
 $lang["wherehouseProductModalTitle"]        = "รายละเอียดสินค้า";
 $lang["wherehouseProductCreateNewProduct"]  = "สร้างสินค้าใหม่";
+$lang["wherehouseProductMaterial"]          = "วัตถุดิบ";
+$lang["wherehouseProductProduct"]           = "สำเร็จรูป";
 
 // Stock
 $lang["wherehouseStockRefils"]              = "เติมสินค้า";
@@ -216,6 +227,7 @@ $lang["accountProductPrice"]             = "ราคา";
 $lang["accountProductDiscount"]          = "ส่วนลด";
 $lang["accountProductPoint"]             = "คะแนน";
 $lang["accountProductModalTitle"]        = "รายละเอียดสินค้า";
+$lang["accountProductTotal"]             = "รวม";
 
 //Order & History
 $lang["accountOrderDate"]                =   "วันที่";
@@ -224,6 +236,19 @@ $lang["accountOrderFanshineName"]        =   "ชื่อแฟรนไชน�
 $lang["accountOrderAmount"]              =   "มูลค่า";
 $lang["accountOrderStatus"]              =   "สถานะ";
 $lang["accountOrderCreateNewOrder"]      =   "สร้างกรายการสั่งซื้อใหม่";
+
+$lang["accountOrderOrderCreate"]        =   "";
+$lang["accountOrderCustomer"]           =   "";
+$lang["accountOrderGoToShop"]           =   "";
+$lang["accountOrderInvoid"]             =   "";
+$lang["accountOrderPoint"]              =   "";
+$lang["accountOrderAmount"]             =   "";
+$lang["accountOrderCheckOut"]           =   "";
+$lang["accountOrderProduct"]            =   "";
+$lang["accountOrderMyOrder"]            =   "";
+$lang["accountOrderCode"]               =   "";
+$lang["accountOrderPrice"]              =   "";
+$lang["accountOrderStock"]              =   "";
 
 //Expense
 $lang["accountExpenseDate"]             =   "วันที่";
