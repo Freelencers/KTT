@@ -26,8 +26,8 @@ $("#searchMaterial").change(function(){
 
 $("#deleteButtonConfirm").click(function(){
 
-    var prdId = $(this).data("id");
-    $.post(base_url + "/Account/Product/deleteProduct", {"prdId" : prdId}, function(resp){
+    var ordId = $(this).data("id");
+    $.post(base_url + "/Account/Order/deleteOrder", {"ordId" : ordId}, function(resp){
 
         $("#modal-deleteConfirm").modal("hide");
         loadTable(currentPage, limitPage, "");
@@ -71,6 +71,15 @@ $(document).on("click", ".changProductDetail", function(){
     },"json");
 });
 
+$(document).on("click", ".nextStatus", function(){
+
+    var ordId = $(this).attr("ordId");
+    $.post(base_url + "/Account/Order/updateOrderStatus", {"ordId": ordId}, function(resp){
+
+        loadTable(currentPage, limitPage, "");
+    });
+});
+
 $("#prdFullPrice , #prdDiscount").change(function(){
 
     var fullPrice = $("#prdFullPrice").val();
@@ -94,6 +103,12 @@ $(document).on("click", ".matIdRadio", function(){
     localStorage.setItem("prdMatId", $(this).val());
 });
 
+$(document).on("click", ".buttonGeneratePDF", function(){
+    
+    var ordId = $(this).attr("ordId");
+    window.open(base_url + "/Account/Order/generateInvoicePDF/" + ordId + "/0/0/0", '_blank');
+});
+
 // Definition
 
 function loadTable(currentPage, limitPage, search){
@@ -111,13 +126,13 @@ function loadTable(currentPage, limitPage, search){
         if(!resp.response.dataList.length){
 
             tbody = $("#noDataRow tbody").html();
-            tbody = tbody.replace("{colspan}", 4);
+            tbody = tbody.replace("{colspan}", 6);
         }
         resp.response.dataList.forEach(function(row){
 
             replace = {
                 "{no}" : no + 1,
-                "{ordCreatedate}" : row.ordCreatedate,
+                "{ordCreatedate}" : convertDateToHuman(row.ordCreatedate),
                 "{ordId}" : row.ordId,
                 "{cusFullName}" : row.cusFullName,
                 "{ordCode}" : row.ordCode,
@@ -130,10 +145,7 @@ function loadTable(currentPage, limitPage, search){
         $("#tbodyOrderList").html(tbody);
 
         // pagination
-        console.log(resp.response.pagination);
         var pagination = genPagination(resp.response.pagination);
         $(".paginationList").html(pagination);
-        console.log(pagination);
-
     },"json");
 }

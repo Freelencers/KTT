@@ -3,7 +3,7 @@ class M_stock extends CI_Model {
 
   public function getStockList($currentPage, $limitPage, $search, $stockCondition){
 
-    $this->db->select("stoId, matId, stoMatId, matName, matType, SUM(stoActualStock) AS stoActualStock, SUM(stoVirtualStock) AS stoVirtualStock, matCode, locName")
+    $this->db->select("stoId, matId, stoMatId, matName, matType, matMin,SUM(stoActualStock) AS stoActualStock, SUM(stoVirtualStock) AS stoVirtualStock, matCode, locName")
     ->from("stock")
     ->join("location", "locId = stoLocId")
     ->join("material", "matId = stoMatId")
@@ -32,10 +32,10 @@ class M_stock extends CI_Model {
                 case "OUTOF-VIRTUAL-STOCK" : $this->db->or_where("stoVirtualStock", 0);
                                         break;
 
-                case "REFILS-ACTUAL-STOCK" : $this->db->or_having("stoActualStock <= matMin");
+                case "REFILS-ACTUAL-STOCK" : $this->db->or_where("stoActualStock <= matMin AND stoActualStock != 0");
                                         break;
 
-                case "REFILS-ACTUAL-STOCK" : $this->db->or_having("stoVirtualStock <= matMin");
+                case "REFILS-ACTUAL-STOCK" : $this->db->or_where("stoVirtualStock <= matMin AND stoVirtualStock != 0");
                                         break;
             }
         }
@@ -105,6 +105,18 @@ class M_stock extends CI_Model {
 
     // insert new transaction
     $this->db->insert("stock", $stoList);
+
+    // initial hash
+    $history["shtStoId"]        = $this->db->insert_id();
+    $history["shtType"]         = "INPUT";
+    $history["shtAmount"]       = $matAmount;
+    $history["shtTotal"]        = $matAmount * $matCost;
+    $history["shtActionDate"]   = date("Y-m-d H:i:s");
+
+    // insert history tranasction
+    $this->db->insert("stockHistory", $history);
+
+
 
 
     $this->db->trans_complete();

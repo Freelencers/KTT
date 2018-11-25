@@ -107,6 +107,7 @@ $("#actionInputStock").click(function(){
 
     var inputData = getDataForm("#inputStockForm");
     inputData["matId"] = localStorage.getItem("matId");
+    inputData["matExpDate"] = convertDateToDatabase($("#matExpDate").val());
 
     $.post(base_url + "/Wherehouse/Stock/inputStock", inputData, function(resp){
 
@@ -165,13 +166,16 @@ function loadTable(currentPage, limitPage, search){
         resp.response.dataList.forEach(function(row){
 
             // Hightlight
-            if(row.stoVirtualStock <= row.matMin){
-
-                Hightlight = "alert alert-warning alert-dismissible";
-            }else if(row.stoActualStock <= 0){
+            Hightlight = "";
+            if(parseFloat(row.stoActualStock) === 0){
 
                 Hightlight = "alert alert-danger alert-dismissible";
+            }else if(parseFloat(row.stoVirtualStock) <= parseFloat(row.matMin)){
+
+                Hightlight = "alert alert-warning alert-dismissible";
             }
+
+
 
             replace = {
                 "{no}" : no + 1,
@@ -215,7 +219,7 @@ function loadHistoryTable(currentPage, limitPage, search){
         if(!resp.response.dataList.length){
 
             tbody = $("#noDataRow tbody").html();
-            tbody = tbody.replace("{colspan}", 7);
+            tbody = tbody.replace("{colspan}", 10);
         }
         resp.response.dataList.forEach(function(row){
 

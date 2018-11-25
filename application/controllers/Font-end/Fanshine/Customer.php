@@ -87,8 +87,6 @@ class Customer extends CI_Controller {
 
 		// JS file
 		$file["js"] = [
-			"assets/plugins/input-mask/jquery.inputmask.js",
-			"assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
 			"assets/plugins/input-mask/jquery.inputmask.extensions.js",
 			"assets/application/fanshine/customer.js"];
 		$this->load->view("Fanshine/Customer", $word);

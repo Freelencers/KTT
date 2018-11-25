@@ -88,7 +88,7 @@ $lang["systemSettingTax"]           = "Tax";
 $lang["systemSettingMemberFee"]     = "Member Fee";
 $lang["systemSettingSpecialCondition"] = " Special Condition";
 $lang["systemSettingPounderWeight"] = "Pounder Weight";
-$lang["systemSettingCommission"]    = "Commission";
+$lang["systemSettingCommission"]    = "Reward";
 $lang["systemSettingRefer"]         = "Refer";
 $lang["systemSettingStandardPoint"] = "Standard Point";
 $lang["systemSettingSchedule"]      = "Schedule";
@@ -127,7 +127,7 @@ $lang["fanshineCustomerPostcode"]       = "Postcode";
 $lang["fanshineCustomerPhoneNumber"]    = "Phone Number";
 $lang["fanshineCustomerEmail"]          = "Email";
 $lang["fanshineCustomerDeliveryAddress"]= "Delivery Address";
-$lang["fanshineCustomerBankAccount"]    = "Bank Account";
+$lang["fanshineCustomerBankAccount"]    = "Account No";
 $lang["fanshineCustomerBranch"]         = "Branch";
 $lang["fanshineCustomerAccountName"]    = "Account Name";
 $lang["fanshineCustomerRefer"]          = "Refer";
@@ -248,6 +248,24 @@ $lang["accountOrderMyOrder"]            =   "My Order";
 $lang["accountOrderCode"]               =   "Code";
 $lang["accountOrderPrice"]              =   "Price";
 $lang["accountOrderStock"]              =   "Stock";
+
+$lang["accountOrderFrom"]               =   "From";
+$lang["accountOrderTo"]                 =   "To";
+$lang["accountOrderDate"]               =   "Date";
+$lang["accountOrderQty"]                =   "Qty";
+$lang["accountOrderSubTotal"]           =   "Sub Total";
+$lang["accountOrderShipping"]           =   "Shipping";
+$lang["accountOrderTax"]                =   "Tax";
+$lang["accountOrderGrandTotal"]         =   "Grand Total";
+$lang["accountOrderPrint"]              =   "Print";
+$lang["accountOrderComplete"]           =   "Complete";
+$lang["accountOrderCustomerCode"]       =   "Customer Code";
+$lang["accountOrderSearchCustomer"]     =   "Find by Customer Code";
+
+$lang["accountOrderCustomerAccountName"]=   "Account Name";
+$lang["accountOrderCustomerAccountNo"]  =   "Account No";
+$lang["accountOrderCustomerBank"]       =   "Bank";
+$lang["accountOrderCustomerType"]       =   "Type";
 
 //Expense
 $lang["accountExpenseDate"]             =   "Date";

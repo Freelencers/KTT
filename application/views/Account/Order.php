@@ -14,7 +14,7 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-2 pull-right">
-                                <a href="<?= base_url("/index.php/Font-end/Account/createOrder"); ?>">
+                                <a href="<?= base_url("/index.php/Font-end/Account/Order/createOrder"); ?>">
                                     <button type="button" class="btn btn-block btn-primary"> <?=$createNewOrder?></button>
                                 </a>
                             </div>
@@ -35,6 +35,8 @@
                                     <td>
                                         <i class="fa fa-fw fa-edit pointer" ordId="{ordId}"></i>
                                         <i class="fa fa-fw fa-trash pointer" onclick="deleteConfirmBox({ordId})"></i>
+                                        <i class="fa fa-fw fa-mail-forward pointer nextStatus" ordId="{ordId}"></i> 
+                                        <i class="fa fa-fw fa-print pointer buttonGeneratePDF" ordId="{ordId}"></i> 
                                     </td>
                                 </tr>
                             </tbody>

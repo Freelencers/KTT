@@ -17,6 +17,8 @@
 <script src="<?= base_url('assets/bower_components/fastclick/lib/fastclick.js');?>"></script>
 <!-- Datepicker -->
 <script src="<?= base_url('assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",');?>"></script>
+<!-- input mask -->
+<script src="<?= base_url('assets/plugins/input-mask/jquery.inputmask.js');?>"></script>
 <!-- General Function -->
 <script src="<?= base_url('assets/application/general.js');?>"></script>
 <!-- AdminLTE App -->

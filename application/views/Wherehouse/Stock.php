@@ -215,7 +215,7 @@
                             </div>
                             <div class="form-group">
                                 <label><?=$expire?></label>
-                                <input type="text" class="form-control autoGet datepicker" id="matExpDate">
+                                <input type="text" class="form-control autoGet datemask" id="matExpDate">
                             </div>
                         </form>
                     </div>

@@ -8,9 +8,6 @@ loadCountry();
 loadBank();
 loadRefer("","");
 
-// Date mark
-$('.datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
-
 // on action
 
 $(document).on("click", ".paginate_button", function(){

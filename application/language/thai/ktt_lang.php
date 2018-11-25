@@ -237,18 +237,39 @@ $lang["accountOrderAmount"]              =   "มูลค่า";
 $lang["accountOrderStatus"]              =   "สถานะ";
 $lang["accountOrderCreateNewOrder"]      =   "สร้างกรายการสั่งซื้อใหม่";
 
-$lang["accountOrderOrderCreate"]        =   "";
-$lang["accountOrderCustomer"]           =   "";
-$lang["accountOrderGoToShop"]           =   "";
-$lang["accountOrderInvoid"]             =   "";
-$lang["accountOrderPoint"]              =   "";
-$lang["accountOrderAmount"]             =   "";
-$lang["accountOrderCheckOut"]           =   "";
-$lang["accountOrderProduct"]            =   "";
-$lang["accountOrderMyOrder"]            =   "";
-$lang["accountOrderCode"]               =   "";
-$lang["accountOrderPrice"]              =   "";
-$lang["accountOrderStock"]              =   "";
+$lang["accountOrderOrderCreate"]        =   "สร้างรายการสั่งซื้อ";
+$lang["accountOrderCustomer"]           =   "ลูกค้า";
+$lang["accountOrderGoToShop"]           =   "เลือกสินค้า";
+$lang["accountOrderInvoid"]             =   "ใบเสร็จ";
+$lang["accountOrderPoint"]              =   "คะแนน";
+$lang["accountOrderAmount"]             =   "ยอดรวม";
+$lang["accountOrderCheckOut"]           =   "สั่งซื้อ";
+$lang["accountOrderProduct"]            =   "สินค้า";
+$lang["accountOrderMyOrder"]            =   "สินค้าของฉัน";
+$lang["accountOrderCode"]               =   "รหัสใบสั่งซื้อ";
+$lang["accountOrderPrice"]              =   "ราคา";
+$lang["accountOrderStock"]              =   "สต็อก";
+
+$lang["accountOrderFrom"]               =   "จาก";
+$lang["accountOrderTo"]                 =   "ถึง";
+$lang["accountOrderDate"]               =   "วันที่";
+$lang["accountOrderQty"]                =   "จำนวน";
+$lang["accountOrderSubTotal"]           =   "ยอดรวม";
+$lang["accountOrderShipping"]           =   "ค่าส่ง";
+$lang["accountOrderTax"]                =   "ภาษี";
+$lang["accountOrderGrandTotal"]         =   "ยอดรวมทั้งหมด";
+$lang["accountOrderPrint"]              =   "พิมพ์";
+$lang["accountOrderComplete"]           =   "เสร็จสิ้น";
+$lang["accountOrderCustomerCode"]       =   "รหัสลูกค้า";
+$lang["accountOrderSearchCustomer"]     =   "ค้าหาลูกค้าด้วยรหัสลูกค้า";
+
+$lang["accountOrderCustomerAccountName"]=   "ชื่อบัญชี";
+$lang["accountOrderCustomerAccountNo"]  =   "เลขบัญชี";
+$lang["accountOrderCustomerBank"]       =   "ธนาคาร";
+$lang["accountOrderCustomerType"]       =   "ประเภท";
+
+$lang["accountOrderCustomerType"]       =   "ประเภท";
+
 
 //Expense
 $lang["accountExpenseDate"]             =   "วันที่";

@@ -76,9 +76,9 @@
               }
             ?>
             <li>
-              <a href="<?=base_url("index.php/Auth/Access/languaue/".$lang);?>">
+              <a href="#" id="switchLanguau" lang="<?=$lang?>">
                 <span class="hidden-xs"><?=$lang?></span>
-              </a> 
+              </a>
             </li>
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
@@ -108,4 +108,6 @@
   var base_url = "<?=base_url()?>" + "index.php";
   var sessionAccId = "<?=$this->session->userdata("accId")?>";
   var language = "<?=$this->session->userdata("languaue")?>";
+
+
 </script>

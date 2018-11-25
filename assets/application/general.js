@@ -1,6 +1,18 @@
 
 // ON LOAD SECTION
+
 $('.datepicker').datepicker({});
+// Date mark
+$('.datemask').inputmask('99/99/9999', { 'placeholder': 'dd/mm/yyyy' });
+
+// switch langua
+$("#switchLanguau").click(function(){
+    console.log("LANG");
+    $.get(base_url + "/Auth/Access/languaue/" + $(this).attr("lang"), function(){
+
+        location.reload();
+    });
+});
 
 // DEFINATION
 
@@ -83,7 +95,7 @@ function convertDateToDatabase(date){
 
     // From dd/mm/yyyy to yyyy-mm-dd
     date = date.split("/");
-    return date[2] + "-" + date[1] + "-" + date[0];
+    return (parseInt(date[2]) - 543) + "-" + date[1] + "-" + date[0];
 }
 
 function modalMessage(message){

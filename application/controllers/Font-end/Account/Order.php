@@ -89,15 +89,76 @@ class Order extends CI_Controller {
 		$word["code"] 			= $this->lang->line("accountOrderCode");
 		$word["price"] 			= $this->lang->line("accountOrderPrice");
 		$word["stock"] 			= $this->lang->line("accountOrderStock");
+		$word["searchCode"] 	= $this->lang->line("accountOrderSearchCustomer");
 
 		$word["save"] 			= $this->lang->line("generalSave");
 		$word["close"] 			= $this->lang->line("generalClose");
 		$word["action"] 		= $this->lang->line("generalAction");
+		$word["noData"] 		= $this->lang->line("generalNoData");
 		$word["no"] 			= $this->lang->line("generalNo");
+
+		// Create Order
+		$this->load->model("Account/M_order");
+		$this->M_order->createOrder();
+
 
 		// JS file
 		$file["js"] = ["assets/application/Account/createOrder.js"];
 		$this->load->view("Account/CreateOrder", $word);
+		$this->load->view("footer", $file);
+	}
+
+	public function checkout($cusId){
+
+		$session = $this->session->userdata();
+
+		// Define customer id
+		$this->session->set_userdata("ordCusId", $cusId);
+
+		// update customer id
+		$this->load->model("Account/M_order");
+		$this->M_order->checkout($cusId);
+		
+		$profile["fullName"] = $session["accFirstname"] . " " . $session["accLastname"];
+		$this->load->view("header", $profile);
+
+		$dataList["menuList"] = $this->M_menu->getAccessModule();
+		$this->load->view("sideBar", $dataList);
+
+		// Languae Setting
+		$word["pageTitle"] 		= $this->lang->line("moduleAccountOrder");
+		$word["invoid"] 		= $this->lang->line("accountOrderInvoid");
+		$word["point"] 			= $this->lang->line("accountOrderPoint");
+		$word["product"] 		= $this->lang->line("accountOrderProduct");
+		$word["code"] 			= $this->lang->line("accountOrderCode");
+		$word["price"] 			= $this->lang->line("accountOrderPrice");
+		$word["stock"] 			= $this->lang->line("accountOrderStock");
+		$word["qty"] 			= $this->lang->line("accountOrderQty");
+		$word["subTotal"] 		= $this->lang->line("accountOrderSubTotal");
+		$word["shipping"] 		= $this->lang->line("accountOrderShipping");
+		$word["tax"] 			= $this->lang->line("accountOrderTax");
+		$word["grandTotal"] 	= $this->lang->line("accountOrderGrandTotal");
+		$word["print"] 			= $this->lang->line("accountOrderPrint");
+		$word["complete"] 		= $this->lang->line("accountOrderComplete");
+		$word["customerCode"] 	= $this->lang->line("accountOrderCustomerCode");
+		$word["date"] 			= $this->lang->line("accountOrderDate");
+		$word["from"] 			= $this->lang->line("accountOrderFrom");
+		$word["to"] 			= $this->lang->line("accountOrderTo");
+
+		$word["accountName"] 	= $this->lang->line("accountOrderCustomerAccountName");
+		$word["accountNo"] 		= $this->lang->line("accountOrderCustomerAccountNo");
+		$word["bank"] 			= $this->lang->line("accountOrderCustomerBank");
+		$word["type"] 			= $this->lang->line("accountOrderCustomerType");
+
+		$word["save"] 			= $this->lang->line("generalSave");
+		$word["close"] 			= $this->lang->line("generalClose");
+		$word["action"] 		= $this->lang->line("generalAction");
+		$word["noData"] 		= $this->lang->line("generalNoData");
+		$word["no"] 			= $this->lang->line("generalNo");
+
+		// JS file
+		$file["js"] = ["assets/application/Account/checkout.js"];
+		$this->load->view("Account/Checkout", $word);
 		$this->load->view("footer", $file);
 	}
 }

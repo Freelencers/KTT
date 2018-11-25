@@ -102,6 +102,8 @@ class M_product extends CI_Model {
          return $updateDate;
     }
     public function createNewProduct($matName,$matCode,$matType,$matMin,$matMax,$matLocId,$matUntId){
+
+
         $dataList = array(
             'matName' => $matName,
             'matCode'  => $matCode,
@@ -111,7 +113,10 @@ class M_product extends CI_Model {
             'matLocId'  => $matLocId,
             'matUntId'  => $matUntId,
             'marCreatedate' => date('Y-m-d H:i:s')
-         );
+        );
+
+        $this->db->trans_start();
+
         $insertDate = $this->db->insert('material',$dataList);
         $insertId = $this->db->insert_id();
 
@@ -120,7 +125,23 @@ class M_product extends CI_Model {
         $this->db->where("matId", $insertId)
         ->update("material", $update);
 
-        return $insertDate;
+        // create stock
+        $stockData["stoMatId"]          = $insertId;
+        $stockData["stoCreatedate"]     = date("Y-m-d H:i:s");
+        $stockData["stoCreateBy"]       = $this->session->userdata("accId");
+        $stockData["stoAction"]         = "INPUT";
+        $stockData["stoActualStock"]    = 0;
+        $stockData["stoVirtualStock"]   = 0;
+        $stockData["stoLast"]           = 1;
+        $stockData["stoLocId"]          = $matLocId;
+        $stockData["stoAmount"]         = 0;
+        $stockData["stoCost"]           = 0;
+        $stockData["stoUsed"]           = 0;
+        $this->db->insert("stock", $stockData);
+
+        $this->db->trans_complete();
+
+        return $this->db->trans_status();
     }
 
     public function getUnitList($search){

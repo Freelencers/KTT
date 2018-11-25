@@ -21,6 +21,23 @@ class M_customer extends CI_Model {
 
         $this->db->trans_start();
 
+        // Generate cusCode
+        $lastCode = $this->db->select(" MAX(cusCode) AS cusCode")
+        ->from("customer")
+        ->where("YEAR(cusCreatedate)", date("Y"))
+        ->where("cusDeleteBy IS NULL")
+        ->get()
+        ->row();
+
+        if($lastCode->cusCode == ""){
+
+            $dataListCustomer["cusCode"] = "KT" . date("Ymd") . "00001";
+        }else{
+
+            $countNumber      = intval(substr($lastCode->cusCode, -5)) + 1;
+            $dataListCustomer["cusCode"] = "KT" . date("Ymd").str_pad($countNumber, 5, "0", STR_PAD_LEFT);
+        }
+
         $this->db->insert('customer', $dataListCustomer); 
         $cusId = $this->db->insert_id();
 
@@ -95,8 +112,8 @@ class M_customer extends CI_Model {
 
     public function getCustomerList($currentPage, $limitPage, $search){
 
-        $cusCode = "CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode";
-        $this->db->select($cusCode . ", cusId, cusFanshineName, cusFullName, cusLevel, DATE(cusCreatedate) AS cusCreatedate, DATEDIFF(NOW(),lvuDate) AS lvuDate")
+        //$cusCode = "CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode";
+        $this->db->select(" cusCode, cusId, cusFanshineName, cusFullName, cusLevel, DATE(cusCreatedate) AS cusCreatedate, DATEDIFF(NOW(),lvuDate) AS lvuDate")
         ->from("customer")
         ->join("levelUp", "cusId = lvuCusId", "inner")
         ->where("cusDeleteBy IS NULL");
@@ -110,6 +127,7 @@ class M_customer extends CI_Model {
             $this->db->or_like('lvuDate', $search);
             $this->db->or_like('cusLevel', $search);
             $this->db->or_like('cusCreatedate', $search);
+            $this->db->or_like('cusCode', $search);
             $this->db->group_end();
         }
 

@@ -7,34 +7,8 @@
                 'locCreatedate' => date('Y-m-d H:i:s'),
                 'locCreateBy' => "1"
             );
-            $checkError = 0;
-            $response = array();
-                if(!$locName) {
-                    $checkError += 1;
-                    $response["locName"] = "Please enter location name";
-                }
-                if(!$locDetail) {
-                    $checkError += 1;
-                    $response["locDetail"] = "Please enter location detail";
-                }
-            if($checkError == 0) {
-                $dbRet =  $this->db->insert("location", $dataList);
-                if($dbRet) {
-                    $locData = array (
-                        "status" => "200",
-                        "msg" => "Success",
-                        "response" => "",
-                    );
-                    return $locData;
-                }
-            } else {
-                $locData = array (
-                    "status" => "200",
-                    "msg" => "Error",
-                    "response" => array("error" => $response),
-                );
-                return $locData;
-            }
+            $result =  $this->db->insert("location", $dataList);
+            return $result;    
        }
 
        public function updateLocationDetail($locId, $locName, $locDetail) {

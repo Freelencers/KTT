@@ -53,8 +53,13 @@ class M_dashboard extends CI_Model {
         return $this->db->get();        
     }
     public function getStockRefilsWarning(){
-        $result = $this->db->select("stoId,matId,stoLast,stoActualStock,matMin")->from("stock")->join('material','matId = stoId')->where("stoLast = 1")->where("stoActualStock <= matMin ");
-          
+        $result = $this->db->select("stoId,matId,stoLast,stoActualStock,matMin")
+                    ->from("stock")
+                    ->join('material','matId = stoMatId')
+                    ->where("stoLast = 1")
+                    ->where("stoVirtualStock <= matMin ")
+                    ->where("stoVirtualStock !=", 0);
+        
         return $this->db->get(); 
     }       
 }
