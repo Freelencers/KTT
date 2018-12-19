@@ -1,13 +1,46 @@
- <?php
+<?php
 class M_stock extends CI_Model {
 
   public function getStockList($currentPage, $limitPage, $search, $stockCondition){
+
+    $accessMaterial = $this->session->userdata("accessMaterial");
+    $accessProduct  = $this->session->userdata("accessProduct");
 
     $this->db->select("stoId, matId, stoMatId, matName, matType, matMin,SUM(stoActualStock) AS stoActualStock, SUM(stoVirtualStock) AS stoVirtualStock, matCode, locName")
     ->from("stock")
     ->join("location", "locId = stoLocId")
     ->join("material", "matId = stoMatId")
+    ->where("matDeleteBy IS NULL")
     ->where("stoLast", 1);
+
+    if($accessMaterial == 1 && $accessProduct == 0){
+
+        //echo "ONLY MATERIAL";
+        $this->db->where("matType", "MATERIAL");
+    }
+
+    if($accessProduct == 1 && $accessMaterial == 0){
+
+        //echo "ONLY PRODUCT";
+        $this->db->where("matType", "PRODUCT");
+    }
+
+    if($accessProduct == 1 && $accessMaterial == 1){
+
+        //echo "SHOW ALL";
+        $this->db->group_start();
+        $this->db->where("matType", "PRODUCT");
+        $this->db->or_where("matType", "MATERIAL");
+        $this->db->group_end();
+    }
+
+    if($accessProduct == 0 && $accessMaterial == 0){
+
+        //echo "NOT SHOW";
+        $this->db->group_start();
+        $this->db->where("matType", "NO-DISPLAY");
+        $this->db->group_end();
+    }
 
     if($search){ 
 
@@ -53,7 +86,7 @@ class M_stock extends CI_Model {
     return $this->db->get();
   }
 
-  public function inputStock($matId, $matCost, $matAmount, $matLocId, $matExpDate){
+  public function inputStock($matId, $matCost, $matAmount, $matLocId, $matExpDate, $stoReason){
 
     $this->db->trans_start();
 
@@ -81,6 +114,7 @@ class M_stock extends CI_Model {
         $stoList["stoCreatedate"]   = date("Y-m-d H:i:s");
         $stoList["stoExpDate"]      = $matExpDate;
         $stoList["stoCreateby"]     = $this->session->userdata("accId");
+        $stoList["stoReason"]       = $stoReason;
 
         // update last transaction
         $stockData["stoLast"] = 0;
@@ -101,6 +135,7 @@ class M_stock extends CI_Model {
         $stoList["stoCreatedate"]   = date("Y-m-d H:i:s");
         $stoList["stoExpDate"]      = $matExpDate;
         $stoList["stoCreateby"]     = $this->session->userdata("accId");
+        $stoList["stoReason"]       = $stoReason;
     }
 
     // insert new transaction
@@ -116,97 +151,58 @@ class M_stock extends CI_Model {
     // insert history tranasction
     $this->db->insert("stockHistory", $history);
 
-
-
-
     $this->db->trans_complete();
 
     return $this->db->trans_status();
   }
 
-  public function outputStock($matId, $matLocId, $matAmount){
+  public function outputStock($matId, $matLocId, $matAmount, $stoReason, $stockType = "BOTH"){
 
-    if($matLocId != "AUTO-MODE"){
-
-        // #####################
-        // Manual Location
-        // #####################
-
-        // get last history
-        $lastInput = $this->db->select("stoId, stoMatId, stoActualStock, stoVirtualStock, stoLocId, stoCost")
-        ->from("stock")
-        ->where("stoMatId", $matId)
-        ->where("stoLocId", $matLocId)
-        ->where("stoLast", 1)
-        ->get()
-        ->row();
-
-    }else{
-
-        // #####################
-        // Auto Location
-        // #####################
-
-        // Find location and soon expire by matId
-        $stoExpSoon = $this->db->select("stoId, stoUsed, stoAmount, stoMatId, stoLocId")
-                        ->from("stock")
-                        ->where("stoMatId", $matId)
-                        ->where("stoAction", "INPUT")
-                        ->having("stoUsed != stoAmount")
-                        ->order_by("stoExpDate", "ASC")
-                        ->limit(1)
-                        ->get()
-                        ->row();
-
-        // find last transaction of expiration soon location
-        $lastInput = $this->db->select("stoId, stoMatId, stoActualStock, stoVirtualStock, stoLocId, stoCost")
-                        ->from("stock")
-                        ->where("stoMatId", $stoExpSoon->stoMatId)
-                        ->where("stoLocId", $stoExpSoon->stoLocId)
-                        ->where("stoLast", 1)
-                        ->get()
-                        ->row();
-    }
 
     // transaction
     $this->db->trans_start();
 
-    // update last transaction to old status
-    $stockData["stoLast"] = 0;
-    $this->db->where("stoId", $lastInput->stoId)
-    ->update("stock", $stockData);
-
     // prepare array for history !! separate easy to search
     $stoId      = array();
     $history    = array();
-    $stoList  = array();
+    $stoList    = array();
+    $cost       = 0;
 
     // update used for lot expiration soon
     for($i=1;$i<=$matAmount;$i++){
 
-        //echo $lastInput->stoMatId . " : " . $lastInput->stoLocId . "<BR>";
-
         // get lot have soon expiration 
-        $this->db->select("stoId, stoUsed, stoAmount, stoCost, stoMatId, stoLocId, stoActualStock, stoVirtualStock")
+        $this->db->select("stoId, stoUsed, stoAmount, stoCost, stoMatId, stoLocId, stoActualStock, stoVirtualStock, stoLast")
         ->from("stock")
-        ->where("stoMatId", $lastInput->stoMatId);
+        ->where("stoMatId", $matId);
 
         if($matLocId != "AUTO-MODE"){
 
-            $this->db->where("stoLocId", $lastInput->stoLocId);
+            $this->db->where("stoLocId", $matLocId);
         }
 
-        $this->db->where("stoAction", "INPUT")
-        ->having("stoUsed != stoAmount")
+        $this->db->where("stoLast", 1)
+        ->where("stoUsed != stoAmount")
         ->order_by("stoExpDate", "ASC")
         ->limit(1);
 
         $stoExpSoon = $this->db->get()->row();
 
-
         // update used for auto mode
-        $stockData["stoUsed"] = $stoExpSoon->stoUsed + 1;
-        $this->db->where("stoId", $stoExpSoon->stoId)
+        $inputTransaction = $this->db->select("stoId, stoUsed, stoCost")
+        ->from("stock")
+        ->where("stoMatId", $matId)
+        ->where("stoAction", "INPUT")
+        ->where("stoUsed != stoAmount")
+        ->order_by("stoExpDate", "ASC")
+        ->order_by("stoId", "ASC")
+        ->limit(1)
+        ->get()
+        ->row();
+
+        $stockData["stoUsed"]  = $inputTransaction->stoUsed + 1;
+        $cost                 += $inputTransaction->stoCost;
+        $this->db->where("stoId", $inputTransaction->stoId)
         ->update("stock", $stockData);
 
         // #################
@@ -220,9 +216,22 @@ class M_stock extends CI_Model {
             $history[$stoExpSoon->stoId]["shtAmount"]       += 1;
             $history[$stoExpSoon->stoId]["shtTotal"]        += $stoExpSoon->stoCost;
 
-            // update lasy stock
-            $stoList[$stoExpSoon->stoId]["stoActualStock"]  = $stoExpSoon->stoActualStock - 1;
-            $stoList[$stoExpSoon->stoId]["stoVirtualStock"] = $stoExpSoon->stoVirtualStock - 1;
+            // update last stock
+            switch($stockType){
+
+                case "BOTH" :   $stoList[$stoExpSoon->stoId]["stoActualStock"]  -= 1;
+                                $stoList[$stoExpSoon->stoId]["stoVirtualStock"] -= 1;
+                                //echo "BOTH";
+                                break;
+
+                case "ACTUAL" : $stoList[$stoExpSoon->stoId]["stoActualStock"]  -= 1;
+                                //echo "ACTUAL";
+                                break;
+
+                case "VIRTUAL" : $stoList[$stoExpSoon->stoId]["stoVirtualStock"] -= 1;
+                                 //echo "VIRTUAL";
+                                 break;
+            }
             $stoList[$stoExpSoon->stoId]["stoAmount"]       += 1;
 
         }else{
@@ -238,16 +247,30 @@ class M_stock extends CI_Model {
             $history[$stoExpSoon->stoId]["shtTotal"]        = $stoExpSoon->stoCost;
             $history[$stoExpSoon->stoId]["shtActionDate"]   = date("Y-m-d H:i:s");
 
-            // update last stock
+            // initial last stock
             $stoList[$stoExpSoon->stoId]["stoMatId"]        = $stoExpSoon->stoMatId;
             $stoList[$stoExpSoon->stoId]["stoLocId"]        = $stoExpSoon->stoLocId;
             $stoList[$stoExpSoon->stoId]["stoAction"]       = "OUTPUT";
             $stoList[$stoExpSoon->stoId]["stoLast"]         = 1;
-            $stoList[$stoExpSoon->stoId]["stoActualStock"]  = $stoExpSoon->stoActualStock - 1;
-            $stoList[$stoExpSoon->stoId]["stoVirtualStock"] = $stoExpSoon->stoVirtualStock - 1;
+
+            switch($stockType){
+
+                case "BOTH" :   $stoList[$stoExpSoon->stoId]["stoActualStock"]  = $stoExpSoon->stoActualStock - 1;
+                                $stoList[$stoExpSoon->stoId]["stoVirtualStock"] = $stoExpSoon->stoVirtualStock - 1;
+                                break;
+
+                case "ACTUAL" : $stoList[$stoExpSoon->stoId]["stoActualStock"]  = $stoExpSoon->stoActualStock - 1;
+                                $stoList[$stoExpSoon->stoId]["stoVirtualStock"] = $stoExpSoon->stoVirtualStock;
+                                break;
+
+                case "VIRTUAL" : $stoList[$stoExpSoon->stoId]["stoActualStock"]  = $stoExpSoon->stoActualStock;
+                                 $stoList[$stoExpSoon->stoId]["stoVirtualStock"] = $stoExpSoon->stoVirtualStock - 1;
+                                 break;
+            }
             $stoList[$stoExpSoon->stoId]["stoAmount"]       = 1;
             $stoList[$stoExpSoon->stoId]["stoCreatedate"]   = date("Y-m-d H:i:s");
             $stoList[$stoExpSoon->stoId]["stoCreateby"]     = $this->session->userdata("accId");
+            $stoList[$stoExpSoon->stoId]["stoReason"]       = $stoReason;
         }
     }
 
@@ -261,18 +284,59 @@ class M_stock extends CI_Model {
     // insert new transaction
     $this->db->insert_batch("stock", $stoList);
 
+    // update last transaction to old status
+    $stockData = "";
+    $stockData["stoLast"] = 0;
+    for($i=0;$i<count($stoId);$i++){
+
+        $this->db->where("stoId", $stoId[$i])
+        ->update("stock", $stockData);
+    }
+
     $this->db->trans_complete();
     
-    return $this->db->trans_status();
+    return $cost;
   }
 
   public function getStockHistoryList($currentPage, $limitPage, $search){
 
-    $this->db->select(" matCode, matName, stoCost, shtTotal, shtActionDate, matType, locName, shtAmount, shtType")
+    $accessMaterial = $this->session->userdata("accessMaterial");
+    $accessProduct  = $this->session->userdata("accessProduct");
+
+    $this->db->select(" matCode, matName, stoCost, shtTotal, shtActionDate, matType, locName, shtAmount, shtType, stoReason")
     ->from("stockHistory")
     ->join("stock", "stoId = shtStoId", "inner")
     ->join("location", "locId = stoLocId", "inner")
     ->join("material", "matId = stoMatId", "inner");
+
+    if($accessMaterial == 1 && $accessProduct == 0){
+
+        //echo "ONLY MATERIAL";
+        $this->db->where("matType", "MATERIAL");
+    }
+
+    if($accessProduct == 1 && $accessMaterial == 0){
+
+        //echo "ONLY PRODUCT";
+        $this->db->where("matType", "PRODUCT");
+    }
+
+    if($accessProduct == 1 && $accessMaterial == 1){
+
+        //echo "SHOW ALL";
+        $this->db->group_start();
+        $this->db->where("matType", "PRODUCT");
+        $this->db->or_where("matType", "MATERIAL");
+        $this->db->group_end();
+    }
+
+    if($accessProduct == 0 && $accessMaterial == 0){
+
+        //echo "NOT SHOW";
+        $this->db->group_start();
+        $this->db->where("matType", "NO-DISPLAY");
+        $this->db->group_end();
+    }
 
     if($search){ 
 
@@ -344,5 +408,36 @@ class M_stock extends CI_Model {
    
     return $dataRow;
   }
+
+  public function getLastCost($matId){
+
+    $this->db->select("stoCost")
+    ->from("stock")
+    ->where("stoMatId", $matId)
+    ->where("stoAction", "INPUT")
+    ->order_by("stoId", "DESC")
+    ->limit(1);
+
+    return $this->db->get();
+  }
+
+  public function updateStockCompleteOrder(){
+
+      // checkout from stock
+      $orderList = $this->db->select("matId, sodQty")
+      ->from("order")
+      ->join("subOrder", "ordId = sodOrdId", "inner")
+      ->join("product", "prdId = sodPrdId", "inner")
+      ->join("material", "matId = prdMatId", "inner")
+      ->where("ordId", $this->session->userdata("ordId"))
+      ->get()
+      ->result();
+
+      for($i=0;$i<count($orderList);$i++){
+
+          $this->outputStock($orderList[$i]->matId, "AUTO-MODE", $orderList[$i]->sodQty, "SYSTEM", "VIRTUAL");
+      }
+  }
 }
+
 ?>

@@ -21,15 +21,18 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label><?=$moneyToPoint?></label>
-                            <input type="text" class="form-control autoGet" id="moneyToPoint">
+                            <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="moneyToPoint">
+                            <span class="help-block"></span>
                         </div>
                         <div class="form-group">
                             <label><?=$tax?></label>
-                            <input type="text" class="form-control autoGet" id="tax">
+                            <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="tax">
+                            <span class="help-block"></span>
                         </div>
                         <div class="form-group">
                             <label><?=$standardPoint?></label>
-                            <input type="text" class="form-control autoGet" id="standardPoint">
+                            <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="standardPoint">
+                            <span class="help-block"></span>
                         </div>
                     </form>
                 </div>
@@ -38,11 +41,13 @@
                         <!-- text input -->
                         <div class="form-group">
                             <label><?=$pointToMoneyLevelS?></label>
-                            <input type="text" class="form-control autoGet" id="pointToMoneyLevelS">
+                            <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="pointToMoneyLevelS">
+                            <span class="help-block"></span>
                         </div>
                         <div class="form-group">
                             <label><?=$pointToMoneyLevelL?></label>
-                            <input type="text" class="form-control autoGet" id="pointToMoneyLevelL">
+                            <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="pointToMoneyLevelL">
+                            <span class="help-block"></span>
                         </div>
                     </form>
                 </div>
@@ -61,11 +66,13 @@
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Level S</label>
-                                        <input type="text" class="form-control autoGet" id="sFee">
+                                        <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="sFee">
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="form-group">
                                         <label>Level L</label>
-                                        <input type="text" class="form-control autoGet" id="lFee">
+                                        <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="lFee">
+                                        <span class="help-block"></span>
                                     </div>
                                 </form>
                             </div>
@@ -85,15 +92,18 @@
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label><?=$pounderWeight?></label>
-                                        <input type="text" class="form-control autoGet" id="pounderWeight">
+                                        <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="pounderWeight">
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="form-group">
                                         <label><?=$commission?></label>
-                                        <input type="text" class="form-control autoGet" id="commission">
+                                        <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="commission">
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="form-group">
                                         <label><?=$refer?></label>
-                                        <input type="text" class="form-control autoGet" id="refer">
+                                        <input type="text" class="form-control autoGet validateDefaultSettingForm" require="true" id="refer">
+                                        <span class="help-block"></span>
                                     </div>
                                 </form>
                             </div>
@@ -250,17 +260,20 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right dateRang autoGet" id="scheduleDateRang">
+                                    <input type="text" class="form-control pull-right dateRang autoGet validateScheduleSettingForm" require="true" id="scheduleDateRang">
                                 </div>
+                                <span class="help-block"></span>
                                 <!-- /.input group -->
                             </div>
                             <div class="form-group">
                                 <label><?=$moneyToPoint?></label>
-                                <input type="text" class="form-control autoGet" id="moneyToPoint">
+                                <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="moneyToPoint">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$tax?></label>
-                                <input type="text" class="form-control autoGet" id="tax">
+                                <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="tax">
+                                <span class="help-block"></span>
                             </div>
                         </form>
                     </div>
@@ -269,15 +282,18 @@
                             <!-- text input -->
                             <div class="form-group">
                                 <label><?=$pointToMoneyLevelS?></label>
-                                <input type="text" class="form-control autoGet" id="pointToMoneyLevelS">
+                                <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="pointToMoneyLevelS">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$pointToMoneyLevelL?></label>
-                                <input type="text" class="form-control autoGet" id="pointToMoneyLevelL">
+                                <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="pointToMoneyLevelL">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$standardPoint?></label>
-                                <input type="text" class="form-control autoGet" id="standardPoint">
+                                <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="standardPoint">
+                                <span class="help-block"></span>
                             </div>
                         </form>
                     </div>
@@ -296,11 +312,13 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Level S</label>
-                                            <input type="text" class="form-control autoGet" id="sFee">
+                                            <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="sFee">
+                                            <span class="help-block"></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Level L</label>
-                                            <input type="text" class="form-control autoGet" id="lFee">
+                                            <input type="text" class="form-control autoGet validateScheduleSettingForm" require="true" id="lFee">
+                                            <span class="help-block"></span>
                                         </div>
                                     </form>
                                 </div>
@@ -320,15 +338,18 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label><?=$pounderWeight?></label>
-                                            <input type="text" class="form-control autoGet modalInput" id="pounderWeight">
+                                            <input type="text" class="form-control autoGet validateScheduleSettingForm modalInput" require="true" id="pounderWeight">
+                                            <span class="help-block"></span>
                                         </div>
                                         <div class="form-group">
                                             <label><?=$commission?></label>
-                                            <input type="text" class="form-control autoGet modalInput" id="commission">
+                                            <input type="text" class="form-control autoGet validateScheduleSettingForm modalInput" require="true" id="commission">
+                                            <span class="help-block"></span>
                                         </div>
                                         <div class="form-group">
                                             <label><?=$refer?></label>
-                                            <input type="text" class="form-control autoGet modalInput" id="refer">
+                                            <input type="text" class="form-control autoGet validateScheduleSettingForm modalInput" require="true" id="refer">
+                                            <span class="help-block"></span>
                                         </div>
                                     </form>
                                 </div>

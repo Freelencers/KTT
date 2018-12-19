@@ -21,6 +21,8 @@ $lang['moduleFanshineCommission']   = 'คอมมิสชัน';
 $lang['moduleWherehouseLocation']   = 'สถานที่เก็บสินค้า';
 $lang['moduleWherehouseProduct']    = 'สินค้า';
 $lang['moduleWherehouseStock']      = 'คลังสินค้า';
+$lang['moduleWherehouseAccessMaterial']  = 'สามารถเข้าถึงวัตุดิบ';
+$lang['moduleWherehouseAccessProduct']   = 'สามารถเข้าสินค้า';
 $lang['moduleAccountProduct']       = 'สินค้านำขาย';
 $lang['moduleAccountOrder']         = 'รายการสั่งซื้อ';
 $lang['moduleAccountHistory']       = 'ประวัติการสั่งซื้อ';
@@ -211,6 +213,7 @@ $lang["wherehouseStockTotal"]               = "มูลค่ารวม";
 $lang["wherehouseStockStatus"]              = "สถานะ";
 $lang["wherehouseStockExpire"]              = "วันหมดอายุ";
 $lang["wherehouseStockModalTitle"]          = "รายละเอียดสินค้า";
+$lang["wherehouseStockReason"]              = "เหตุผล";
 
 //################
 // Account
@@ -249,6 +252,7 @@ $lang["accountOrderMyOrder"]            =   "สินค้าของฉั�
 $lang["accountOrderCode"]               =   "รหัสใบสั่งซื้อ";
 $lang["accountOrderPrice"]              =   "ราคา";
 $lang["accountOrderStock"]              =   "สต็อก";
+$lang["accountOrderUnit"]               =   "หน่วย";
 
 $lang["accountOrderFrom"]               =   "จาก";
 $lang["accountOrderTo"]                 =   "ถึง";
@@ -301,3 +305,9 @@ $lang["reportBenefitFilterTitle"]        =   "ตัวเลือก";
 $lang["reportGrowthCode"]               =   "รหัส";
 $lang["reportGrowthFanshineName"]       =   "ชื่อแฟรนไชน์";
 $lang["reportGrowthAVG"]                =   "ค่าเฉลี่ย";
+
+//################
+// Validate
+//################
+
+$lang["validateRequire"]                =   "กรุณากรอกข้อมูล";

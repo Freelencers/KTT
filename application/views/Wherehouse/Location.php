@@ -73,12 +73,14 @@
                     <!-- text input -->
                     <div class="form-group">
                         <label><?=$name?></label>
-                        <input type="text" class="form-control autoGet" id="locName">
+                        <input type="text" class="form-control autoGet validate" require="true" id="locName">
+                        <span class="help-block"></span>
                     </div>
                     <div class="form-group">
                         <label><?=$description?></label>
-                        <textarea class="form-control autoGet" id="locDetail">
+                        <textarea class="form-control autoGet validate" require="true" id="locDetail">
                         </textarea>
+                        <span class="help-block"></span>
                     </div>
                 </form>
             </div>

@@ -25,7 +25,10 @@ $("#createNewAcountButtom").click(function(){
 
 $("#modalSaveButton").click(function(){
 
-    actionCustomer();
+    if(validate(".validate")){
+
+        actionCustomer();
+    }
 });
 
 $(".province").change(function(){
@@ -46,6 +49,7 @@ $(document).on("click", ".changeCustomerDetail", function(){
     localStorage.setItem("modalStatus", "UPDATE");
     var cusId = $(this).attr("data-cusId");
     var tempValue = "";
+    clearDataForm(".modal-body");
     $.post(base_url + "/Fanshine/Customer/getCustomerDetailById", {"cusId" : cusId}, function(resp){
 
         resp = resp.response.dataRow;
@@ -348,14 +352,23 @@ function loadRefer(search, except=""){
     $.post(base_url + "/Fanshine/Customer/getRefer", {"search": "", "except" : except}, function(resp){
         var options = "";
         var optionElement = $("#option").html();
+        var disabled = "";
 
         if(resp.response.dataList.length){
             resp.response.dataList.forEach(function(row){
 
+                if(row.cusRefTime >= 2){
+
+                    disabled = "disabled";
+                }else{
+                    
+                    disabled = "";
+                }
                 replace = {
                     "{title}" : row.cusCode + " : " + row.cusFullName,
                     "{value}" : row.cusId,
-                    "{selected}" : ""
+                    "{selected}" : "",
+                    "{disabled}" : disabled
                 }
                 options += replaceAll(optionElement, replace);
             });

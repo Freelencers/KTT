@@ -66,85 +66,90 @@ $("#createScheduleButton").click(function(){
 
 $("#saveSettingDefault").click(function(){
 
-    var sedList = new Array();
-    $(".defaultSettingForm .autoGet").each(function(){
+    if(validate(".validateDefaultSettingForm")){
 
-        sedList.push({
-            "sedId": $(this).attr("sedId"),
-            "sedValue": $(this).val(),
-            "sedname": $(this).attr("id")
+        var sedList = new Array();
+        $(".defaultSettingForm .autoGet").each(function(){
+
+            sedList.push({
+                "sedId": $(this).attr("sedId"),
+                "sedValue": $(this).val(),
+                "sedname": $(this).attr("id")
+            });
         });
-    });
-    $.post(base_url + "/System/Setting/updateSettingDefault", {"sedList" : sedList}, function(resp){
+        $.post(base_url + "/System/Setting/updateSettingDefault", {"sedList" : sedList}, function(resp){
 
-        loadScheduleTable(currentPage, limitPage, "");
-        loadHistoryTable(currentPage, limitPage, "");
-        $("#modal-success").modal();
-    },"json");
+            loadScheduleTable(currentPage, limitPage, "");
+            loadHistoryTable(currentPage, limitPage, "");
+            $("#modal-success").modal();
+        },"json");
+    }
 });
 
 $("#saveButtonModal").click(function(){
 
-    var modalStatus = localStorage.getItem("modalStatus");
-    var scheduleList = {};
-    var scheduleList = {};
-    scheduleList["sscList"] = new Array();
+    if(validate(".validateScheduleSettingForm")){
+        var modalStatus = localStorage.getItem("modalStatus");
+        var scheduleList = {};
+        var scheduleList = {};
+        scheduleList["sscList"] = new Array();
 
-    $(".modal-body .autoGet").each(function(){
+        $(".modal-body .autoGet").each(function(){
 
-        var value = $(this).val();
-        var id = $(this).attr("id");
-        var sscId = $(this).attr("sscId");
-        var temp = "";
+            var value = $(this).val();
+            var id = $(this).attr("id");
+            var sscId = $(this).attr("sscId");
+            var temp = "";
 
 
-        if(id == "scheduleDateRang"){
-            
-            // Convert format to yyyy-mm-dd and split 
-            temp = value.split(" - ");
-            scheduleList["ssgDateStart"] = convertDateToDatabase(temp[0]);
-            scheduleList["ssgDateEnd"]   = convertDateToDatabase(temp[1]);
-        }else{
-
-            if(modalStatus == "CREATE"){
-
-                // CREATE
-                scheduleList["sscList"].push({
-                    "sscName" : id,
-                    "sscValue" : value 
-                });
+            if(id == "scheduleDateRang"){
+                
+                // Convert format to yyyy-mm-dd and split 
+                temp = value.split(" - ");
+                scheduleList["ssgDateStart"] = convertDateToDatabase(temp[0]);
+                scheduleList["ssgDateEnd"]   = convertDateToDatabase(temp[1]);
             }else{
 
-                // UPDTE
-                scheduleList["sscList"].push({
-                    "sscId" : sscId,
-                    "sscName" : id,
-                    "sscValue" : value 
-                });
+                if(modalStatus == "CREATE"){
+
+                    // CREATE
+                    scheduleList["sscList"].push({
+                        "sscName" : id,
+                        "sscValue" : value 
+                    });
+                }else{
+
+                    // UPDTE
+                    scheduleList["sscList"].push({
+                        "sscId" : sscId,
+                        "sscName" : id,
+                        "sscValue" : value 
+                    });
+                }
             }
+        });
+
+
+        if(modalStatus == "CREATE"){
+
+            // CREATE
+            $.post(base_url + "/System/Setting/createSettingSchedule", scheduleList, function(resp){
+
+                $("#modal-createSchedule").modal("hide");
+                loadScheduleTable(currentPage, limitPage, "");
+                $("#modal-success").modal();
+            },"json");
+        }else{
+
+            // UPDATE
+            scheduleList["ssgId"]   = localStorage.getItem("ssgId");
+            $.post(base_url + "/System/Setting/updateSettingSchedule", scheduleList, function(resp){
+
+                $("#modal-createSchedule").modal("hide");
+                loadScheduleTable(currentPage, limitPage, "");
+                $("#modal-success").modal();
+            },"json");
         }
-    });
-
-
-    if(modalStatus == "CREATE"){
-
-        // CREATE
-        $.post(base_url + "/System/Setting/createSettingSchedule", scheduleList, function(resp){
-
-            $("#modal-createSchedule").modal("hide");
-            loadScheduleTable(currentPage, limitPage, "");
-            $("#modal-success").modal();
-        },"json");
-    }else{
-
-        // UPDATE
-        scheduleList["ssgId"]   = localStorage.getItem("ssgId");
-        $.post(base_url + "/System/Setting/updateSettingSchedule", scheduleList, function(resp){
-
-            $("#modal-createSchedule").modal("hide");
-            loadScheduleTable(currentPage, limitPage, "");
-            $("#modal-success").modal();
-        },"json");
     }
 });
 
@@ -155,7 +160,7 @@ $(document).on("click", ".changeSettingDetail", function(){
     localStorage.setItem("modalStatus", "UPDATE");
 
     // check this schedule is working
-    if($(this).attr("class").search("disabled")){
+    if($(this).attr("class").search("disabled") != -1){
 
         $.post(base_url + "/General/getLangLine", {"str": "generalScheduleLock"}, function(resp){
 
@@ -184,7 +189,7 @@ $(document).on("click", ".changeSettingDetail", function(){
 $("#deleteButtonConfirm").click(function(){
 
     // check this schedule is working
-    if($(this).attr("class").search("disabled")){
+    if($(this).attr("class").search("disabled") != -1){
 
         $("#modal-deleteConfirm").modal("hide");
         $.post(base_url + "/General/getLangLine", {"str": "generalScheduleLock"}, function(resp){

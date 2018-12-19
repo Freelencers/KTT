@@ -60,7 +60,9 @@ class History extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/Account/orderHistory.js"];
 		$this->load->view("Account/History", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

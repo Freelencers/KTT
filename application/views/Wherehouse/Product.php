@@ -84,32 +84,32 @@
                     <!-- text input -->
                     <div class="form-group">
                         <label><?=$productName?></label>
-                        <input type="text" class="form-control autoGet" id="matName">
+                        <input type="text" class="form-control autoGet validate" require="true" id="matName">
                     </div>
                     <div class="form-group">
                         <label><?=$location?></label>
-                        <select class="form-control autoGet" id="matLocId">
+                        <select class="form-control autoGet validate" require="true" id="matLocId">
                         </select>
                     </div>
                     <div class="form-group">
                         <label><?=$unit?></label>
-                        <select class="form-control autoGet" id="matUntId">
+                        <select class="form-control autoGet validate" require="true" id="matUntId">
                         </select>
                     </div>
                     <div class="form-group">
                         <label><?=$type?></label>
-                        <select class="form-control autoGet" id="matType">
+                        <select class="form-control autoGet validate" require="true" id="matType">
                             <option value="MATERIAL"><?=$this->lang->line("wherehouseProductMaterial");?></option>
                             <option value="PRODUCT"><?=$this->lang->line("wherehouseProductProduct");?></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label><?=$min?></label>
-                        <input type="text" class="form-control autoGet" id="matMin">
+                        <input type="text" class="form-control autoGet validate" require="true" id="matMin">
                     </div>
                     <div class="form-group">
                         <label><?=$max?></label>
-                        <input type="text" class="form-control autoGet" id="matMax">
+                        <input type="text" class="form-control autoGet validate" require="true" id="matMax">
                     </div>
                 </form>
             </div>

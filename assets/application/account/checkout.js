@@ -57,8 +57,9 @@ function loadOrderProductList(){
             // Create card
             replace = {
                 "{sodQty}" : row.sodQty,
-                "{point}" : row.prdPoint,
-                "{price}" : (row.prdFullPrice - row.prdDiscount),
+                "{untName}" : row.untName,
+                "{point}" : row.prdPoint * row.sodQty,
+                "{price}" : (row.prdFullPrice - row.prdDiscount) * row.sodQty,
                 "{matName}" : row.matName
             }
             rows += replaceAll(component, replace);

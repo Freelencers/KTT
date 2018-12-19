@@ -1,3 +1,4 @@
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -5,7 +6,6 @@
         <?=$pageTitle?> 
         </h1>
     </section>
-
     <!-- Main content -->
     <section class="content">
         <div class="row">
@@ -51,15 +51,24 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <select class="form-control">
+                                <select class="form-control filter" id="filterColumn">
+                                    <option value="cmsTotalPrivatePoint"><?=$privatePoint?></option>
+                                    <option value="cmsTotalPublicPoint"><?=$companyPoint?></option>
+                                    <option value="cmsTotalPoint"><?=$amount?></option>
+                                    <option value="cmsTotalCommission"><?=$commission?></option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control">
+                                <select class="form-control filter" id="filterCondition">
+                                    <option value=">"> > </option>
+                                    <option value="<"> < </option>
+                                    <option value="="> = </option>
+                                    <option value=">="> >= </option>
+                                    <option value="<="> <= </option>
                                 </select>
                             </div>
                             <div class="col-md-5">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control filter" id="filterValue">
                             </div>
                         </div>
                     </div>
@@ -74,7 +83,7 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control filter" id="search">
                             </div>
                         </div>
                     </div>
@@ -91,36 +100,31 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <!-- template -->
+                                <table class="template" id="rowTemplateReport">
+                                    <tbody>
+                                        <tr>
+                                            <td>{cmrDate}</td>
+                                            <td>
+                                                <i class="fa fa-fw fa-bank pointer generatePdfTransfer" cmrId="{cmrId}"></i>
+                                                <i class="fa fa-fw fa-file-text pointer getReportDetail" cmrId="{cmrId}"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <th><?=$cycleDate?></th>
                                         <th><?=$action?></th>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{cmrDate}</td>
-                                            <td>
-                                                <i class="fa fa-fw fa-bank" data-cmrId="{cmrId}"></i>
-                                                <i class="fa fa-fw fa-file-text" data-cmrId="{cmrId}"></i>
-                                            </td>
-                                        </tr>
+                                    <tbody id="tbodyReportList">
+
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-md-12">
-                                <ul class="pagination pull-right">
-                                    <li class="paginate_button">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button active">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button ">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button">
-                                        <a href="#">1</a>
-                                    </li>
+                                <ul class="pagination paginationReportList pull-right pagination-sm no-margin">
+                                
                                 </ul>
                             </div>
                         </div>
@@ -138,6 +142,24 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <!-- template -->
+                                <table class="template" id="rowTemplateCommission">
+                                    <tbody>
+                                        <tr>
+                                            <td>{code}</td>
+                                            <td>{fanshineName}</td>
+                                            <td>{bank}</td>
+                                            <td>{bankAccount}</td>
+                                            <td>{privatePoint}</td>
+                                            <td>{companyPoint}</td>
+                                            <td>{amount}</td>
+                                            <td>{commission}</td>
+                                            <td>
+                                                <i class="fa fa-fw fa-file-text pointer generateCommissionDetailPdf" cmsCmrId="{cmsCmrId}" cmsCusId="{cmsCusId}"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <th><?=$code?></th>
@@ -150,37 +172,14 @@
                                         <th><?=$commission?></th>
                                         <th><?=$action?></th>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{code}</td>
-                                            <td>{FanshineName}</td>
-                                            <td>{bank}</td>
-                                            <td>{bankAccount}</td>
-                                            <td>{privatePoint}</td>
-                                            <td>{companyPoint}</td>
-                                            <td>{amount}</td>
-                                            <td>{commission}</td>
-                                            <td>
-                                                <i class="fa fa-fw fa-file-text" data-cmrId="{cmrId}"></i>
-                                            </td>
-                                        </tr>
+                                    <tbody id="tbodyCommissionList">
+                                    
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-md-12">
-                                <ul class="pagination pull-right">
-                                    <li class="paginate_button">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button active">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button ">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="paginate_button">
-                                        <a href="#">1</a>
-                                    </li>
+                                <ul class="pagination paginationCommissionList pull-right">
+                                
                                 </ul>
                             </div>
                         </div>

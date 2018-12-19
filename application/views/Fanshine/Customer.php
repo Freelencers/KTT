@@ -121,11 +121,13 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label><?=$fanshineName?></label>
-                                <input type="text" class="form-control autoGet cusList" id="cusFanshineName">
+                                <input type="text" class="form-control autoGet validate cusList" require="true" id="cusFanshineName">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$fullName?></label>
-                                <input type="text" class="form-control autoGet cusList" id="cusFullName">
+                                <input type="text" class="form-control autoGet validate cusList" require="true" id="cusFullName">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -135,22 +137,25 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control datemask cusList" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" id="cusDateOfBirth">
+                                            <input type="text" class="form-control datepicker cusList validate" require="true" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" id="cusDateOfBirth">
                                         </div>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-3">
                                         <label><?=$level?></label>
-                                        <select class="form-control autoGet cusList" id="cusLevel">
+                                        <select class="form-control autoGet validate cusList" require="true" id="cusLevel">
                                             <option value="S">S</option>
                                             <option value="L">L</option>
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$country?></label>
-                                <select class="form-control autoGet cusList" id="cusCouId">
+                                <select class="form-control autoGet validate cusList" require="true" id="cusCouId">
                                 </select>
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$passportId?></label>
@@ -158,23 +163,27 @@
                             </div>
                             <div class="form-group">
                                 <label><?=$personalId?></label>
-                                <input type="text" class="form-control autoGet cusList" id="cusPersonalId">
+                                <input type="text" class="form-control autoGet validate cusList" require="true" id="cusPersonalId">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$address?></label>
-                                <input type="text" class="form-control autoGet addList addProfile" id="addDetail">
+                                <input type="text" class="form-control autoGet validate addList addProfile" require="true" id="addDetail">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$province?></label>
-                                        <select class="form-control autoGet addList addProfile province" id="addProvince">
+                                        <select class="form-control autoGet validate addList addProfile province" require="true" id="addProvince">
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$district?></label>
-                                        <select class="form-control autoGet addList addProfile districtProfile" id="addDistrict">
+                                        <select class="form-control autoGet validate addList addProfile districtProfile" require="true" id="addDistrict">
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
@@ -182,54 +191,64 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label><?=$postcode?></label>
-                                <input type="text" class="form-control autoGet addList addProfile" id="addPostcode">
+                                <input type="text" class="form-control autoGet validate addList addProfile" require="true" id="addPostcode">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$phoneNumber?></label>
-                                <input type="text" class="form-control autoGet contactList" id="conPhone">
+                                <input type="text" class="form-control autoGet validate contactList" require="true" id="conPhone">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$email?></label>
-                                <input type="text" class="form-control autoGet contactList" id="conEmail">
+                                <input type="text" class="form-control autoGet validate contactList" require="true" id="conEmail">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$deliveryAddress?></label>
-                                <input type="text" class="form-control autoGet addList addDelivery" id="addDetail">
+                                <input type="text" class="form-control autoGet validate addList addDelivery" require="true" id="addDetail">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$province?></label>
-                                        <select class="form-control autoGet addList addDelivery province" id="addProvince">
+                                        <select class="form-control autoGet validate addList addDelivery province" require="true" id="addProvince">
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$district?></label>
-                                        <select class="form-control autoGet addList addDelivery districtDelivery" id="addDistrict">
+                                        <select class="form-control autoGet validate addList addDelivery districtDelivery" require="true" id="addDistrict">
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$postcode?></label>
-                                <input type="text" class="form-control autoGet addList addDelivery" id="addPostcode">
+                                <input type="text" class="form-control autoGet validate addList addDelivery" require="true" id="addPostcode">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$bank?></label>
-                                        <select class="form-control autoGet bankAccountDetail" id="bacBanId">
+                                        <select class="form-control autoGet validate bankAccountDetail" require="true" id="bacBanId">
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$bankAccount?></label>
-                                        <input type="text" class="form-control autoGet bankAccountDetail" id="bacNumber">
+                                        <input type="text" class="form-control autoGet validate bankAccountDetail" require="true" id="bacNumber">
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$branch?></label>
-                                <input type="text" class="form-control autoGet bankAccountDetail" id="bacBranch">
+                                <input type="text" class="form-control autoGet validate bankAccountDetail" require="true" id="bacBranch">
+                                <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -237,40 +256,46 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label><?=$accountType?></label>
-                                        <select class="form-control autoGet bankAccountDetail" id="bacType">
+                                        <select class="form-control autoGet validate bankAccountDetail" require="true" id="bacType">
                                             <option value="SAVING"><?=$savingAccount?></option>
                                             <option value="CURRENT"><?=$currentAccount?></option>
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$accountName?></label>
-                                <input type="text" class="form-control autoGet bankAccountDetail" id="bacName">
+                                <input type="text" class="form-control autoGet validate bankAccountDetail" require="true" id="bacName">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$refer?></label>
-                                <select class="form-control autoGet cusList" id="cusReferId">
+                                <select class="form-control autoGet validate cusList" require="true" id="cusReferId">
                                 </select>
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><?=$maritalStatus?></label>
-                                        <select class="form-control autoGet cusList" id="cusMarital">
+                                        <select class="form-control autoGet validate cusList" require="true" id="cusMarital">
                                             <option value="MARRIED"><?=$this->lang->line("fanshineCustomerSingle")?></option>
                                             <option value="SINGLE"><?=$this->lang->line("fanshineCustomerMarried")?></option>
                                         </select>
+                                        <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label><?=$child?></label>
-                                        <input type="text" class="form-control autoGet cusList" id="cusChild">
+                                        <input type="text" class="form-control autoGet validate cusList" require="true" id="cusChild">
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><?=$descendantName?></label>
-                                <input type="text" class="form-control autoGet cusList" id="cusDescedant">
+                                <input type="text" class="form-control autoGet validate cusList" require="true" id="cusDescedant">
+                                <span class="help-block"></span>
                             </div>
                         </div>
                     </form>

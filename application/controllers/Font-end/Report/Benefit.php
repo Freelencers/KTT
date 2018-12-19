@@ -48,7 +48,7 @@ class Benefit extends CI_Controller {
 
 		// Languae Setting
 		$word["pageTitle"] 			= $this->lang->line("moduleReportBenefit");
-		$word["costByProduct"] 		= $this->lang->line("ReportBenefitCostByProduct");
+		$word["costByProduct"] 		= $this->lang->line("reportBenefitCostByProduct");
 		$word["costByExpense"] 		= $this->lang->line("reportBenefitCostByExpense");
 		$word["includeWaiting"] 	= $this->lang->line("reportBenefitIncludeWaiting");
 		$word["expense"] 			= $this->lang->line("reportBenefitExpense");
@@ -63,7 +63,9 @@ class Benefit extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/Report/benefit.js"];
 		$this->load->view("Report/Benefit", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

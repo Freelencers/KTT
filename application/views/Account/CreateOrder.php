@@ -112,7 +112,7 @@
                                             </center>
                                         </div>
                                         <div class="col-sm-3">
-                                            <button type="button" class="btn btn-block btn-success btn-xs addProductToCrat" prdId="{prdId}" action="add">+</button>
+                                            <button type="button" class="btn btn-block btn-success btn-xs addProductToCrat" prdId="{prdId}" stock="{stock}" action="add">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -139,6 +139,7 @@
                                         <p><?=$code?>  : {code}</p>
                                         <p><?=$point?> : {point}</p>
                                         <p><?=$price?> : {price}</p>
+                                        <p><?=$unit?> : {untName}</p>
                                     </div>
                                     <div class="box-footer with-border">
                                         <div class="col-sm-3"></div>

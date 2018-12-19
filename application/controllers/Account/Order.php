@@ -28,7 +28,6 @@ class Order extends CI_controller {
         echo json_encode($json);
     }
 
-
     public function getMyOrderList(){
 
         $ordId          = $this->input->post("ordId");
@@ -164,6 +163,8 @@ class Order extends CI_controller {
 
     public function complete($subTotal, $tax, $shipping, $isRedirect=true){
 
+        $this->load->model("Wherehouse/M_stock");
+
         $orderDetail["ordSubTotal"] = $subTotal;
         $orderDetail["ordShipping"] = $shipping;
         $orderDetail["ordTax"]      = $tax;
@@ -171,6 +172,8 @@ class Order extends CI_controller {
         $orderDetail["ordStatus"]   = "WAIT-PAY";
         $orderDetail["ordCusId"]    = $this->session->userdata("ordCusId");
         $this->M_order->complete($orderDetail);
+        $this->M_stock->updateStockCompleteOrder();
+
         if($isRedirect){
 
             redirect(base_url() . "index.php/Font-end/Account/Order");
@@ -213,7 +216,6 @@ class Order extends CI_controller {
 		$pdf->AddFont('THSarabun','U','THSarabun Bold.php');
         $pdf->SetFont('THSarabun','',16);
         
-
         // Order detail box
 
         // order code
@@ -236,13 +238,13 @@ class Order extends CI_controller {
    
         // Kratatong box
         $pdf->Text(10, 45, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderFrom")));
-        $pdf->Text(10, 50, iconv( 'UTF-8','TIS-620', 'Gatatong Fanshine'));
-        $pdf->Text(10, 55, iconv( 'UTF-8','TIS-620', '123/456 xxxx xxxx xxx'));
-        $pdf->Text(10, 60, iconv( 'UTF-8','TIS-620', 'ชลบุรี'));
-        $pdf->Text(10, 65, iconv( 'UTF-8','TIS-620', 'แสนสุข'));
+        $pdf->Text(10, 50, iconv( 'UTF-8','TIS-620', 'ปาท่องโก๋กระทะมอง'));
+        $pdf->Text(10, 55, iconv( 'UTF-8','TIS-620', '249 ถ.สุขุมวิท ต.แสนสุข ตลาดหนองมน'));
+        $pdf->Text(10, 60, iconv( 'UTF-8','TIS-620', 'อ.เมือง'));
+        $pdf->Text(10, 65, iconv( 'UTF-8','TIS-620', 'จ.ชลบุรี'));
         $pdf->Text(10, 70, iconv( 'UTF-8','TIS-620', '20130'));
-        $pdf->Text(10, 75, iconv( 'UTF-8','TIS-620', 'gatatong@gmail.com'));
-        $pdf->Text(10, 80, iconv( 'UTF-8','TIS-620', '0888888888'));
+        $pdf->Text(10, 75, iconv( 'UTF-8','TIS-620', '089-936-8257'));
+        $pdf->Text(10, 80, iconv( 'UTF-8','TIS-620', 'raty.ying@yahoo.com'));
 
 
         // Customer box
@@ -268,9 +270,10 @@ class Order extends CI_controller {
         //Column headings
         $header = array(
             iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderQty")),
+            iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderUnit")),
             iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderProduct")),
-            iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderPrice")),
-            iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderPoint"))
+            iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderPoint")),
+            iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderPrice"))
         );
 
         // prepare data to array
@@ -278,9 +281,10 @@ class Order extends CI_controller {
         for($i=0;$i<count($invoiceDetail["subOrderDetail"]);$i++){
 
             $data[$i][0] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->sodQty);
-            $data[$i][1] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->matName);
-            $data[$i][2] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->prdPoint);
-            $data[$i][3] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->prdPrice);
+            $data[$i][1] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->untName);
+            $data[$i][2] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->matName);
+            $data[$i][3] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->prdPoint);
+            $data[$i][4] = iconv( 'UTF-8','TIS-620', $invoiceDetail["subOrderDetail"][$i]->prdPrice);
         }
 
         // create table
@@ -294,7 +298,7 @@ class Order extends CI_controller {
         // Left 1
         $pdf->Cell( 20, 5, iconv( 'UTF-8','TIS-620', 
             $this->lang->line("accountOrderCustomerAccountName") . " : " .
-            "KRATATONG"
+            "สมเกียรติ ทวีพาณิชย์กุล"
         ), 0, 0,'L');
 
         // Right 1
@@ -304,7 +308,7 @@ class Order extends CI_controller {
         // Left 2
         $pdf->Cell( 20, 5, iconv( 'UTF-8','TIS-620', 
             $this->lang->line("accountOrderCustomerAccountNo")). " : " .
-            "000-000000-0"
+            "454-2-22110-8"
         , 0, 0,'L');
 
         // Right 2
@@ -330,7 +334,6 @@ class Order extends CI_controller {
         // Right 4
         $pdf->Cell( 120, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderGrandTotal")), 0, 0,'R');
         $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordTotal), 0, 1,'R');
-
 
         // Render
 		$pdf->Output("assets/tempPDF/invoice.pdf","I");

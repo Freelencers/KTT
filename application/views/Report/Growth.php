@@ -15,26 +15,10 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table class="table table-bordered table-hover dataTable">
-                            <thead>
-                                <th><?=$code?></th>
-                                <th><?=$fanshineName?></th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7</th>
-                                <th>8</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th><?=$avg?></th>
-                            </thead>
+                        <!-- template -->
+                        <table class="template" id="templateGrowth">
                             <tbody>
-                                <tr id="locationColumnTemplate">
+                                <tr>
                                     <td>{code}</td>
                                     <td>{fanshineName}</td>
                                     <td>{m1}</td>
@@ -53,7 +37,29 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="col-md-12">
+
+                        <table class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <th><?=$code?></th>
+                                <th><?=$fanshineName?></th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                                <th>9</th>
+                                <th>10</th>
+                                <th>11</th>
+                                <th>12</th>
+                                <th><?=$avg?></th>
+                            </thead>
+                            <tbody id="tableOfgrowth">
+                            </tbody>
+                        </table>
+                        <div class="col-md-12 template">
                             <ul class="pagination pull-right">
                                 <li class="paginate_button">
                                     <a href="#">1</a>

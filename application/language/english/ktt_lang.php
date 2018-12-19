@@ -21,6 +21,8 @@ $lang['moduleFanshineCommission']   = 'Commission';
 $lang['moduleWherehouseLocation']   = 'Location';
 $lang['moduleWherehouseProduct']    = 'Product';
 $lang['moduleWherehouseStock']      = 'Stock';
+$lang['moduleWherehouseAccessMaterial']  = 'Access Material';
+$lang['moduleWherehouseAccessProduct']   = 'Access Product';
 $lang['moduleAccountProduct']       = 'Product';
 $lang['moduleAccountOrder']         = 'Order';
 $lang['moduleAccountHistory']       = 'History';
@@ -210,6 +212,7 @@ $lang["wherehouseStockTotal"]               = "Total";
 $lang["wherehouseStockStatus"]              = "Status";
 $lang["wherehouseStockExpire"]              = "Expire";
 $lang["wherehouseStockModalTitle"]          = "Stock Detail";
+$lang["wherehouseStockReason"]              = "Reason";
 
 //################
 // Account
@@ -226,7 +229,7 @@ $lang["accountProductPrice"]             = "Price";
 $lang["accountProductDiscount"]          = "Discount";
 $lang["accountProductPoint"]             = "Point";
 $lang["accountProductModalTitle"]        = "Product Detail";
-$lang["accountProductTotal"]             = "Toal";
+$lang["accountProductTotal"]             = "Total";
 
 //Order
 $lang["accountOrderDate"]                =   "Date";
@@ -248,6 +251,7 @@ $lang["accountOrderMyOrder"]            =   "My Order";
 $lang["accountOrderCode"]               =   "Code";
 $lang["accountOrderPrice"]              =   "Price";
 $lang["accountOrderStock"]              =   "Stock";
+$lang["accountOrderUnit"]               =   "Unit";
 
 $lang["accountOrderFrom"]               =   "From";
 $lang["accountOrderTo"]                 =   "To";
@@ -284,17 +288,23 @@ $lang["accountExpenseCreateNewExpense"] =   "Create New Expense";
 //################
 
 // Benefit
-$lang["accountReportBenefitCostByProduct"]      =   "Cost by Product";
-$lang["accountReportBenefitCostByExpense"]      =   "Cost by Expense";
-$lang["accountReportBenefitIncludeWaiting"]     =   "Include Waiting";
-$lang["accountReportBenefitExpense"]            =   "Expense";
-$lang["accountReportBenefitIncome"]             =   "Income";
-$lang["accountReportBenefitProfit"]             =   "Profit";
-$lang["accountReportBenefitProcess"]            =   "Process";
-$lang["accountReportBenefitFilterTitle"]        =   "Option";
+$lang["reportBenefitCostByProduct"]      =   "Cost by Product";
+$lang["reportBenefitCostByExpense"]      =   "Cost by Expense";
+$lang["reportBenefitIncludeWaiting"]     =   "Include Waiting";
+$lang["reportBenefitExpense"]            =   "Expense";
+$lang["reportBenefitIncome"]             =   "Income";
+$lang["reportBenefitProfit"]             =   "Profit";
+$lang["reportBenefitProcess"]            =   "Process";
+$lang["reportBenefitFilterTitle"]        =   "Option";
 
 
 // Benefit
 $lang["reportGrowthCode"]               =   "Code";
 $lang["reportGrowthFanshineName"]       =   "Fanshine Name";
 $lang["reportGrowthAVG"]                =   "AVG";
+
+//################
+// Validate
+//################
+
+$lang["validateRequire"]                =   "Please enter data.";

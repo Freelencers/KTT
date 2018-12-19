@@ -60,12 +60,12 @@ class Order extends CI_Controller {
 		$word["no"] 				= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Account/order.js"];
+		$file["js"] = ["assets/application/account/order.js"];
 		$this->load->view("Account/Order", $word);
 		$this->load->view("footer", $file);
 	}
 
-	public function createOrder(){
+	public function createOrder($ordId=0){
 
 		$session = $this->session->userdata();
 		
@@ -90,6 +90,7 @@ class Order extends CI_Controller {
 		$word["price"] 			= $this->lang->line("accountOrderPrice");
 		$word["stock"] 			= $this->lang->line("accountOrderStock");
 		$word["searchCode"] 	= $this->lang->line("accountOrderSearchCustomer");
+		$word["unit"]			= $this->lang->line("accountOrderUnit");
 
 		$word["save"] 			= $this->lang->line("generalSave");
 		$word["close"] 			= $this->lang->line("generalClose");
@@ -98,9 +99,14 @@ class Order extends CI_Controller {
 		$word["no"] 			= $this->lang->line("generalNo");
 
 		// Create Order
-		$this->load->model("Account/M_order");
-		$this->M_order->createOrder();
+		if($ordId == 0){
 
+			$this->load->model("Account/M_order");
+			$this->M_order->createOrder();
+		}else{
+
+			$this->session->set_userdata("ordId", $ordId);
+		}
 
 		// JS file
 		$file["js"] = ["assets/application/Account/createOrder.js"];
@@ -144,6 +150,7 @@ class Order extends CI_Controller {
 		$word["date"] 			= $this->lang->line("accountOrderDate");
 		$word["from"] 			= $this->lang->line("accountOrderFrom");
 		$word["to"] 			= $this->lang->line("accountOrderTo");
+		$word["unit"]			= $this->lang->line("accountOrderUnit");
 
 		$word["accountName"] 	= $this->lang->line("accountOrderCustomerAccountName");
 		$word["accountNo"] 		= $this->lang->line("accountOrderCustomerAccountNo");

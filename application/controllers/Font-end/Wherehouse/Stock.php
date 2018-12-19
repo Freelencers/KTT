@@ -59,6 +59,7 @@ class Stock extends CI_Controller {
 		$word["stockIn"] 				= $this->lang->line("wherehouseStockIn");
 		$word["stockOut"] 				= $this->lang->line("wherehouseStockOut");
 		$word["stockAction"] 			= $this->lang->line("wherehouseStockAction");
+		$word["reason"] 				= $this->lang->line("wherehouseStockReason");
 		
 		$word["no"] 					= $this->lang->line("wherehouseStockNo");
 		$word["sku"] 					= $this->lang->line("wherehouseStockSKU");

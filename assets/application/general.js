@@ -1,7 +1,7 @@
 
 // ON LOAD SECTION
 
-$('.datepicker').datepicker({});
+$('.datepicker').datepicker({language:'th-th',format:'dd/mm/yyyy'});
 // Date mark
 $('.datemask').inputmask('99/99/9999', { 'placeholder': 'dd/mm/yyyy' });
 
@@ -43,6 +43,8 @@ function clearDataForm(elementId){
 
     $(elementId).find(".autoGet").each(function(){
 
+        $(this).closest(".form-group").removeClass("has-success");
+        $(this).closest(".form-group").removeClass("has-error");
         $(this).val("");
     });
 }
@@ -86,16 +88,28 @@ function genPagination(paginationList){
 
 function convertDateToHuman(date){
 
-    // From yyyy-mm-dd to dd/mm/yyyy
-    date = date.split("-");
-    return date[2] + "/" + date[1] + "/" + (parseInt(date[0]) + 543);
+    // From yyyy-mm-dd Ato dd/mm/yyyy
+    if(date){
+
+        date = date.split("-");
+        return date[2] + "/" + date[1] + "/" + (parseInt(date[0]) + 543);
+    }else{
+
+        return "";
+    }
 }
 
 function convertDateToDatabase(date){
 
     // From dd/mm/yyyy to yyyy-mm-dd
-    date = date.split("/");
-    return (parseInt(date[2]) - 543) + "-" + date[1] + "-" + date[0];
+    if(date){
+
+        date = date.split("/");
+        return (parseInt(date[2]) - 0) + "-" + date[1] + "-" + date[0];
+    }else{
+
+        return "";
+    }
 }
 
 function modalMessage(message){
@@ -107,8 +121,55 @@ function modalMessage(message){
 
 function getLangLine(str){
 
-    $.post(base_url + "/General/getLangLine", {"str": str}, function(resp){
+    console.log("LANG");
+    $.ajax({
+        url: base_url + "/General/getLangLine", 
+        global: false,
+        type: 'POST',
+        data: {"str" : str},
+        async: false, //blocks window close
+        success: function(resp) {
+            console.log(resp.response);
+            return resp.response;
+        }
+    });
+}
 
-        return resp.response;
-    },"json");
+function validate(className){
+
+    var require = "";
+    var value = "";
+    var fails = 0;
+    $(className).each(function(){
+
+        require = $(this).attr("require");
+        //validType = $(this).attr("validType");
+        value = $(this).val();
+
+        console.log(require);
+        if(require === "true"){
+
+            if(value === ""){
+                
+                console.log(getLangLine("validateRequire"));
+                $(this).closest(".form-group").addClass("has-error");
+                $(this).closest(".form-group").removeClass("has-success");
+                $(this).closest(".form-group").find(".help-block").text("กรุณากรอกข้อมูล");
+                fails += 1;
+            }else{
+
+                $(this).closest(".form-group").removeClass("has-error");
+                $(this).closest(".form-group").addClass("has-success");
+                $(this).closest(".form-group").find(".help-block").text(""); 
+            }
+        }
+    });
+
+    if(fails > 0){
+
+        return false;
+    }else{
+
+        return true;
+    }
 }

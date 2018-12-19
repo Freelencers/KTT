@@ -1,8 +1,35 @@
 // on load
 payCount();
+shippingOrder();
+newFanshine();
+stockRefils();
+orderCount();
+orderAmountToday();
+orderAllDatInWeek();
 
 // on aciton
+
+$.post(base_url + "/System/Dashboard/fanshineTree", {}, function(resp){
+    var contex_menu = {};
+    tree = createTree('div_tree','white',contex_menu);
+    
+    var root = tree.createNode( "Gatatong" ,true,'/assets/aimaraJS/images/star.png',null,null,'context1');
+    travelInTree(root, resp);
+    tree.drawTree();
+},"json");
+
 // defination
+
+function travelInTree(node, resp){
+
+    var temp = "";
+    for(var i=0;i<resp.child.length;i++){
+
+        temp = node.createChildNode( resp.child[i].lv + " : " + resp.child[i].name ,true,'/assets/aimaraJS/images/person.png',null,null,'context1');
+        travelInTree(temp, resp.child[i]);
+    }
+    return 0;
+}
 
 function payCount(){
 
@@ -17,15 +44,15 @@ function shippingOrder(){
 
     $.post(base_url + "/System/Dashboard/shippingCount", "", function(resp){
 
-        $("#shppingCount").text(resp.response.shippingCount);
+        $("#shippingCount").text(resp.response.shippingCount);
     }, "json");
 }
 
 function newFanshine(){
 
-    $.post(base_url + "/System/Dashboard/newFanshine", "", function(resp){
+    $.post(base_url + "/System/Dashboard/newFanshineCount", "", function(resp){
 
-        $("#newFanshine").text(resp.response.newFanshine);
+        $("#newFanshineCount").text(resp.response.newFanshineCount);
     }, "json");
 }
 
@@ -33,37 +60,72 @@ function stockRefils(){
 
     $.post(base_url + "/System/Dashboard/stockRefilsWarning", "", function(resp){
 
-        $("#stockRefils").text(resp.response.stockRefils);
+        $("#stockRefilsCount").text(resp.response.stockRefils);
     }, "json");
 }
 
 function orderCount(){
 
-    $.post(base_url + "/System/Dashboard/orderCountToday", "", function(){
+    $.post(base_url + "/System/Dashboard/orderCountToday", "", function(resp){
 
-        $("#orderCountToday").text(resp.response.stockRefils);
+        $("#orderCount").text(resp.response.orderCountToday);
     }, "json");
 }
 
 function orderAmountToday(){
 
-    $.post(base_url + "/System/Dashboard/orderAmountToday", "", function(){
+    $.post(base_url + "/System/Dashboard/orderAmountToday", "", function(resp){
 
-        $("#orderAmountToday").text(resp.response.stockRefils);
+        $("#orderAmount").text(resp.response.orderAmountToday);
     }, "json");
 }
 
 function orderAllDatInWeek(){
 
-    $.post(base_url + "/System/Dashboard/orderAllDayInWeek", "", function(){
+    $.post(base_url + "/System/Dashboard/orderAllDayInWeek", "", function(resp){
 
         // Chart implement here
-    });
+        Highcharts.chart('containerLineChart', {
+
+            title: {
+                text: ''
+            },
+            
+            subtitle: {
+                text: ''
+            },
+            exporting: {
+                enabled: false
+            },
+            yAxis: {
+                title: {
+                    text: 'Order Value'
+                }
+            },
+
+            xAxis: {
+                categories: resp.response.categories
+            },
+            series: [{
+                name: resp.series.name,
+                data: resp.series.data
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+            
+        });
+    }, "json");
 }
 
-function fanshineTree(){
-
-    $.post(base_url + "/System/Dashboard/fanshineTree", "", function(){
-
-    });
-}

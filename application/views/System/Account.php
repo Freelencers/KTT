@@ -75,19 +75,23 @@
                     <!-- text input -->
                     <div class="form-group">
                         <label><?=$firstname?></label>
-                        <input type="text" class="form-control autoGet" id="accFirstname">
+                        <input type="text" class="form-control autoGet validate" require="true" id="accFirstname">
+                        <span class="help-block"></span>
                     </div>
                     <div class="form-group">
                         <label><?=$lastname?></label>
-                        <input type="text" class="form-control autoGet" id="accLastname">
+                        <input type="text" class="form-control autoGet validate" require="true" id="accLastname">
+                        <span class="help-block"></span>
                     </div>
                     <div class="form-group">
                         <label><?=$username?></label>
-                        <input type="text" class="form-control autoGet" id="accUsername">
+                        <input type="text" class="form-control autoGet validate" require="true" id="accUsername">
+                        <span class="help-block"></span>
                     </div>
                     <div class="form-group">
                         <label><?=$password?></label>
-                        <input type="password" class="form-control autoGet" id="accPassword">
+                        <input type="password" class="form-control autoGet validate" require="true" id="accPassword">
+                        <span class="help-block"></span>
                     </div>
                 </form>
             </div>

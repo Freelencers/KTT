@@ -109,4 +109,42 @@ class Dashboard extends CI_Controller {
         $json["response"]["stockRefils"]= $result;
         echo json_encode($json);
     }
+
+    public function fanshineTree(){
+
+        $customerList = $this->M_dashboard->getFanshinelist()
+                        ->result();
+                     
+        $tree["name"]  = "Gatatong";
+        $tree["cusId"] = 1;
+        $tree["child"] = array();
+        
+        // find child level 1
+        $parentId = 1;
+        $tree["child"] = $this->findDeepChild($customerList, $parentId);
+
+        echo json_encode($tree);
+    }
+
+
+    public function findDeepChild($customerList, $parentId){
+
+        $result = array();
+        $isNoChild = true;
+        for($i=0;$i<count($customerList);$i++){
+
+            if($customerList[$i]->cusReferId == $parentId){
+
+                $temp["name"]  = $customerList[$i]->cusFullName;
+                $temp["cusId"] = $customerList[$i]->cusId;
+                $temp["lv"] = $customerList[$i]->cusLevel;
+                $temp["child"] = $this->findDeepChild($customerList, $temp["cusId"]);
+                array_push($result, $temp);
+                $isNoChild = false;
+            }
+        }
+
+        return $result;
+    }
+
 }

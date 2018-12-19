@@ -5,12 +5,13 @@ class M_product extends CI_Model {
 
         $result = $this->db->select("matId,matName,matCode,matUntId,matMin,matMax,matType,matLocId,matUntId")
         ->from("material")
-        ->join("location",'matUntId = locId', "inner")
+        ->join("location",'matLocId = locId', "inner")
         ->join("unit",'matUntId = untId', "inner")
         ->where("matId",$productID);
 
         return $this->db->get();
     }
+
     public function getProductList($currentPage,$limitPage,$search,$matType="",$orlimit){
 
         $offset = ($currentPage-1)*$limitPage;

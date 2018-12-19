@@ -29,6 +29,7 @@ class M_customer extends CI_Model {
         ->get()
         ->row();
 
+        // New year reset code
         if($lastCode->cusCode == ""){
 
             $dataListCustomer["cusCode"] = "KT" . date("Ymd") . "00001";
@@ -55,12 +56,27 @@ class M_customer extends CI_Model {
         }
         $this->db->insert_batch('address', $customerDataJson["cusAddList"]); 
         $this->db->insert_batch('contact', $customerDataJson["cusContactList"]); 
-        $this->db->insert_batch('bankAccount', $customerDataJson["bankAccountDetail"]); 
+        $this->db->insert_batch('bankAccount', $customerDataJson["bankAccountDetail"]);
+        
+        // update number of refTime for RefId
+        $this->db->where("cusId", $dataListCustomer["cusReferId"])
+        ->set('cusRefTime', '`cusRefTime` + 1', FALSE)
+        ->update("customer");
 
         // Create levelup log
         $this->upgradeCustomerLevel($cusId, $dataListCustomer["cusLevel"]);
 
         // Create expense list 
+        $this->load->model("Account/M_expense");
+        $settingValue = $this->M_general->getSettingValue();
+
+        $input["epnTitle"]  = "New Customer";
+        $input["epnDetail"] = "CODE : " . $dataListCustomer["cusCode"] . " LV : " . $dataListCustomer["cusLevel"];
+        $input["epnAmount"] = $settingValue[0][ strtolower($dataListCustomer["cusLevel"]) . "Fee"];
+        $input["epnCusId"]  = $cusId;
+        $input["epnType"]   = "INCOME";
+        $input["epnSection"]= "NEW-CUSTOMER";
+        $this->M_expense->createExpense($input);
 
         $this->db->trans_complete();
         
@@ -113,7 +129,7 @@ class M_customer extends CI_Model {
     public function getCustomerList($currentPage, $limitPage, $search){
 
         //$cusCode = "CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode";
-        $this->db->select(" cusCode, cusId, cusFanshineName, cusFullName, cusLevel, DATE(cusCreatedate) AS cusCreatedate, DATEDIFF(NOW(),lvuDate) AS lvuDate")
+        $this->db->select(" cusCode, cusId, cusFanshineName, cusFullName, cusLevel, DATE(cusCreatedate) AS cusCreatedate, DATEDIFF(NOW(),lvuDate) AS lvuDate, cusRefTime")
         ->from("customer")
         ->join("levelUp", "cusId = lvuCusId", "inner")
         ->where("cusDeleteBy IS NULL");
@@ -122,11 +138,11 @@ class M_customer extends CI_Model {
         if($search){ 
 
             $this->db->group_start();
-            $this->db->like('cusFanshineName', $search);
+            $this->db->like('cusFanshineName ', $search);
             $this->db->or_like('cusFullName', $search);
-            $this->db->or_like('lvuDate', $search);
+            //$this->db->or_like('lvuDate', $search);
             $this->db->or_like('cusLevel', $search);
-            $this->db->or_like('cusCreatedate', $search);
+            //$this->db->or_like('cusCreatedate', $search);
             $this->db->or_like('cusCode', $search);
             $this->db->group_end();
         }
@@ -160,23 +176,17 @@ class M_customer extends CI_Model {
 
         $this->db->trans_start();
 
-        // Update detail in customer table
-        $dataList = array();
-        $dataList["cusLevel"] = $cusLevel;
-
-        $this->db->where("cusId", $cusId)
-        ->update("customer", $dataList);
-
         // Insert data to levelUp
         $dataList = array();
-        $dataList["lvuCusId"]   = $cusId;
 
         // get last level
-        $lvuFrom                = $this->db->select("cusLevel")
+        $lvuFrom                = $this->db->select("cusLevel, cusCode")
                                 ->from("customer")
                                 ->where("cusId", $cusId)
                                 ->get()
                                 ->row();
+        
+        $dataList["lvuCusId"]   = $cusId;
         $dataList["lvuFrom"]    = $lvuFrom->cusLevel;
         $dataList["lvuTo"]      = $cusLevel;
         $dataList["lvuDate"]    = date("Y-m-d H:i:s");
@@ -185,7 +195,7 @@ class M_customer extends CI_Model {
         // new user case
         if($dataList["lvuFrom"] == $cusLevel){
 
-            $dataList["lvuFrom"]  = null;
+            $dataList["lvuFrom"]  = $cusLevel;
         }
 
         if($cusLevel == "S"){
@@ -197,7 +207,39 @@ class M_customer extends CI_Model {
         }
         $this->db->insert("levelUp", $dataList);
 
-        // Create expense list 
+        // Update detail in customer table
+        $cusDetail = array();
+        $cusDetail["cusLevel"] = $cusLevel;
+
+        $this->db->where("cusId", $cusId)
+        ->update("customer", $cusDetail);
+
+        // ############################
+        // create expense transaction
+        // ############################
+
+        // get setting value
+        $this->load->model("Account/M_expense");
+        $settingValue = $this->M_general->getSettingValue();
+
+        // check up or down
+        if(strcmp($dataList["lvuFrom"], $dataList["lvuTo"]) < 0){
+
+            $input["epnTitle"]  = "Downgrade Customer";
+            $input["epnAmount"] = $settingValue[0][ strtolower($dataList["lvuFrom"]) . "Fee"] - $settingValue[0][ strtolower($dataList["lvuTo"]) . "Fee"];
+            $input["epnType"]   = "EXPENSE";
+            $input["epnSection"]= "DOWNGRADE-CUSTOMER";
+        }else{
+
+            $input["epnTitle"]  = "Upgrade Customer";
+            $input["epnAmount"] = $settingValue[0][ strtolower($dataList["lvuTo"]) . "Fee"] - $settingValue[0][ strtolower($dataList["lvuFrom"]) . "Fee"];
+            $input["epnType"]   = "INCOME";
+            $input["epnSection"]= "UPGRADE-CUSTOMER";
+        }
+
+        $input["epnDetail"] = "CODE : " . $lvuFrom->cusCode . " LV : " . $cusLevel;
+        $input["epnCusId"]  = $cusId;
+        $this->M_expense->createExpense($input);
 
         $this->db->trans_complete();
 
@@ -214,6 +256,8 @@ class M_customer extends CI_Model {
 
         $response["cusAddList"]         =  $this->db->select("*")
                                         ->from("address")
+                                        ->join("province"   , "prvId = addProvince", "inner")
+                                        ->join("district"   , "disId = addDistrict", "inner")
                                         ->where("addCusId", $cusId)
                                         ->get()
                                         ->result();
@@ -269,7 +313,7 @@ class M_customer extends CI_Model {
     public function getRefer($search, $except){
 
         $cusCode = "CONCAT('KT', LPAD(MONTH(cusCreatedate), 2, 0), LPAD(DAY(cusCreatedate), 2, 0), LPAD(cusId, 4, 0 )) AS cusCode";
-        $this->db->select($cusCode .", cusId, cusFanshineName, cusFullName")
+        $this->db->select($cusCode .", cusId, cusFanshineName, cusFullName, cusRefTime")
         ->from("customer")
         ->where("cusDeletedate IS NULL");
 
@@ -289,6 +333,43 @@ class M_customer extends CI_Model {
 
         return $this->db->get();
     }
+
+    public function getHeaderIdOfthisChain($cusId){
+
+        $allCustomerList = $this->db->select("cusId, cusReferId")
+                            ->from("customer")
+                            ->get()
+                            ->result();
+
+        // convert to hash table
+        $customerHashTable = array();
+        for($i=0;$i<count($allCustomerList);$i++){
+
+           $customerHashTable[$allCustomerList[$i]->cusId] = $allCustomerList[$i]->cusReferId;
+        }
+
+        // run backword in tree
+        $chainOfCusId = array();
+        while($customerHashTable[$cusId] != null){
+            
+            $cusId = $customerHashTable[$cusId];
+            array_push($chainOfCusId, $cusId);
+        }
+
+        return $chainOfCusId;
+    }
+
+    public function isNewCustomer($cusId){
+
+        $this->db->select("lvuDate")
+        ->from("levelUp")
+        ->where("lvuCusId", $cusId)
+        ->having("DATEDIFF(NOW(), lvuDate) <= 60");
+
+        return $this->db->get()->num_rows();
+    }
+
+
     
     
 }

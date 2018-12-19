@@ -74,26 +74,31 @@
                         <div class="form-group" >
                             <div class="form-group" id="showMatName">
                                 <label><?=$productName?></label>
-                                <input type="text" class="form-control autoGet" id="matName" disabled>
+                                <input type="text" class="form-control autoGet" require="true" id="matName" disabled>
+                                <span class="help-block"></span>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <label><?=$price?></label>
-                                    <input type="number" class="form-control autoGet" min="0" id="prdFullPrice">
+                                    <input type="number" class="form-control autoGet validate" require="true" min="0" id="prdFullPrice">
+                                    <span class="help-block"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label><?=$discount?></label>
-                                    <input type="number" class="form-control autoGet" min="0" id="prdDiscount">
+                                    <input type="number" class="form-control autoGet validate" require="true" min="0" id="prdDiscount">
+                                    <span class="help-block"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label><?=$total?></label>
-                                    <input type="number" class="form-control autoGet" min="0" id="prdTotal">
+                                    <input type="number" class="form-control autoGet validate" require="true" min="0" id="prdTotal">
+                                    <span class="help-block"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label><?=$point?></label>
-                            <input type="number" class="form-control autoGet" min="0" id="prdPoint">
+                            <input type="number" class="form-control autoGet validate" require="true" min="0" id="prdPoint">
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     

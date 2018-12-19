@@ -134,6 +134,7 @@
                                             <td>{shtAmount}</td>
                                             <td>{stoCost}</td>
                                             <td>{shtTotal}</td>
+                                            <td>{stoReason}</td>
                                             <td>{shtType}</td>
                                         </tr>
                                     </tbody>
@@ -149,6 +150,7 @@
                                     <th><?=$amount?></th>
                                     <th><?=$cost?></th>
                                     <th><?=$total?></th>
+                                    <th><?=$reason?></th>
                                     <th><?=$stockAction?></th>
                                 </thead>
                                 <tbody id="tableStockHistoryList">
@@ -202,20 +204,29 @@
                             </div>
                             <div class="form-group">
                                 <label><?=$amount?></label>
-                                <input type="text" class="form-control autoGet matAmount" id="matAmount" type="number">
+                                <input class="form-control autoGet validateInputStock matAmount" require="true" id="matAmount" type="number">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$cost?></label>
-                                <input type="text" class="form-control autoGet matCost" id="matCost" type="number">
+                                <input class="form-control autoGet validateInputStock matCost" require="true" id="matCost" type="number">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$location?></label>
-                                <select class="form-control autoGet" id="matLocId">
+                                <select class="form-control autoGet validateInputStock" require="true" id="matLocId">
                                 </select>
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$expire?></label>
-                                <input type="text" class="form-control autoGet datemask" id="matExpDate">
+                                <input type="text" class="form-control autoGet validateInputStock datepicker" require="true" id="matExpDate" data-provide="datepicker" data-date-language="th-th">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label><?=$reason?></label>
+                                <input type="text" class="form-control autoGet validateInputStock stoReason" require="true" id="stoReason" type="text">
+                                <span class="help-block"></span>
                             </div>
                         </form>
                     </div>
@@ -256,16 +267,23 @@
                             </div>
                             <div class="form-group">
                                 <label><?=$productName?></label>
-                                <input type="text" class="form-control matName autoGet disabled" id="matName" disabled>
+                                <input type="text" class="form-control matName autoGet validate disabled" id="matName" disabled>
                             </div>
                             <div class="form-group">
                                 <label><?=$amount?></label>
-                                <input type="text" class="form-control autoGet matAmount" id="matAmount" type="number">
+                                <input class="form-control autoGet validateOutputStock matAmount matAmountOutput" require="true" id="matAmount" type="number">
+                                <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label><?=$location?></label>
-                                <select class="form-control autoGet matLocStock" id="matLocId">
+                                <select class="form-control autoGet validateOutputStock matLocStock" require="true" id="matLocId">
                                 </select>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label><?=$reason?></label>
+                                <input type="text" class="form-control autoGet validateOutputStock stoReason" require="true" id="stoReason" type="text">
+                                <span class="help-block"></span>
                             </div>
                         </form>
                     </div>

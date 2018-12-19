@@ -39,7 +39,10 @@ $("#deleteButtonConfirm").click(function(){
 // Create button click
 $("#modalSaveButton").click(function(){
 
-    createNewProduct();
+    if(validate(".validate")){
+        
+        createNewProduct();
+    }
 });
 
 $("#createNewProductButton").click(function(){

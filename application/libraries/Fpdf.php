@@ -1901,7 +1901,7 @@ class Fpdf
 	function ImprovedTable($header, $data)
 	{
 		// Column widths
-		$w = array(20, 85, 40, 45);
+		$w = array(20, 20, 70, 40, 40);
 		// Header
 		for($i=0;$i<count($header);$i++)
 			$this->Cell($w[$i],7,$header[$i],1,0,'C');
@@ -1910,14 +1910,83 @@ class Fpdf
 		foreach($data as $row)
 		{
 			$this->Cell($w[0],6,$row[0], 'LR', 0, 'C');
-			$this->Cell($w[1],6,$row[1],'LR');
-			$this->Cell($w[2],6,number_format($row[2]),'LR',0,'R');
+			$this->Cell($w[1],6,$row[1],'LR',0,'C');
+			$this->Cell($w[2],6,$row[2],'LR');
 			$this->Cell($w[3],6,number_format($row[3]),'LR',0,'R');
+			$this->Cell($w[4],6,number_format($row[4]),'LR',0,'R');
 			$this->Ln();
 		}
 		// Closing line
 		$this->Cell(array_sum($w),0,'','T');
 	}
 
+	function transferTable($header, $data)
+	{
+		// Column widths
+		$w = array(35, 45, 15, 20, 35, 40);
+
+		// Header
+		for($i=0;$i<count($header);$i++){
+
+			$this->Cell($w[$i],6,$header[$i],1,0,'C');
+		}
+		$this->Ln();
+
+		// Data
+		foreach($data as $row)
+		{
+			$this->Cell($w[0],6, iconv( 'UTF-8','TIS-620',$row->cusCode),'LR', 0, 'C');
+			$this->Cell($w[1],6, iconv( 'UTF-8','TIS-620',$row->bacName),'LR', 0, 'C');
+			$this->Cell($w[2],6, iconv( 'UTF-8','TIS-620',$row->banName),'LR', 0, 'C');
+			$this->Cell($w[3],6, iconv( 'UTF-8','TIS-620',$row->bacBranch),'LR', 0, 'C');
+			$this->Cell($w[4],6, iconv( 'UTF-8','TIS-620',$row->bacNumber),'LR', 0, 'C');
+			$this->Cell($w[5],6, number_format( $row->cmsTotalCommission),'LR',0,'R');
+			$this->Ln();
+		}
+		// Closing line
+		$this->Cell(array_sum($w),0,'','T');
+	}
+
+	function commissionPublicPointDetail($header, $data, &$result)
+	{
+		// Column widths
+		$w = array(20, 100, 20, 25, 25);
+
+		// Header
+		for($i=0;$i<count($header);$i++){
+
+			$this->Cell($w[$i],6,$header[$i],1,0,'C');
+		}
+		$this->Ln();
+
+		foreach($data as $row)
+		{
+			$this->Cell($w[0],8, iconv( 'UTF-8','TIS-620',$row->cmsCreatedate),'LR', 0, 'C');;
+			$this->Cell($w[1],8, iconv( 'UTF-8','TIS-620',$row->cmsDetail),'LR', 0, 'C');;
+
+			//type
+			if($row->cmsTotalPrivatePoint){
+
+				$type = "องค์กร";
+				$point = $row->cmsTotalPublicPoint;
+			}else{
+				
+				$type = "ส่วนตัว";
+				$point = $row->cmsTotalPrivatePoint;
+			}
+
+			$this->Cell($w[2],8, iconv( 'UTF-8','TIS-620', $type), 'LR', 0, 'C');;
+			$this->Cell($w[3],8, number_format( $point),'LR',0,'R');
+			$this->Cell($w[4],8, number_format( $row->cmsTotalCommission),'LR',0,'R');
+			$this->Ln();
+
+			$result["commission"] 	+= $row->cmsTotalCommission;
+			$result["privatePoint"]	+= $row->cmsTotalPrivatePoint;
+			$result["publicPoint"] 	+= $row->cmsTotalPublicPoint;
+		}
+
+		// Closing line
+		$this->Cell(array_sum($w),0,'','T');
+	}
 }
 ?>

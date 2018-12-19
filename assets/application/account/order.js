@@ -34,6 +34,12 @@ $("#deleteButtonConfirm").click(function(){
     });
 });
 
+$(document).on("click", ".changeOrder", function(){
+
+    var ordId = $(this).attr("ordId");
+    window.open(base_url + "/Font-end/Account/Order/createOrder/" + ordId, '_blank');
+});
+
 
 // Create button click
 $("#modalSaveButton").click(function(){

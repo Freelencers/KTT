@@ -12,14 +12,25 @@
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-2 pull-right">
-                                <button type="button" class="btn btn-block btn-primary" id="createNewAcountButtom" data-toggle="modal" data-target="#modal-createNewAccount"><?=$createNewOrder?></button>
-                            </div>
-                        </div>
+
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+                        <!-- Template -->
+                        <table class="template" id="orderTemplate">
+                            <tbody>
+                                <tr>
+                                    <td>{date}</td>
+                                    <td>{orderCode}</td>
+                                    <td>{fanshineName}</td>
+                                    <td>{amount}</td>
+                                    <td>{status}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-file-text buttonGeneratePDF pointer" data-ordId="{ordId}"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-bordered table-hover dataTable">
                             <thead>
                                 <th><?=$date?></th>
@@ -29,33 +40,11 @@
                                 <th><?=$status?></th>
                                 <th><?=$action?></th>
                             </thead>
-                            <tbody>
-                                <tr id="locationColumnTemplate">
-                                    <td>{date}</td>
-                                    <td>{orderId}</td>
-                                    <td>{fanshineName}</td>
-                                    <td>{amount}</td>
-                                    <td>{status}</td>
-                                    <td>
-                                        <i class="fa fa-fw fa-file-text" data-ordId="{ordId}"></i>
-                                    </td>
-                                </tr>
+                            <tbody id="tbodyOrderList">
                             </tbody>
                         </table>
                         <div class="col-md-12">
-                            <ul class="pagination pull-right">
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button ">
-                                    <a href="#">1</a>
-                                </li>
-                                <li class="paginate_button">
-                                    <a href="#">1</a>
-                                </li>
+                            <ul class="pagination paginationList pull-right">
                             </ul>
                         </div>
                     </div>

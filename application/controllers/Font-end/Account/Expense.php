@@ -58,13 +58,16 @@ class Expense extends CI_Controller {
 		$word["filterTitle"] 		= $this->lang->line("accountExpenseFilterTitle");
 		$word["expenseToday"] 		= $this->lang->line("accountExpenseExpenseToday");
 		$word["createNewExpense"] 	= $this->lang->line("accountExpenseCreateNewExpense");
+		$word["modalTitle"] 		= $this->lang->line("accountExpenseCreateNewExpense");
 
 		$word["save"] 				= $this->lang->line("generalSave");
 		$word["close"] 				= $this->lang->line("generalClose");
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/account/expense.js"];
 		$this->load->view("Account/Expense", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

@@ -17,6 +17,9 @@
 <script src="<?= base_url('assets/bower_components/fastclick/lib/fastclick.js');?>"></script>
 <!-- Datepicker -->
 <script src="<?= base_url('assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",');?>"></script>
+<!-- thai extension -->
+<script src="<?= base_url('assets/datepicker-thai/js/locales/bootstrap-datepicker.th.js');?>"></script>
+
 <!-- input mask -->
 <script src="<?= base_url('assets/plugins/input-mask/jquery.inputmask.js');?>"></script>
 <!-- General Function -->
@@ -25,10 +28,16 @@
 <script src="<?= base_url('assets/dist/js/adminlte.min.js');?>"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?= base_url('assets/dist/js/demo.js');?>"></script>
+
+
+
+
 <script>
   $(document).ready(function () {
     $('.sidebar-menu').tree()
   })
+
+  $(document).ajaxStart(function() { Pace.restart(); });
 </script>
 </body>
 </html>
@@ -113,7 +122,7 @@
 
 <!-- template -->
 <div class="template" id="option">
-    <option value="{value}" {selected}>{title}</option>
+    <option value="{value}" {selected} {disabled}>{title}</option>
 </div>
 
 <?php

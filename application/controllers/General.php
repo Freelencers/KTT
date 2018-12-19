@@ -20,6 +20,10 @@ class General extends CI_Controller {
 	 */
 	public function getLangLine()
 	{
+		//lang load
+		$languaue = $this->session->userdata("languaue");
+		$this->lang->load('ktt', $languaue);
+		
 		$str = $this->input->post("str");
 		$data["status"] = 200;
 		$data["msg"] = "success";
@@ -32,5 +36,16 @@ class General extends CI_Controller {
 
 		$result = $this->M_general->getSettingValue();
 		echo json_encode($result);
+	}
+
+	public function test(){
+
+		$this->load->model("Fanshine/M_customer");
+		$this->M_customer->getHeaderIdOfthisChain(9);
+	}
+
+	public function resetData($password){
+		
+		$this->M_general->resetData($password);
 	}
 }

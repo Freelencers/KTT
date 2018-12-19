@@ -21,13 +21,13 @@
                             <div class="col-md-4">
                                 <div class="box box-solid">
                                     <div class="box-body">
-                                        <p>KRATATONG</p>
-                                        <p>244/314 xxx xxx xxx xxx</p>
-                                        <p>CHonburi</p>
-                                        <p>Saensuk</p>
+                                        <p>ปาท่องโก๋กระทะทอง</p>
+                                        <p>249 ถ.สุขุมวิท ต.แสนสุข ตลาดหนองมน</p>
+                                        <p>อ.เมือง</p>
+                                        <p>จ.ชลบุรี</p>
                                         <p>20130</p>
-                                        <p>0874899811</p>
-                                        <p>pakorn_traipan@icloud.com</p>
+                                        <p>089-936-8257</p>
+                                        <p>raty.ying@yahoo.com</p>
                                     </div>
                                     <!-- /.box-body -->
                                 </div>                       
@@ -63,11 +63,11 @@
                                         </p>                                       
                                         <p>
                                             <?=$accountName?>: 
-                                            <span id="">KRATATONG</span>
+                                            <span id="">สมเกียรติ ทวีพาณิชย์กุล</span>
                                         </p>                                       
                                         <p>
                                             <?=$accountNo?>: 
-                                            <span id="">999-9999-999-999</span>
+                                            <span id="">454-2-22110-8</span>
                                         </p>                                       
                                         <p>
                                             <?=$bank?>: 
@@ -75,7 +75,7 @@
                                         </p>                                       
                                         <p>
                                             <?=$type?>: 
-                                            <span id="">Saving</span>
+                                            <span id="">ออมทรัพย์</span>
                                         </p>                                       
                                     </div>
                                     <!-- /.box-body -->
@@ -89,6 +89,7 @@
                                     <tbody>
                                         <tr>
                                             <td>{sodQty}</td>
+                                            <td>{untName}</td>
                                             <td>{matName}</td>
                                             <td>{point}</td>
                                             <td>{price}</td>
@@ -99,6 +100,7 @@
                                 <table class="table table-bordered table-hover pb-0">
                                     <thead>
                                         <th><?=$qty?></th>
+                                        <th><?=$unit?></th>
                                         <th><?=$product?></th>
                                         <th><?=$point?></th>
                                         <th><?=$price?></th>

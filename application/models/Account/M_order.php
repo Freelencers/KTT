@@ -3,12 +3,12 @@ class M_order extends CI_Model {
 
     public function getProductList($currentPage,$limitPage,$search,$orlimit){
 
-        $result = $this->db->select("matCode, matName, prdId, prdPoint, prdFullPrice, prdDiscount, stoVirtualStock, untName")
+        $result = $this->db->select("matCode, matName, prdId, prdPoint, prdFullPrice, prdDiscount, SUM(stoVirtualStock) AS stoVirtualStock, untName")
         ->from("product")
         ->join("material",'matId = prdMatId', "inner")
-        ->join("stock", "stoMatId = prdMatId AND stoLast = 1")
+        ->join("stock", "stoMatId = matId AND stoLast = 1", "inner")
         ->join("unit", "untId = matUntId", "inner")
-        ->where("matDeleteBy IS NULL");
+        ->where("prdDeleteBy IS NULL");
 
         if($search){ 
 
@@ -102,13 +102,14 @@ class M_order extends CI_Model {
    
     public function getOrderList($currentPage,$limitPage,$search, $mode){
 
+        $this->load->model("Fanshine/M_customer");
+        $settingValue = $this->M_general->getSettingValue();
+
         $result = $this->db->select("ordId, ordCode, cusFullName, ordStatus, ordTotal, DATE(ordCreatedate) AS ordCreatedate")
         ->from("order")
         ->join("customer", "cusId = ordCusId", "inner")
         ->where("ordStatus !=", "SUCCESS");
-        //->join("subOrder", "sodOrdId = ordId", "inner")
-        //->join("product", "prdId = sodPrdId", "inner");
-    
+
         if($search){ 
 
             $this->db->group_start();
@@ -119,45 +120,175 @@ class M_order extends CI_Model {
         if($mode == "LIMIT"){
 
             $offset = ($currentPage-1)*$limitPage;
-            $this->db->order_by("ordId", "DESC")
-            ->limit($limitPage, $offset);    
-        }
+            $orderList = $this->db->order_by("ordId", "DESC")
+            ->limit($limitPage, $offset)
+            ->get();    
+        
+            // clear old order
+            $this->db->trans_start();
 
-        $orderList = $this->db->get();
-        // clear old order
-        $this->db->trans_start();
+            $orderDel = $this->db->select("ordId, ordCreatedate")
+            ->from("order")
+            ->having("DATEDIFF(NOW(), ordCreatedate) > 3")
+            ->where("ordStatus", "SHOPPING")
+            ->or_where("ordStatus", "WAIT-PAY")
+            ->get()
+            ->result();
 
-        $orderDel = $this->db->select("ordId, ordCreatedate")
-        ->from("order")
-        ->having("DATEDIFF(NOW(), ordCreatedate) > 3")
-        ->where("ordStatus", "SHOPPING")
-        ->or_where("ordStatus", "WAIT-PAY")
-        ->get()
-        ->result();
+            // Copy array
+            if(count($orderDel) > 0){
 
-        // Copy array
-        if(count($orderDel) > 0){
+                $ordIdList = array();
+                for($i=0;$i<count($orderDel);$i++){
+        
+                    array_push($ordIdList, $orderDel[$i]->ordId);
+                }
 
-            $ordIdList = array();
-            for($i=0;$i<count($orderDel);$i++){
-    
-                array_push($ordIdList, $orderDel[$i]->ordId);
+                $this->db->where_in("ordId", $ordIdList)
+                ->delete("order");
+
+                $this->db->where_in("sodOrdId", $ordIdList)
+                ->delete("subOrder");
             }
 
-            $this->db->where_in("ordId", $ordIdList)
-            ->delete("order");
+            // checkout from stock
+            $this->load->model("Wherehouse/M_stock");
 
-            $this->db->where_in("sodOrdId", $ordIdList)
-            ->delete("subOrder");
+            $stockList = $this->db->select("matId, sodQty, ordCreatedate, COUNT(DISTINCT sodId), ordId, ordCusId")
+                        ->from("order")
+                        ->join("subOrder", "ordId = sodOrdId", "inner")
+                        ->join("product", "prdId = sodPrdId", "inner")
+                        ->join("material", "matId = prdMatId", "inner")
+                        ->where("ordStatus", "SHIPPED")
+                        ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
+                        ->get()
+                        ->result();
+
+            $orderWillUpdateToSuccess = array();
+
+            for($i=0;$i<count($stockList);$i++){
+
+                // update stock
+                $totalCostOfproduct = $this->M_stock->outputStock($stockList[$i]->matId, "AUTO-MODE", $stockList[$i]->sodQty, "SYSTEM", "ACTUAL");
+
+                // check case new customer and order more than condition 
+                $prdId = 1; // special item for new customer
+                $isNewCustomer = $this->M_customer->isNewCustomer($stockList[$i]->ordCusId);
+                if($isNewCustomer == 1){
+
+                    // get current level
+                    $cusLevel = $this->db->select("cusLevel")
+                                ->from("customer")
+                                ->where("cusId", $stockList[$i]->ordCusId)
+                                ->get()
+                                ->row();
+
+                    // check give reward already
+                    $giveReward = $this->db->select("cmsId")
+                                    ->from("commission")
+                                    ->where("cmsCusId", $stockList[$i]->ordCusId)
+                                    ->like("cmsDetail", "Level : " . $cusLevel->cusLevel, "before")
+                                    ->get()
+                                    ->num_rows();
+                    if($giveReward == 0){
+
+                        $isOrderMoreThanCondition = $this->db->select("sodId, SUM(sodQty) AS sodQty")
+                                                    ->from("subOrder")
+                                                    ->where("sodPrdId", $prdId)
+                                                    ->having("sodQty >= " . $settingValue[0]["pounderWeight"])
+                                                    ->get()
+                                                    ->num_rows();
+                        if($isOrderMoreThanCondition == 1){
+                            $rewardCommission["cmsDetail"]            = "สมาชิกใหม่สั่งซื้อสินค้า ได้ตามเป้าที่กำหนด " . $settingValue[0]["pounderWeight"] . " กิโล";
+                            $rewardCommission["cmsTotalPublicPoint"]  = 0;
+                            $rewardCommission["cmsTotalPrivatePoint"] = 0; 
+                            $rewardCommission["cmsTotalPoint"]        = 0;
+                            $rewardCommission["cmsTotalCommission"]   = $settingValue[0]["commission"];
+                            $rewardCommission["cmsCreatedate"]        = date("Y-m-d");
+                            $rewardCommission["cmsCusId"]             = $stockList[$i]->ordCusId;
+                            $this->db->insert("commission", $rewardCommission);                            
+                        }
+                    }
+                }
+
+                // pepare data for update success
+                $orderWillUpdateToSuccess[$i]["ordStatus"] = "SUCCESS";
+                $orderWillUpdateToSuccess[$i]["ordCost"]   = $totalCostOfproduct;
+                $orderWillUpdateToSuccess[$i]["ordId"]     = $stockList[$i]->ordId;
+            }
+
+            // create expense and commisison of success order
+            $orderShipped = $this->db->select("ordTotal, ordCode, ordCusId, ordCreatedate, cusLevel, cusCode")
+                            ->from("order")
+                            ->join("customer", "cusId = ordCusId", "inner")
+                            ->where("ordStatus", "SHIPPED")
+                            ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
+                            ->get()
+                            ->result();
+
+            $expenseList        = array();
+            $commissionList     = array();
+            $temp               = array();
+            $orderSuccessIdList = array();
+
+            for($i=0;$i<count($orderShipped);$i++){
+
+                $expenseList[$i]["epnTitle"]        = "รายการสั่งซื้อ";
+                $expenseList[$i]["epnAmount"]       = $orderShipped[$i]->ordTotal; 
+                $expenseList[$i]["epnType"]         = "INCOME";
+                $expenseList[$i]["epnSection"]      = "ORDER";
+                $expenseList[$i]["epnDetail"]       = "รหัส : " . $orderShipped[$i]->ordCode;
+                $expenseList[$i]["epnCusId"]        = $orderShipped[$i]->ordCusId;
+                $expenseList[$i]["epnCreatedate"]   = date("Y-m-d H:i:s");
+
+                // this list for head not include owner
+                $headerList = $this->M_customer->getHeaderIdOfthisChain($orderShipped[$i]->ordCusId);
+                for($j=0;$j<count($headerList);$j++){
+
+                    // create for header
+                    $temp["cmsDetail"]            = "รหัส : " . $orderShipped[$i]->ordCode .", จาก : " . $orderShipped[$i]->cusCode;
+                    $temp["cmsTotalPublicPoint"]  = $orderShipped[$i]->ordTotal * $settingValue[0]["moneyToPoint"];
+                    $temp["cmsTotalPrivatePoint"] = 0; 
+                    $temp["cmsTotalPoint"]        = $temp["cmsTotalPublicPoint"];
+                    $temp["cmsTotalCommission"]   = $temp["cmsTotalPoint"] * $settingValue[0]["pointToMoneyLevel" . $orderShipped[$i]->cusLevel];
+                    $temp["cmsCreatedate"]        = date("Y-m-d");
+                    $temp["cmsCusId"]             = $headerList[$j]; 
+                    array_push($commissionList, $temp);
+                }
+
+                //create for owner order
+                $temp["cmsDetail"]            = "รหัส : " . $orderShipped[$i]->ordCode .", จาก : " . $orderShipped[$i]->cusCode;
+                $temp["cmsTotalPublicPoint"]  = 0;
+                $temp["cmsTotalPrivatePoint"] = $orderShipped[$i]->ordTotal * $settingValue[0]["moneyToPoint"];
+                $temp["cmsTotalPoint"]        = $temp["cmsTotalPrivatePoint"];
+                $temp["cmsTotalCommission"]   = $temp["cmsTotalPoint"] * $settingValue[0]["pointToMoneyLevel" . $orderShipped[$i]->cusLevel];
+                $temp["cmsCreatedate"]        = date("Y-m-d");
+                $temp["cmsCusId"]             = $orderShipped[$i]->ordCusId;
+
+                // separate insert for fix bug
+                $this->db->insert("commission", $temp);
+            }
+
+            if(count($orderShipped)){
+
+                // create expense transaction
+                $this->db->insert_batch("expense", $expenseList);
+
+                // create commission transaction
+                $this->db->insert_batch("commission", $commissionList);
+            }
+
+            // success order shipped
+            if(count($orderWillUpdateToSuccess) >= 1){
+
+                $this->db->update_batch("order", $orderWillUpdateToSuccess, "ordId");
+            }
+
+            $this->db->trans_complete();
+        }else{
+
+            $orderList = $this->db->get();
         }
-
-        // success order shipped
-        $success["ordStatus"] = "SUCCESS";
-        $this->db->where("ordStatus", "SHIPPED")
-        ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
-        ->update("order", $success);
-
-        $this->db->trans_complete();
 
         return $orderList;
     }
@@ -188,10 +319,11 @@ class M_order extends CI_Model {
                             ->get()
                             ->result();
 
-        $subOrderDetail = $this->db->select("sodQty, matName, (prdPoint * sodQty) as prdPoint, ((prdFullPrice - prdDiscount) * sodQty) AS prdPrice")
+        $subOrderDetail = $this->db->select("sodQty, matName, untName,(prdPoint * sodQty) as prdPoint, ((prdFullPrice - prdDiscount) * sodQty) AS prdPrice")
                             ->from("subOrder")
                             ->join("product"    , "sodPrdId = prdId", "inner")
                             ->join("material"   , "prdMatId = matId", "inner")
+                            ->join("unit"   , "untId = matUntId", "inner")
                             ->where("sodOrdId", $ordId)
                             ->get()
                             ->result();
@@ -339,5 +471,17 @@ class M_order extends CI_Model {
     }
 
 
+    public function searchInArray($array, $value){
+
+        for($i=0;$i<count($array);$i++){
+
+            echo $value . " = ". $array[$i]."<BR>";
+            if($value == $array[$i]){
+
+                return "HAVE";
+            }
+        }
+        return "NOT-HAVE";
+    }
 }
 ?>

@@ -23,7 +23,7 @@ class M_menu extends CI_Model {
 		$accId = $this->session->userdata("accId");
 		
 		// get menu can access
-        $this->db->select("modHumanName, modIcon, modDestination, modSection, modName")
+        $this->db->select("modHumanName, modIcon, modDestination, modSection, modName, modShow")
         ->from("permission")
 		->join("module", "perModId = modId", "inner")
 		->where("perAccId", $accId);

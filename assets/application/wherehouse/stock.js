@@ -11,6 +11,15 @@ loadStockRefils();
 
 
 // on action
+$(".matAmountOutput").keyup(function(){
+
+    var max = localStorage.getItem("VirtalStock");
+    if(parseInt($(this).val()) > parseInt(max)){
+
+        $(this).val(max);
+    }
+});
+
 $(document).on("click", ".paginate_button", function(){
 
     currentPage = $(this).data("page");
@@ -46,9 +55,11 @@ $(".stockCondition").change(function(){
 
 $(document).on("click", ".inputStock", function(){
 
-    console.log("IN");
     var matId = $(this).attr("matId");
     localStorage.setItem("matId", matId);
+
+    // clear form
+    clearDataForm("#inputStockForm");
 
      // get material detail
      var matId = $(this).attr("matId");
@@ -56,6 +67,11 @@ $(document).on("click", ".inputStock", function(){
  
          $(".matCode").val(resp.response.dataRow.matCode);
          $(".matName").val(resp.response.dataRow.matName);
+     },"json");
+
+     $.post(base_url + "/Wherehouse/Stock/getLastCost", {"matId": matId}, function(resp){
+
+        $("#matCost").val(resp.response.lastCost);
      },"json");
 
     $("#modal-inputStock").modal();
@@ -66,12 +82,18 @@ $(document).on("click", ".outputStock", function(){
     var matId = $(this).attr("matId");
     localStorage.setItem("matId", matId);
 
+    // clear form
+    clearDataForm("#outputStockForm");
+
      // get material detail
      var matId = $(this).attr("matId");
      $.post(base_url + "/Wherehouse/Stock/getProductStockDetail", {"matId": matId, "locationMode" : "OUTPUT"}, function(resp){
  
          $(".matCode").val(resp.response.dataRow.matCode);
          $(".matName").val(resp.response.dataRow.matName);
+
+         //set stock for check input box
+         localStorage.setItem("VirtalStock", resp.response.dataRow.matLocationList[0].stoVirtualStock);
 
          // Location
          var optionTemplate = $("#option").html();
@@ -105,27 +127,33 @@ $(document).on("click", ".outputStock", function(){
 
 $("#actionInputStock").click(function(){
 
-    var inputData = getDataForm("#inputStockForm");
-    inputData["matId"] = localStorage.getItem("matId");
-    inputData["matExpDate"] = convertDateToDatabase($("#matExpDate").val());
+    if(validate(".validateInputStock")){
 
-    $.post(base_url + "/Wherehouse/Stock/inputStock", inputData, function(resp){
+        var inputData = getDataForm("#inputStockForm");
+        inputData["matId"] = localStorage.getItem("matId");
+        inputData["matExpDate"] = convertDateToDatabase($("#matExpDate").val());
 
-        loadTable(currentPage, limitPage, "");
-        $("#modal-inputStock").modal("hide");
-    },"json");
+        $.post(base_url + "/Wherehouse/Stock/inputStock", inputData, function(resp){
+
+            loadTable(currentPage, limitPage, "");
+            $("#modal-inputStock").modal("hide");
+        },"json");
+    }
 });
 
 $("#actionOutputStock").click(function(){
 
-    var outputData = getDataForm("#outputStockForm");
-    outputData["matId"] = localStorage.getItem("matId");
+    if(validate(".validateOutputStock")){
+        
+        var outputData = getDataForm("#outputStockForm");
+        outputData["matId"] = localStorage.getItem("matId");
 
-    $.post(base_url + "/Wherehouse/Stock/outputStock", outputData, function(resp){
+        $.post(base_url + "/Wherehouse/Stock/outputStock", outputData, function(resp){
 
-        loadTable(currentPage, limitPage, "");
-        $("#modal-outputStock").modal("hide");
-    },"json");
+            loadTable(currentPage, limitPage, "");
+            $("#modal-outputStock").modal("hide");
+        },"json");
+    }
 });
 
 $(".tabs").click(function(){
@@ -243,7 +271,8 @@ function loadHistoryTable(currentPage, limitPage, search){
                 "{shtTotal}" : row.shtTotal,
                 "{shtAmount}" : row.shtAmount,
                 "{shtActionDate}" : row.shtActionDate,
-                "{shtType}" : shtType
+                "{shtType}" : shtType,
+                "{stoReason}" : row.stoReason
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);
@@ -277,7 +306,7 @@ function loadLocation(){
         resp.response.dataList.forEach(function(row){
 
             replace = {
-                "{title}" : row.locName,
+                "{title}" : row.locName + " : " + row.locDetail,
                 "{value}" : row.locId,
             }
             options += replaceAll(optionTemplate, replace);
@@ -288,7 +317,7 @@ function loadLocation(){
 
 function loadStockRefils(){
 
-    $.post(base_url + "/Dashboard/stockRefilsWarning", "", function(resp){
+    $.post(base_url + "/System/Dashboard/stockRefilsWarning", "", function(resp){
 
         $("#stockRefils").text(resp.response.stockRefils);
     },"json");

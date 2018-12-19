@@ -40,21 +40,24 @@ $("#search").change(function(){
 $(document).on("click", ".addProductToCrat", function(){
 
     var prdId = $(this).attr("prdId");
+    var stock = $(this).attr("stock");
 
     // check prdId define to index of array?
     if(cart[prdId] == void 0){
 
         cart[prdId] = 1; 
+        updateAmountOfProduct("ADD", prdId);
     }else{
 
-        cart[prdId] += 1; 
+        if(parseInt(cart[prdId]) < parseInt(stock)){
+
+            cart[prdId] += 1; 
+            updateAmountOfProduct("ADD", prdId);
+        }
     }
-    updateAmountOfProduct("ADD", prdId);
 });
 
 $(document).on("click", ".removeProductToCrat", function(){
-
-    debugger;
 
     var prdId = $(this).attr("prdId");
     if(cart[prdId] == void 0){
@@ -185,7 +188,7 @@ function loadProduct(){
                 "{prdId}" : row.prdId,
                 "{point}" : row.prdPoint,
                 "{price}" : (row.prdFullPrice - row.prdDiscount),
-                "{stock}" : row.stoVirtualStock,
+                "{stock}" : row.stoVirtualStock + " " + row.untName,
                 "{matName}" : row.matName,
                 "{matId}" : row.matId
             }
@@ -240,7 +243,8 @@ function loadMyOrder(){
                 "{stock}" : row.stoVirtualStock,
                 "{matName}" : row.matName,
                 "{amount}" : row.sodQty,
-                "{matId}" : row.matId
+                "{matId}" : row.matId,
+                "{untName}" : row.untName
             }
             cardList += replaceAll(component, replace);
 

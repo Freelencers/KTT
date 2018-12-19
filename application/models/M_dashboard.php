@@ -12,7 +12,7 @@ class M_dashboard extends CI_Model {
        return $this->db->get();
     }
     public function getPayCount(){
-        $result = $this->db->select("ordId")->from("order")->where("ordStatus","PAYING");
+        $result = $this->db->select("ordId")->from("order")->where("ordStatus","WAIT-PAY");
 
         return $this->db->get();
     }
@@ -23,12 +23,8 @@ class M_dashboard extends CI_Model {
         return $this->db->get();
     }
     public function getOrderCountToday(){
-        $date = new DateTime("now");
 
-        $curr_date = $date->format('Y-m-d ');
-
-        $result = $this->db->select("ordId")->from("order")->where("DATE(ordCreatedate)",$curr_date);   
-        
+        $result = $this->db->select("ordId")->from("order")->where("DATE(ordCreatedate)", date("Y-m-d"));   
         return $this->db->get();
     }
     public function getOrderAmountToday(){
@@ -48,7 +44,7 @@ class M_dashboard extends CI_Model {
         $day_of_week = date('N', strtotime($curr_date));
         $day_of_week = ($day_of_week - 1) * (-1);
         $maxday = date('Y-m-d',strtotime($day_of_week."days"));
-        $result = $this->db->select("SUM(ordSubTotal) as ordSubTotal")->from("order")->where("ordCreatedate BETWEEN '$maxday' AND '$minDay'")->group_by('DATE(ordCreatedate)'); 
+        $result = $this->db->select("SUM(ordTotal) as ordSubTotal")->from("order")->where("ordCreatedate BETWEEN '$maxday' AND '$minDay'")->group_by('DATE(ordCreatedate)'); 
            
         return $this->db->get();        
     }
@@ -62,4 +58,13 @@ class M_dashboard extends CI_Model {
         
         return $this->db->get(); 
     }       
+
+    public function getFanshineList(){
+
+        $this->db->select("cusId, cusReferId, cusFullName, cusLevel")
+        ->from("customer")
+        ->where("cusDeleteBy IS NULL");
+
+        return $this->db->get();
+    }
 }

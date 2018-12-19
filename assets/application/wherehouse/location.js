@@ -25,7 +25,10 @@ $("#deleteButtonConfirm").click(function(){
 // Create button click
 $("#modalSaveButton").click(function(){
 
-    createNewLocation();
+    if(validate(".validate")){
+
+        createNewLocation();
+    }
 });
 
 $("#createLocatinoButton").click(function(){

@@ -38,6 +38,10 @@ class Commission extends CI_Controller {
 
 	public function index()
 	{
+		// generate Report
+		$this->load->model("Fanshine/M_commission");
+		$this->M_commission->generateCommissionReport();
+
 		$session = $this->session->userdata();
 		
 		$profile["fullName"] = $session["accFirstname"] . " " . $session["accLastname"];
@@ -68,7 +72,9 @@ class Commission extends CI_Controller {
 		$word["action"] 			= $this->lang->line("generalAction");
 		$word["no"] 				= $this->lang->line("generalNo");
 
+		// JS file
+		$file["js"] = ["assets/application/fanshine/commission.js"];
 		$this->load->view("Fanshine/Commission", $word);
-		$this->load->view("footer");
+		$this->load->view("footer", $file);
 	}
 }

@@ -73,14 +73,14 @@ function createTree(p_div,p_backColor,p_contextMenu) {
 						p_parentNode.elementLi.getElementsByTagName("ul")[0].style.display = 'block';
 						v_img = p_parentNode.elementLi.getElementsByTagName("img")[0];
 						v_img.style.visibility = "visible";
-						v_img.src = base_url + 'assets/aimaraJS/images/collapse.png';
+						v_img.src =  '/assets/aimaraJS/images/collapse.png';
 						v_img.id = 'toggle_off';
 						}
 						else {
 							p_parentNode.elementLi.getElementsByTagName("ul")[0].style.display = 'none';
 							v_img = p_parentNode.elementLi.getElementsByTagName("img")[0];
 							v_img.style.visibility = "visible";
-							v_img.src = base_url + 'assets/aimaraJS/images/expand.png';
+							v_img.src =  '/assets/aimaraJS/images/expand.png';
 							v_img.id = 'toggle_on';
 						}
 					}
@@ -138,15 +138,15 @@ function createTree(p_div,p_backColor,p_contextMenu) {
 			var v_exp_col = null;
 
 			if (p_node.childNodes.length == 0) {
-				v_exp_col = createImgElement('toggle_off','exp_col',base_url + 'assets/aimaraJS/images/collapse.png');
+				v_exp_col = createImgElement('toggle_off','exp_col', '/assets/aimaraJS/images/collapse.png');
 				v_exp_col.style.visibility = "hidden";
 			}
 			else {
 				if (p_node.expanded) {
-					v_exp_col = createImgElement('toggle_off','exp_col',base_url + 'assets/aimaraJS/images/collapse.png');
+					v_exp_col = createImgElement('toggle_off','exp_col', '/assets/aimaraJS/images/collapse.png');
 				}
 				else {
-					v_exp_col = createImgElement('toggle_on','exp_col',base_url + 'assets/aimaraJS/images/expand.png');
+					v_exp_col = createImgElement('toggle_on','exp_col', '/assets/aimaraJS/images/expand.png');
 				}
 			}
 
@@ -246,7 +246,7 @@ function createTree(p_div,p_backColor,p_contextMenu) {
 				p_node.expanded = true;
 
 				img.id="toggle_off";
-				img.src = base_url + 'assets/aimaraJS/images/collapse.png';
+				img.src =  '/assets/aimaraJS/images/collapse.png';
 				elem_ul = img.parentElement.getElementsByTagName("ul")[0];
 				elem_ul.style.display = 'block';
 
@@ -265,7 +265,7 @@ function createTree(p_div,p_backColor,p_contextMenu) {
 					this.nodeBeforeCloseEvent(p_node);
 
 				img.id="toggle_on";
-				img.src = base_url + 'assets/aimaraJS/images/expand.png';
+				img.src =  '/assets/aimaraJS/images/expand.png';
 				elem_ul = img.parentElement.getElementsByTagName("ul")[0];
 				elem_ul.style.display = 'none';
 
@@ -384,7 +384,7 @@ function createTree(p_div,p_backColor,p_contextMenu) {
 
 						if (v_menu.elements[i].submenu!=undefined) {
 							var v_span_more = createSimpleElement('div',null,null);
-							v_span_more.appendChild(createImgElement(null,'menu_img',base_url + 'assets/aimaraJS/images/right.png'));
+							v_span_more.appendChild(createImgElement(null,'menu_img', '/assets/aimaraJS/images/right.png'));
 							v_li.appendChild(v_span_more);
 							v_tree.contextMenuLi(v_menu.elements[i].submenu,v_ul,p_node);
 						}
@@ -429,7 +429,7 @@ function createTree(p_div,p_backColor,p_contextMenu) {
 
 				if (p_submenu.elements[i].p_submenu!=undefined) {
 					var v_span_more = createSimpleElement('div',null,null);
-					v_span_more.appendChild(createImgElement(null,'menu_img',base_url + 'assets/aimaraJS/images/right.png'));
+					v_span_more.appendChild(createImgElement(null,'menu_img', '/assets/aimaraJS/images/right.png'));
 					v_li.appendChild(v_span_more);
 					v_tree.contextMenuLi(p_submenu.elements[i].p_submenu,v_ul,p_node);
 				}

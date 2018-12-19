@@ -24,6 +24,8 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?= base_url('assets/dist/css/skins/_all-skins.min.css');?>">
 
+  <script src="<?= base_url('assets/plugins/pace/pace.js');?>"></script>
+  <link href="<?= base_url('assets/plugins/pace/pace.css');?>" rel="stylesheet" />
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>

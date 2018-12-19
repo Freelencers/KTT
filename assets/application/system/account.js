@@ -9,7 +9,10 @@ loadTable(currentPage, limitPage, "");
 
 $("#modalSaveButton").click(function(){
 
-    createNewAccount();
+    if(validate(".validate")){
+
+        createNewAccount();
+    }
 });
 
 $("#deleteButtonConfirm").click(function(){

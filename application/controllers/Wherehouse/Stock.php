@@ -37,8 +37,9 @@ class Stock extends CI_controller {
         $matAmount  = $this->input->post("matAmount");
         $matLocId   = $this->input->post("matLocId");
         $matExpDate = $this->input->post("matExpDate");
+        $stoReason  = $this->input->post("stoReason");
 
-        $result = $this->M_stock->inputStock($matId, $matCost, $matAmount, $matLocId, $matExpDate);
+        $result = $this->M_stock->inputStock($matId, $matCost, $matAmount, $matLocId, $matExpDate, $stoReason);
 
         if($result) {
 
@@ -57,8 +58,9 @@ class Stock extends CI_controller {
         $matId      = $this->input->post("matId");
         $matLocId   = $this->input->post("matLocId");
         $matAmount  = $this->input->post("matAmount");
+        $stoReason  = $this->input->post("stoReason");
 
-        $result = $this->M_stock->outputStock($matId, $matLocId, $matAmount);
+        $result = $this->M_stock->outputStock($matId, $matLocId, $matAmount, $stoReason);
         if($result) {
 
             $json['status'] = 200;
@@ -101,6 +103,15 @@ class Stock extends CI_controller {
         $json["status"] = 200;
         $json["msg"] = "success";
         $json['response']['dataRow'] = $dataRow;
+
+        echo json_encode($json);
+    }
+
+    public function getLastCost(){
+
+        $matId = $this->input->post("matId");
+        $result = $this->M_stock->getLastCost($matId)->row();
+        $json["response"]["lastCost"] = $result->stoCost;
 
         echo json_encode($json);
     }
