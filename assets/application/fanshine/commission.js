@@ -117,7 +117,7 @@ function loadReportTable(currentPage, limitPage, search){
         }
         resp.response.dataList.forEach(function(row){
             replace = {
-                "{cmrDate}"        : row.cmrDate,
+                "{cmrDate}"        : convertDateToHuman(row.cmrDate),
                 "{cmrId}"          : row.cmrId,
             }
             no++;
@@ -151,8 +151,8 @@ function getCommissionDateRang(){
     var lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0);
 
 
-    strDate  = "1/" + d.getMonth() + "/" + (parseInt(d.getFullYear()) + 543) + " - ";
-    strDate += lastDay.getDate() + "/" + d.getMonth() + "/" + parseInt(d.getFullYear() + 543);
+    strDate  = "1/" + (parseInt(d.getMonth()) + 1) + "/" + (parseInt(d.getFullYear()) + 543) + " - ";
+    strDate += lastDay.getDate() + "/" + (parseInt(d.getMonth()) + 1) + "/" + parseInt(d.getFullYear() + 543);
 
     $("#commissionTime").text(strDate);
 }

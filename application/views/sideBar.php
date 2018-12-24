@@ -6,6 +6,10 @@
       <ul class="sidebar-menu" data-widget="tree">
         <?php
        
+          //lang load
+		      $languaue = $this->session->userdata("languaue");
+          $this->lang->load('ktt', $languaue);
+
           // initial
           $this->session->set_userdata("accessMaterial", 0);
           $this->session->set_userdata("accessProduct", 0);
@@ -14,6 +18,7 @@
           foreach($menuList["section"] as $section){
 
             echo '<li class="header">' . strtoupper($section->modSection) . '</li>';
+            echo '<li><a href="' . base_url('index.php/Font-end/Welcome') . '"><i class="fa fa-fw fa-book"></i> <span>' . $this->lang->line("manual") . '</span></a></li>';
 
             // Loop menu list in this section
             foreach($menuList["permission"] as $menu){

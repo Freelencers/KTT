@@ -26,6 +26,7 @@ class M_general extends CI_Model {
 		->from("settingScheduleGroup")
 		->join("settingSchedule", "ssgId = sscSsgId")
 		->where("NOW() BETWEEN ssgDateStart AND ssgDateEnd")
+		->where("ssgDeleteBy IS NULL")
 		->get();
 
 
@@ -45,58 +46,58 @@ class M_general extends CI_Model {
 		if($password == "pakornt"){
 
 			echo "table address empty <BR>";
-			$this->db->empty_table("address");
+			$this->db->truncate("address");
 
 			echo "table bankAccount empty <BR>";
-			$this->db->empty_table("bankAccount");
+			$this->db->truncate("bankAccount");
 
 			echo "table commission empty <BR>";
-			$this->db->empty_table("commission");
+			$this->db->truncate("commission");
 
 			echo "table commissionReport empty <BR>";
-			$this->db->empty_table("commissionReport");
+			$this->db->truncate("commissionReport");
 
 			echo "table subOrder empty <BR>";
-			$this->db->empty_table("subOrder");
+			$this->db->truncate("subOrder");
 
 			echo "table stockHistory empty <BR>";
-			$this->db->empty_table("stockHistory");
+			$this->db->truncate("stockHistory");
 
 			echo "table stock empty <BR>";
-			$this->db->empty_table("stock");
+			$this->db->truncate("stock");
 
 			echo "table settingScheduleGroup empty <BR>";
-			$this->db->empty_table("settingScheduleGroup");
+			$this->db->truncate("settingScheduleGroup");
 
 			echo "table settingSchedule empty <BR>";
-			$this->db->empty_table("settingSchedule");
+			$this->db->truncate("settingSchedule");
 
 			echo "table productPrie empty <BR>";
-			$this->db->empty_table("productPrice");
+			$this->db->truncate("productPrice");
 
 			echo "table product empty <BR>";
-			$this->db->empty_table("product");
+			$this->db->truncate("product");
 
 			echo "table order empty <BR>";
-			$this->db->empty_table("order");
+			$this->db->truncate("order");
 
 			echo "table material empty <BR>";
-			$this->db->empty_table("material");
+			$this->db->truncate("material");
 
 			echo "table location empty <BR>";
-			$this->db->empty_table("location");
+			$this->db->truncate("location");
 
 			echo "table levelUp empty <BR>";
-			$this->db->empty_table("levelUp");
+			$this->db->truncate("levelUp");
 
 			echo "table expense empty <BR>";
-			$this->db->empty_table("expense");
+			$this->db->truncate("expense");
 
 			echo "table customer empty <BR>";
-			$this->db->empty_table("customer");
+			$this->db->truncate("customer");
 
 			echo "table contact empty <BR>";
-			$this->db->empty_table("contact");
+			$this->db->truncate("contact");
 
 			echo "table permission empty <BR>";
 			$this->db->where("perAccId != 1")

@@ -32,11 +32,11 @@ class M_customer extends CI_Model {
         // New year reset code
         if($lastCode->cusCode == ""){
 
-            $dataListCustomer["cusCode"] = "KT" . date("Ymd") . "00001";
+            $dataListCustomer["cusCode"] = "KT" . date("Y") . date("m") . date("d") . "00001";
         }else{
 
             $countNumber      = intval(substr($lastCode->cusCode, -5)) + 1;
-            $dataListCustomer["cusCode"] = "KT" . date("Ymd").str_pad($countNumber, 5, "0", STR_PAD_LEFT);
+            $dataListCustomer["cusCode"] = "KT" . date("Y") . date("m") . date("d") .str_pad($countNumber, 5, "0", STR_PAD_LEFT);
         }
 
         $this->db->insert('customer', $dataListCustomer); 
@@ -341,16 +341,15 @@ class M_customer extends CI_Model {
                             ->get()
                             ->result();
 
-        // convert to hash table
         $customerHashTable = array();
         for($i=0;$i<count($allCustomerList);$i++){
 
-           $customerHashTable[$allCustomerList[$i]->cusId] = $allCustomerList[$i]->cusReferId;
+            $customerHashTable[$allCustomerList[$i]->cusId] = $allCustomerList[$i]->cusReferId;
         }
 
         // run backword in tree
         $chainOfCusId = array();
-        while($customerHashTable[$cusId] != null){
+        while($customerHashTable[$cusId] != 0){
             
             $cusId = $customerHashTable[$cusId];
             array_push($chainOfCusId, $cusId);
@@ -369,8 +368,4 @@ class M_customer extends CI_Model {
         return $this->db->get()->num_rows();
     }
 
-
-    
-    
 }
-  

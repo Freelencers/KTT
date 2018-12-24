@@ -233,7 +233,7 @@ function loadTable(currentPage, limitPage, search){
                 "{cusFullName}"              : row.cusFullName,
                 "{cusLevel}"                 : row.cusLevel,
                 "{cusCreatedate}"            : convertDateToHuman(row.cusCreatedate),
-                "{cusStatus}"                : row.cusStatus,
+                "{cusStatus}"                : customerStatusLabel(row.cusStatus),
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);
@@ -521,4 +521,27 @@ function clearForm(){
     $("#cusCouId").val(0);
     $("#cusMarital").val("MARRIED");
     $("#cusLevel").val("S");
+}
+
+function customerStatusLabel(status){
+
+    if(language == "english"){
+
+        if(status == "NEW"){
+
+            return "<span class='badge bg-maroon'>New</span>";
+        }else{
+
+            return " <span class='badge bg-red'>Pro</span>"
+        }
+    }else{
+
+        if(status == "NEW"){
+
+            return "<span class='badge bg-maroon'>สมาชิกใหม่</span>";
+        }else{
+
+            return " <span class='badge bg-red'>มืออาชีพ</span>"
+        }
+    }
 }

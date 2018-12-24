@@ -63,8 +63,7 @@ class M_Benefit extends CI_Model {
         ->where("YEAR(epnCreatedate)", $year) 
 
         ->group_start()
-        ->where("epnSection", "ORDER")
-        ->or_where("epnSection", "UPGRADE-CUSTOMER")
+        ->where("epnType", "INCOME")
         ->group_end()
 
         ->group_by("MONTH(epnCreatedate)")
@@ -74,9 +73,8 @@ class M_Benefit extends CI_Model {
 
         $outcome = $this->db->select("SUM(epnAmount) AS outcome, MONTH(epnCreatedate) as month")
         ->from("expense")
-        ->where("epnSection != 'ORDER'")
         ->where("YEAR(epnCreatedate)", $year) 
-        ->where("epnSection != 'UPGRADE-CUSTOMER'")
+        ->where("epnType", "EXPENSE")
         ->group_by("MONTH(epnCreatedate)")
         ->get()
         ->result();

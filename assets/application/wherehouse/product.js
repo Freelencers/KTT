@@ -43,20 +43,17 @@ $("#createNewProductButton").click(function(){
 
 $(document).on("click", ".changMaterialDetail", function(){
 
-    if(validate(".validate")){
-        
-        var matId = $(this).attr("matId");
+    var matId = $(this).attr("matId");
 
-        // assign to local storage
-        localStorage.setItem("matId", matId);
-        localStorage.setItem("createStatus", "UPDATE");
+    // assign to local storage
+    localStorage.setItem("matId", matId);
+    localStorage.setItem("createStatus", "UPDATE");
 
-        $.post(base_url + "/Wherehouse/Product/getProductDetailById", {"matId": matId}, function(resp){
+    $.post(base_url + "/Wherehouse/Product/getProductDetailById", {"matId": matId}, function(resp){
 
-            pushDataForm("#materialForm", resp.response.dataRow);
-            $("#modal-createNewProduct").modal("show");
-        },"json");
-    }
+        pushDataForm("#materialForm", resp.response.dataRow);
+        $("#modal-createNewProduct").modal("show");
+    },"json");
 });
 // Definition
 

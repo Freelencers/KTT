@@ -40,9 +40,8 @@ class M_expense extends CI_Model {
    public function getExpenseList($currentPage,$limitPage,$search, $startDate, $endDate, $type, $orlimit){
 
         $result = $this->db->select("epnId, epnType, epnTitle, epnDetail, epnAmount, DATE(epnCreatedate) as epnCreatedate")
-        ->from("expense");
-        
-        
+        ->from("expense")
+        ->where("epnAmount > 0");
 
         if($search){ 
 

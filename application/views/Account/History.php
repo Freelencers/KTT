@@ -26,7 +26,7 @@
                                     <td>{amount}</td>
                                     <td>{status}</td>
                                     <td>
-                                        <i class="fa fa-fw fa-file-text buttonGeneratePDF pointer" data-ordId="{ordId}"></i>
+                                        <i class="fa fa-fw fa-file-text buttonGeneratePDF pointer" ordId="{ordId}"></i>
                                     </td>
                                 </tr>
                             </tbody>

@@ -28,6 +28,7 @@ function loadTable(currentPage, limitPage, search){
                 "{fanshineName}" : resp.response.dataList[key].fullName
             }
 
+            avg = 0;
             for(var i=1;i<=12;i++){
 
                 if(resp.response.dataList[key].incomeOfMonth[i] == undefined){
@@ -39,6 +40,7 @@ function loadTable(currentPage, limitPage, search){
                 }
 
                 avg += parseFloat(replace["{m" + i + "}"]);
+                console.log(replace["{m" + i + "}"]);
             }
 
             replace["{avg}"] = Math.round((avg / 12) * 100) / 100;

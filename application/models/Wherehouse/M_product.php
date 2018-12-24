@@ -122,7 +122,7 @@ class M_product extends CI_Model {
         $insertId = $this->db->insert_id();
 
         // Generate Code 
-        $update["matCode"] = "MT" . str_pad($insertId, 5, "0");
+        $update["matCode"] = "MT" . str_pad($insertId, 5, "0", STR_PAD_LEFT);
         $this->db->where("matId", $insertId)
         ->update("material", $update);
 

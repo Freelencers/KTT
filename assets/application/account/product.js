@@ -3,6 +3,9 @@ var currentPage = 1;
 var currentPageMaterial = 1;
 var limitPage = 10;
 
+// Fix bug
+var matId = 0;
+
 loadTable(currentPage, limitPage, "");
 loadMaterialList(currentPageMaterial, 5);
 
@@ -192,11 +195,21 @@ function loadMaterialList(currentPage, limitPage){
         }
         resp.response.dataList.forEach(function(row){
 
+            if(no === 0){
+
+                localStorage.setItem("prdMatId", row.matId);
+                checked = "checked";
+            }else{
+
+                checked = "";
+            }
+
             replace = {
                 "{no}" : no + 1,
                 "{matId}" : row.matId,
                 "{matCode}" : row.matCode,
-                "{matName}" : row.matName
+                "{matName}" : row.matName,
+                "{checked}" : checked
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);

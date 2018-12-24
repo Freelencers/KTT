@@ -86,7 +86,7 @@ class M_stock extends CI_Model {
     return $this->db->get();
   }
 
-  public function inputStock($matId, $matCost, $matAmount, $matLocId, $matExpDate, $stoReason){
+  public function inputStock($matId, $matCost, $matAmount, $matLocId, $matExpDate, $stoReason, $inputMode="BOTH"){
 
     $this->db->trans_start();
 
@@ -99,7 +99,7 @@ class M_stock extends CI_Model {
                 ->get()
                 ->row();
 
-    // create new transaction
+    // create transaction
     if($lastInput){
 
         // already history befor
@@ -108,13 +108,29 @@ class M_stock extends CI_Model {
         $stoList["stoAction"]       = "INPUT";
         $stoList["stoCost"]         = $matCost;
         $stoList["stoLast"]         = 1;
-        $stoList["stoActualStock"]  = $lastInput->stoActualStock + $matAmount;
-        $stoList["stoVirtualStock"] = $lastInput->stoVirtualStock + $matAmount;
         $stoList["stoAmount"]       = $matAmount;
         $stoList["stoCreatedate"]   = date("Y-m-d H:i:s");
         $stoList["stoExpDate"]      = $matExpDate;
         $stoList["stoCreateby"]     = $this->session->userdata("accId");
         $stoList["stoReason"]       = $stoReason;
+
+        switch($inputMode){
+
+            case "BOTH" :   $stoList["stoActualStock"]  = $lastInput->stoActualStock + $matAmount;
+                            $stoList["stoVirtualStock"] = $lastInput->stoVirtualStock + $matAmount;
+                            //echo "BOTH";
+                            break;
+
+            case "ACTUAL" : $stoList["stoActualStock"]  = $lastInput->stoActualStock + $matAmount;
+                            $stoList["stoVirtualStock"] = $lastInput->stoVirtualStock;
+                            //echo "ACTUAL";
+                            break;
+
+            case "VIRTUAL" : $stoList["stoVirtualStock"] = $lastInput->stoVirtualStock + $matAmount;
+                             $stoList["stoActualStock"]  = $lastInput->stoActualStock;
+                             //echo "VIRTUAL";
+                             break;
+        }
 
         // update last transaction
         $stockData["stoLast"] = 0;
@@ -200,10 +216,13 @@ class M_stock extends CI_Model {
         ->get()
         ->row();
 
-        $stockData["stoUsed"]  = $inputTransaction->stoUsed + 1;
+        if($stockType == "BOTH" || $stockType == "ACTUAL"){
+
+            $stockData["stoUsed"]  = $inputTransaction->stoUsed + 1;
+            $this->db->where("stoId", $inputTransaction->stoId)
+            ->update("stock", $stockData);
+        }
         $cost                 += $inputTransaction->stoCost;
-        $this->db->where("stoId", $inputTransaction->stoId)
-        ->update("stock", $stockData);
 
         // #################
         // History save
@@ -214,7 +233,7 @@ class M_stock extends CI_Model {
 
             // update Amount and Total Cost 
             $history[$stoExpSoon->stoId]["shtAmount"]       += 1;
-            $history[$stoExpSoon->stoId]["shtTotal"]        += $stoExpSoon->stoCost;
+            $history[$stoExpSoon->stoId]["shtTotal"]        += $inputTransaction->stoCost;
 
             // update last stock
             switch($stockType){
@@ -242,9 +261,10 @@ class M_stock extends CI_Model {
             // initial hash
             $history[$stoExpSoon->stoId] = array();
             $history[$stoExpSoon->stoId]["shtStoId"]        = $stoExpSoon->stoId;
+            $history[$stoExpSoon->stoId]["shtFromLot"]      = $inputTransaction->stoId;
             $history[$stoExpSoon->stoId]["shtType"]         = "OUTPUT";
             $history[$stoExpSoon->stoId]["shtAmount"]       = 1;
-            $history[$stoExpSoon->stoId]["shtTotal"]        = $stoExpSoon->stoCost;
+            $history[$stoExpSoon->stoId]["shtTotal"]        = $inputTransaction->stoCost;
             $history[$stoExpSoon->stoId]["shtActionDate"]   = date("Y-m-d H:i:s");
 
             // initial last stock
@@ -278,11 +298,11 @@ class M_stock extends CI_Model {
     $history = array_values($history);
     $stoList = array_values($stoList);
 
-    // insert history tranasction
-    $this->db->insert_batch("stockHistory", $history);
-
     // insert new transaction
     $this->db->insert_batch("stock", $stoList);
+
+    // insert history tranasction
+    $this->db->insert_batch("stockHistory", $history);
 
     // update last transaction to old status
     $stockData = "";
@@ -424,7 +444,7 @@ class M_stock extends CI_Model {
   public function updateStockCompleteOrder(){
 
       // checkout from stock
-      $orderList = $this->db->select("matId, sodQty")
+      $orderList = $this->db->select("matId, sodQty, ordCode, ordId")
       ->from("order")
       ->join("subOrder", "ordId = sodOrdId", "inner")
       ->join("product", "prdId = sodPrdId", "inner")
@@ -433,10 +453,14 @@ class M_stock extends CI_Model {
       ->get()
       ->result();
 
+      $order["ordCost"] = 0;
       for($i=0;$i<count($orderList);$i++){
 
-          $this->outputStock($orderList[$i]->matId, "AUTO-MODE", $orderList[$i]->sodQty, "SYSTEM", "VIRTUAL");
+          $order["ordCost"] += $this->outputStock($orderList[$i]->matId, "AUTO-MODE", $orderList[$i]->sodQty, "ORDER : ". $orderList[$i]->ordCode, "VIRTUAL");
       }
+
+      $this->db->where("ordId", $orderList[0]->ordId)
+      ->update("order", $order);
   }
 }
 

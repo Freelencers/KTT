@@ -196,3 +196,8 @@
     <!-- /.content -->
 </div>
 
+<script>
+
+    localStorage.setItem("ordCusId", '<?= $this->session->userdata("ordCusId")?>');
+</script>
+

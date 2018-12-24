@@ -3,7 +3,7 @@ class M_orderHistory extends CI_Model {
 
     public function getOrderHistory($currentPage,$limitPage,$search,$orlimit){
 
-        $result = $this->db->select("DATE(ordCreatedate) as ordCreatedate, ordCode, cusFullName, ordTotal, ordStatus")
+        $result = $this->db->select("DATE(ordCreatedate) as ordCreatedate, ordCode, cusFullName, ordTotal, ordStatus, ordId")
         ->from("order")
         ->join("customer", "cusId = ordCusId", "inner");
 

@@ -19,7 +19,6 @@ class Dashboard extends CI_Controller {
         //Call model
         $result = $this->M_dashboard->getShippingCount();
         $result = $result->num_rows();
-        //$result = $result[0];
 
         //json fromat
         $json["status"]="";
@@ -69,7 +68,14 @@ class Dashboard extends CI_Controller {
 
         $json["status"]="";
         $json["msg"]="";
-        $json["response"]["orderAmountToday"]= $result;
+
+        if($result == null){
+
+            $json["response"]["orderAmountToday"] = 0;
+        }else{
+
+            $json["response"]["orderAmountToday"] = $result;
+        }
         echo json_encode($json);
         
     }

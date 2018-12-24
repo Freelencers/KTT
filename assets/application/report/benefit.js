@@ -65,7 +65,7 @@ function loadChart(){
                     label: {
                         connectorAllowed: false
                     },
-                    pointStart: 2010
+                    pointStart: 1 
                 }
             },
 

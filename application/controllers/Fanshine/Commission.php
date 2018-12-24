@@ -273,14 +273,16 @@ class Commission extends CI_controller {
             // send email
             for($i=0;$i<count($customerList);$i++){
 
-                // $sendTo = $customerList[$i]->conValue;
-                $this->email->to("pakorn_traipan@icloud.com");
+                $sendTo = $customerList[$i]->conValue;
+                $this->email->to($sendTo);
                 $this->email->message('Testing the email class.');
                 $this->generatePdfCommissionDetail($lastCommissionReportId, $customerList[$i]->cusId); 
                 $this->email->attach('commissionReport.pdf', 'attachment', 'assets/tempPDF/invoice.pdf');
                 $this->email->send();
             }
         }
+        echo "PROCESS COMPLETE";
+
     }
 }
 

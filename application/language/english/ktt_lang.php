@@ -11,6 +11,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['signInFail']			= 'Username or Password is incorrect please try again!';
 
+$lang['manual']   = 'Manual';
+
 // Module
 $lang['moduleDashboardDashboard']   = 'Dashboard';
 $lang['moduleSystemAccount']        = 'Account';

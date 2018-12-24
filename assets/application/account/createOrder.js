@@ -9,7 +9,7 @@ var cart = new Array();
 
 loadCustomerList();
 loadProduct();
-loadMyOrder()
+loadMyOrder();
 
 // on action
 $("#searchCustomer").change(function(){
@@ -133,6 +133,9 @@ function loadCustomerList(code){
         // Location
         var optionTemplate = $("#option").html();
         var options = "";
+        var ordCusId = localStorage.getItem("ordCusId");
+        console.log(ordCusId);
+
         if(!resp.response.dataList.length){ 
 
             replace = {
@@ -152,8 +155,16 @@ function loadCustomerList(code){
 
                 replace = {
                     "{title}" : row.cusCode + " - " + row.cusFullName,
-                    "{value}" : row.cusId
+                    "{value}" : row.cusId,
+                    "{selected}" : ""
                 }
+
+                if(parseInt(row.cusId) == ordCusId){
+                    
+                    console.log("SELECTED");
+                    replace["{selected}"] = "selected";
+                }
+                console.log(replace);
                 options += replaceAll(optionTemplate, replace);
             });
         }

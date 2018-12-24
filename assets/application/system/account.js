@@ -33,6 +33,8 @@ $(document).on("click", ".updateAccount", function(){
     localStorage.setItem("accId", accId);
     localStorage.setItem("createStatus", "update");
 
+    $("#accUsername").attr("disabled", true);
+
     $.post(base_url + "/System/Account/getAccountById", {"accId": accId}, function(resp){
 
         pushDataForm("#createNewAccountForm", resp.response.dataRow);
@@ -46,6 +48,7 @@ $("#createNewAcountButtom").click(function(){
     console.log("clear");
     clearDataForm(".modal-body");
     localStorage.setItem("createStatus", "CREATE"); 
+    $("#accUsername").attr("disabled", false);
     $("#modal-createNewAccount").modal("show");
 });
 
@@ -82,7 +85,7 @@ function loadTable(currentPage, limitPage, search){
                 "{accFirstname}" : row.accFirstname,
                 "{accLastname}" : row.accLastname,
                 "{accUsername}" : row.accUsername,
-                "{accCreatedate}" : row.accCreatedate
+                "{accCreatedate}" : convertDateToHuman(row.accCreatedate)
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);
@@ -113,12 +116,30 @@ function createNewAccount(){
             clearDataForm();
         });
     }else{
-        $.post(base_url + "/System/Account/createNewAccount", json, function(resp){
 
-            loadTable(currentPage, limitPage, "");
-            $("#modal-createNewAccount").modal("hide");
-            clearDataForm();
-        },"json");
+        // check username is already
+        $.post(base_url + "/System/Account/usernameIsAlready/" + json["accUsername"], function(usernameIsAlready){
+
+            if(usernameIsAlready.haveAlready == 0){
+
+                $.post(base_url + "/System/Account/createNewAccount", json, function(resp){
+
+                    loadTable(currentPage, limitPage, "");
+                    $("#modal-createNewAccount").modal("hide");
+                    clearDataForm();
+                },"json");
+            }else{
+
+                if(language == "english"){
+
+                    modalMessage("Username have already");
+                }else{
+        
+                    modalMessage("Username นี้มีอยู่แล้วในระบบ");
+                }
+            }
+        }, "json");
+
     }
 
    

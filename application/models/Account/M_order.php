@@ -105,27 +105,11 @@ class M_order extends CI_Model {
         $this->load->model("Fanshine/M_customer");
         $settingValue = $this->M_general->getSettingValue();
 
-        $result = $this->db->select("ordId, ordCode, cusFullName, ordStatus, ordTotal, DATE(ordCreatedate) AS ordCreatedate")
-        ->from("order")
-        ->join("customer", "cusId = ordCusId", "inner")
-        ->where("ordStatus !=", "SUCCESS");
-
-        if($search){ 
-
-            $this->db->group_start();
-            $this->db->like('matName', $search);
-            $this->db->group_end();
-        }
-
-        if($mode == "LIMIT"){
-
-            $offset = ($currentPage-1)*$limitPage;
-            $orderList = $this->db->order_by("ordId", "DESC")
-            ->limit($limitPage, $offset)
-            ->get();    
         
-            // clear old order
-            $this->db->trans_start();
+
+        // #####################
+        // clear old order
+        // #####################
 
             $orderDel = $this->db->select("ordId, ordCreatedate")
             ->from("order")
@@ -138,93 +122,26 @@ class M_order extends CI_Model {
             // Copy array
             if(count($orderDel) > 0){
 
-                $ordIdList = array();
                 for($i=0;$i<count($orderDel);$i++){
         
-                    array_push($ordIdList, $orderDel[$i]->ordId);
+                    $this->deleteOrder($orderDel[$i]->ordId);
+                
                 }
-
-                $this->db->where_in("ordId", $ordIdList)
-                ->delete("order");
-
-                $this->db->where_in("sodOrdId", $ordIdList)
-                ->delete("subOrder");
             }
 
-            // checkout from stock
-            $this->load->model("Wherehouse/M_stock");
+        $this->db->trans_start();
 
-            $stockList = $this->db->select("matId, sodQty, ordCreatedate, COUNT(DISTINCT sodId), ordId, ordCusId")
-                        ->from("order")
-                        ->join("subOrder", "ordId = sodOrdId", "inner")
-                        ->join("product", "prdId = sodPrdId", "inner")
-                        ->join("material", "matId = prdMatId", "inner")
-                        ->where("ordStatus", "SHIPPED")
-                        ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
-                        ->get()
-                        ->result();
+        // ################################################
+        // create expense and commisison of success order
+        // ################################################
 
-            $orderWillUpdateToSuccess = array();
-
-            for($i=0;$i<count($stockList);$i++){
-
-                // update stock
-                $totalCostOfproduct = $this->M_stock->outputStock($stockList[$i]->matId, "AUTO-MODE", $stockList[$i]->sodQty, "SYSTEM", "ACTUAL");
-
-                // check case new customer and order more than condition 
-                $prdId = 1; // special item for new customer
-                $isNewCustomer = $this->M_customer->isNewCustomer($stockList[$i]->ordCusId);
-                if($isNewCustomer == 1){
-
-                    // get current level
-                    $cusLevel = $this->db->select("cusLevel")
-                                ->from("customer")
-                                ->where("cusId", $stockList[$i]->ordCusId)
-                                ->get()
-                                ->row();
-
-                    // check give reward already
-                    $giveReward = $this->db->select("cmsId")
-                                    ->from("commission")
-                                    ->where("cmsCusId", $stockList[$i]->ordCusId)
-                                    ->like("cmsDetail", "Level : " . $cusLevel->cusLevel, "before")
-                                    ->get()
-                                    ->num_rows();
-                    if($giveReward == 0){
-
-                        $isOrderMoreThanCondition = $this->db->select("sodId, SUM(sodQty) AS sodQty")
-                                                    ->from("subOrder")
-                                                    ->where("sodPrdId", $prdId)
-                                                    ->having("sodQty >= " . $settingValue[0]["pounderWeight"])
-                                                    ->get()
-                                                    ->num_rows();
-                        if($isOrderMoreThanCondition == 1){
-                            $rewardCommission["cmsDetail"]            = "สมาชิกใหม่สั่งซื้อสินค้า ได้ตามเป้าที่กำหนด " . $settingValue[0]["pounderWeight"] . " กิโล";
-                            $rewardCommission["cmsTotalPublicPoint"]  = 0;
-                            $rewardCommission["cmsTotalPrivatePoint"] = 0; 
-                            $rewardCommission["cmsTotalPoint"]        = 0;
-                            $rewardCommission["cmsTotalCommission"]   = $settingValue[0]["commission"];
-                            $rewardCommission["cmsCreatedate"]        = date("Y-m-d");
-                            $rewardCommission["cmsCusId"]             = $stockList[$i]->ordCusId;
-                            $this->db->insert("commission", $rewardCommission);                            
-                        }
-                    }
-                }
-
-                // pepare data for update success
-                $orderWillUpdateToSuccess[$i]["ordStatus"] = "SUCCESS";
-                $orderWillUpdateToSuccess[$i]["ordCost"]   = $totalCostOfproduct;
-                $orderWillUpdateToSuccess[$i]["ordId"]     = $stockList[$i]->ordId;
-            }
-
-            // create expense and commisison of success order
-            $orderShipped = $this->db->select("ordTotal, ordCode, ordCusId, ordCreatedate, cusLevel, cusCode")
-                            ->from("order")
-                            ->join("customer", "cusId = ordCusId", "inner")
-                            ->where("ordStatus", "SHIPPED")
-                            ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
-                            ->get()
-                            ->result();
+            $orderShipped = $this->db->select("ordTotal, ordCode, ordCusId, ordCreatedate, cusLevel, cusCode, ordId")
+            ->from("order")
+            ->join("customer", "cusId = ordCusId", "inner")
+            ->where("ordStatus", "SHIPPED")
+            ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
+            ->get()
+            ->result();
 
             $expenseList        = array();
             $commissionList     = array();
@@ -232,6 +149,8 @@ class M_order extends CI_Model {
             $orderSuccessIdList = array();
 
             for($i=0;$i<count($orderShipped);$i++){
+
+                //echo $orderShipped[$i]->ordId."<BR>";
 
                 $expenseList[$i]["epnTitle"]        = "รายการสั่งซื้อ";
                 $expenseList[$i]["epnAmount"]       = $orderShipped[$i]->ordTotal; 
@@ -269,7 +188,10 @@ class M_order extends CI_Model {
                 $this->db->insert("commission", $temp);
             }
 
-            if(count($orderShipped)){
+            //echo json_encode($expenseList);
+            //echo json_encode($commissionList);
+
+            if(count($expenseList) > 0){
 
                 // create expense transaction
                 $this->db->insert_batch("expense", $expenseList);
@@ -278,13 +200,120 @@ class M_order extends CI_Model {
                 $this->db->insert_batch("commission", $commissionList);
             }
 
+        // #########################################
+        // checkout from stock & special reward
+        // #########################################
+            $this->load->model("Wherehouse/M_stock");
+
+            $stockList = $this->db->select("matId, sodQty, ordCreatedate, ordId, ordCusId, ordCode")
+                        ->from("order")
+                        ->join("subOrder", "ordId = sodOrdId", "inner")
+                        ->join("product", "prdId = sodPrdId", "inner")
+                        ->join("material", "matId = prdMatId", "inner")
+                        ->where("ordStatus", "SHIPPED")
+                        ->having("DATEDIFF(NOW(), ordCreatedate) > 1")
+                        ->group_by("sodId")
+                        ->get()
+                        ->result();
+
+            $orderWillUpdateToSuccess = array();
+
+            for($i=0;$i<count($stockList);$i++){
+
+                // update stock
+                // echo $stockList[$i]->matId . " AUTO-MODE " .  $stockList[$i]->sodQty . " ORDER : " . $stockList[$i]->ordCode . "<BR>";
+                $totalCostOfproduct = $this->M_stock->outputStock($stockList[$i]->matId, "AUTO-MODE", $stockList[$i]->sodQty, "ORDER : " . $stockList[$i]->ordCode, "ACTUAL");
+
+                // pepare data for update success
+                $orderWillUpdateToSuccess[$i]["ordStatus"] = "SUCCESS";
+                $orderWillUpdateToSuccess[$i]["ordCost"]   = $totalCostOfproduct;
+                $orderWillUpdateToSuccess[$i]["ordId"]     = $stockList[$i]->ordId;
+            }
+
             // success order shipped
             if(count($orderWillUpdateToSuccess) >= 1){
 
                 $this->db->update_batch("order", $orderWillUpdateToSuccess, "ordId");
             }
 
-            $this->db->trans_complete();
+            // #######################
+            // Condition of fanshine
+            // #######################
+
+            // check case new customer and order more than condition 
+            $prdId = 1; // special item for new customer
+            $newCustomer = $this->db->select("lvuDate, lvuCusId")
+                            ->from("levelUp")
+                            ->where("lvuCusId != 1") // ignore admin account
+                            ->having("DATEDIFF(NOW(), lvuDate) <= 60")
+                            ->group_by("lvuCusId")
+                            ->get()
+                            ->result();
+
+            for($i=0;$i<count($newCustomer);$i++){
+
+                // get current level
+                $cusLevel = $this->db->select("cusLevel")
+                            ->from("customer")
+                            ->where("cusId", $newCustomer[$i]->lvuCusId)
+                            ->get()
+                            ->row();
+
+                // check give reward already
+                $giveReward = $this->db->select("cmsId")
+                                ->from("commission")
+                                ->where("cmsCusId", $newCustomer[$i]->lvuCusId)
+                                ->where("cmsDetail", "สมาชิกใหม่ Level : " . $cusLevel->cusLevel . " สั่งซื้อสินค้า ได้ตามเป้าที่กำหนด " . $settingValue[0]["pounderWeight"] . " กิโล")
+                                ->get()
+                                ->num_rows();
+
+                if($giveReward == 0){
+                    
+                    $isOrderMoreThanCondition = $this->db->select("sodId, SUM(sodQty) AS sodQty")
+                                                ->from("subOrder")
+                                                ->where("sodPrdId", $prdId)
+                                                ->having("sodQty >= " . $settingValue[0]["pounderWeight"])
+                                                ->get()
+                                                ->num_rows();
+
+                    if($isOrderMoreThanCondition == 1){
+
+                        $rewardCommission["cmsDetail"]            = "สมาชิกใหม่ Level : " . $cusLevel->cusLevel . " สั่งซื้อสินค้า ได้ตามเป้าที่กำหนด " . $settingValue[0]["pounderWeight"] . " กิโล";
+                        $rewardCommission["cmsTotalPublicPoint"]  = 0;
+                        $rewardCommission["cmsTotalPrivatePoint"] = 0; 
+                        $rewardCommission["cmsTotalPoint"]        = 0;
+                        $rewardCommission["cmsTotalCommission"]   = $settingValue[0]["commission"];
+                        $rewardCommission["cmsCreatedate"]        = date("Y-m-d");
+                        $rewardCommission["cmsCusId"]             = $stockList[$i]->ordCusId;
+                        $this->db->insert("commission", $rewardCommission);                            
+                    }
+                }
+            }
+        
+        //die;
+        $this->db->trans_complete();
+
+        // ######################
+        // Get order list
+        // #####################
+        $result = $this->db->select("ordId, ordCode, cusFullName, ordStatus, ordTotal, DATE(ordCreatedate) AS ordCreatedate")
+                    ->from("order")
+                    ->join("customer", "cusId = ordCusId", "inner")
+                    ->where("ordStatus !=", "SUCCESS");
+
+        if($search){ 
+
+            $this->db->group_start();
+            $this->db->like('matName', $search);
+            $this->db->group_end();
+        }
+
+        if($mode == "LIMIT"){
+
+            $offset = ($currentPage-1)*$limitPage;
+            $orderList = $this->db->order_by("ordId", "DESC")
+            ->limit($limitPage, $offset)
+            ->get();    
         }else{
 
             $orderList = $this->db->get();
@@ -308,14 +337,14 @@ class M_order extends CI_Model {
                             ->from("address")
                             ->join("province"   , "prvId = addProvince", "inner")
                             ->join("district"   , "disId = addDistrict", "inner")
-                            ->where("addCusId", $this->session->userdata("ordCusId"))
+                            ->where("addCusId", $orderDetail->ordCusId)
                             ->where("addType", "DELIVERY")
                             ->get()
                             ->row();
 
         $contactDetail = $this->db->select("conName, conValue")
                             ->from("contact")
-                            ->where("conCusId" , $this->session->userdata("ordCusId"))
+                            ->where("conCusId" , $orderDetail->ordCusId)
                             ->get()
                             ->result();
 
@@ -340,6 +369,41 @@ class M_order extends CI_Model {
 
         $this->db->trans_start();
 
+        //#####################
+        // return virtual stock 
+        //#####################
+
+        $this->load->model("Wherehouse/M_stock");
+        // get order code
+        $order = $this->db->select("ordCode")
+                ->from("order")
+                ->where("ordId", $ordId)
+                ->get()
+                ->row();
+
+        // get stock 
+        $stock = $this->db->select("stoId")
+                    ->from("stock")
+                    ->like("stoReason", $order->ordCode)
+                    ->get()
+                    ->result();
+
+        for($i=0;$i<count($stock);$i++){
+
+            $stockHistory = $this->db->select("shtStoId, shtFromLot, shtAmount, stoCost, stoLocId, stoMatId, stoExpDate")
+                            ->from("stockHistory")
+                            ->join("stock", "shtFromLot = stoId")
+                            ->where("shtStoId < ", $stock[$i]->stoId)
+                            ->order_by("shtStoId", "DESC")
+                            ->limit(1)
+                            ->get()
+                            ->row();
+
+            $this->M_stock->inputStock($stockHistory->stoMatId, $stockHistory->stoCost, $stockHistory->shtAmount, $stockHistory->stoLocId, $stockHistory->stoExpDate, "RETURN : " . $order->ordCode, "VIRTUAL");
+        }
+
+
+        // remove transaction
         $this->db->where("ordId", $ordId)
         ->delete("order");
 
@@ -469,7 +533,6 @@ class M_order extends CI_Model {
 
         return $this->db->affected_rows();
     }
-
 
     public function searchInArray($array, $value){
 

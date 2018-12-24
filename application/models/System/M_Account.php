@@ -69,12 +69,21 @@ class M_Account extends CI_Model {
     public function getAllAccount($perPages = 1, $limitPage = 1) {
         $offset = ($perPages-1)*$limitPage;
 
-        $this->db->select('accId, accFirstname, accLastname, accUsername, DATE_FORMAT(accCreatedate, "%d/%m/%y") as accCreatedate');
+        $this->db->select('accId, accFirstname, accLastname, accUsername, DATE(accCreatedate) AS accCreatedate');
         $this->db->where("accDeleteBy IS NULL");
         $this->db->limit($limitPage, $offset);
         $query = $this->db->get('account');
 
         return $query;
+    }
+
+    public function usernameIsAlready($username){
+
+        return $this->db->select("accUsername")
+                        ->from("account")
+                        ->where("accUsername", $username)
+                        ->get()
+                        ->num_rows();
     }
     
     

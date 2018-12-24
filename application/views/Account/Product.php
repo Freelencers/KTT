@@ -117,7 +117,7 @@
                                 <table class="template" id="materialTemplate">
                                     <tbody>
                                         <tr>
-                                            <td><input type="radio" class="autoGet matIdRadio" name="matId"  value="{matId}"></td>
+                                            <td><input type="radio" class="autoGet matIdRadio" name="matId"  value="{matId}" {checked}></td>
                                             <td>{matCode}</td>
                                             <td>{matName}</td>
                                         </tr>

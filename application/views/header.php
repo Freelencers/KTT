@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>KTT | Blank Page</title>
+  <title>GTT | Fanshine Management</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -50,9 +50,9 @@
       <!-- Logo -->
       <a href="../../index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>KT</b>S</span>
+        <span class="logo-mini"><b>GT</b>S</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>KTT</b>SYSTEM</span>
+        <span class="logo-lg"><b>GTT</b>SYSTEM</span>
       </a>
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar navbar-static-top">
@@ -71,14 +71,17 @@
               $lang = "";
               if($this->session->userdata("languaue") == "english"){
                 
-                $lang = "TH";
+                $lang = "ภาษาไทย";
+                $code = "TH";
               }else{
 
-                $lang = "EN";
+                $lang = "English";
+                $code = "EN";
               }
             ?>
             <li>
-              <a href="#" id="switchLanguau" lang="<?=$lang?>">
+              <a href="#" id="switchLanguau" lang="<?=$code?>">
+                <i class="fa fa-fw fa-language"></i>
                 <span class="hidden-xs"><?=$lang?></span>
               </a>
             </li>

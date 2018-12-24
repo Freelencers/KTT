@@ -69,5 +69,12 @@
             
             echo json_encode($json);
         }
+
+        public function usernameIsAlready($username){
+
+            $this->load->model("System/M_Account");
+            $result["haveAlready"] = $this->M_Account->usernameIsAlready($username);
+            echo json_encode($result);
+        }
     }
 ?>

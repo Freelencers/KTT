@@ -247,6 +247,8 @@ class Order extends CI_controller {
         $pdf->Text(10, 80, iconv( 'UTF-8','TIS-620', 'raty.ying@yahoo.com'));
 
 
+        //echo json_encode($invoiceDetail);
+        //die;
         // Customer box
         $pdf->Text(120, 45, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderTo")));
 
