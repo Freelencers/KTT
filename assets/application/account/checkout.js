@@ -3,29 +3,30 @@ var currentPageProduct = 1;
 var currentPageMyOrder = 1;
 var limitPage = 9;
 var keyword = "";
+var totalPoint = 0;
 loadOrderProductList();
 getInvoidDetail();
 
 // on action
 $("#shipping").change(function(){
 
-    var subTotal = $("#subTotal").text();
+    var subTotal = $("#subTotal").attr("value");
     calculateSum(subTotal);
 });
 
 $("#complete").click(function(){
 
-    var subTotal = $("#subTotal").text();
-    var tax = $("#tax").text();
+    var subTotal = $("#subTotal").attr("value");
+    var tax = $("#tax").attr("value");
     var shipping = $("#shipping").val();
 
-    window.location.replace(base_url + "/Account/Order/complete/" + subTotal + "/" + tax + "/" + shipping);
+    window.location.replace(base_url + "/Account/Order/complete/" + subTotal + "/" + tax + "/" + shipping + "/true/" + totalPoint);
 })
 
 $("#buttonGeneratePDF").click(function(){
     
-    var subTotal = $("#subTotal").text();
-    var tax = $("#tax").text();
+    var subTotal = $("#subTotal").attr("value")
+    var tax = $("#tax").attr("value");
     var shipping = $("#shipping").val();
 
     window.open(base_url + "/Account/Order/generateInvoicePDF/0/" + subTotal + "/" + tax + "/" + shipping, '_blank');
@@ -56,12 +57,14 @@ function loadOrderProductList(){
 
             // Create card
             replace = {
-                "{sodQty}" : row.sodQty,
+                "{sodQty}" : moneyNumberFormat(row.sodQty),
                 "{untName}" : row.untName,
-                "{point}" : row.prdPoint * row.sodQty,
-                "{price}" : (row.prdFullPrice - row.prdDiscount) * row.sodQty,
+                "{point}" : moneyNumberFormat(row.prdPoint * row.sodQty),
+                "{price}" : moneyNumberFormat(row.prdFullPrice - row.prdDiscount) * row.sodQty,
                 "{matName}" : row.matName
             }
+
+            totalPoint += (row.prdPoint * row.sodQty);
             rows += replaceAll(component, replace);
 
             // Calculate sumary
@@ -71,7 +74,8 @@ function loadOrderProductList(){
 
         calculateSum(sumPrice);
         $("#tbodyInvoid").html(rows);
-        $("#subTotal").text(sumPrice);
+        $("#subTotal").text(moneyNumberFormat(sumPrice));
+        $("#subTotal").attr("value", sumPrice);
 
     }, "json");
 }
@@ -88,8 +92,9 @@ function calculateSum(subTotal){
 
         tax         = ((resp[0].tax * 0.01) * (subTotal + shipping));
         grandTotal  = ((resp[0].tax * 0.01) * (subTotal + shipping)) + subTotal + shipping;
-        $("#tax").text(tax);
-        $("#grandTotal").text(grandTotal);
+        $("#tax").text(moneyNumberFormat(tax));
+        $("#tax").attr("value", tax);
+        $("#grandTotal").text(moneyNumberFormat(grandTotal));
 
     }, "json");
 

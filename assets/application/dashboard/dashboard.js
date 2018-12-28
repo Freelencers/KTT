@@ -13,7 +13,7 @@ $.post(base_url + "/System/Dashboard/fanshineTree", {}, function(resp){
     var contex_menu = {};
     tree = createTree('div_tree','white',contex_menu);
     
-    var root = tree.createNode( "Gatatong" ,true,'/assets/aimaraJS/images/star.png',null,null,'context1');
+    var root = tree.createNode( "Gatatong " + "[" + (resp.numberOfChild - 1) + "]" ,true,'/assets/aimaraJS/images/star.png',null,null,'context1');
     travelInTree(root, resp);
     tree.drawTree();
 },"json");
@@ -25,7 +25,7 @@ function travelInTree(node, resp){
     var temp = "";
     for(var i=0;i<resp.child.length;i++){
 
-        temp = node.createChildNode( resp.child[i].lv + " : " + resp.child[i].name ,true,'/assets/aimaraJS/images/person.png',null,null,'context1');
+        temp = node.createChildNode( resp.child[i].lv + " : " + resp.child[i].name + "[" + resp.child[i].numberOfChild + "]",true,'/assets/aimaraJS/images/person.png',null,null,'context1');
         travelInTree(temp, resp.child[i]);
     }
     return 0;

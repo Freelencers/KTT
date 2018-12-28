@@ -38,7 +38,7 @@
                             </tbody>
                         </table>
 
-                        <table class="table table-bordered table-hover dataTable">
+                        <table class="table table-bordered table-hover dataTable dataTable">
                             <thead>
                                 <th><?=$code?></th>
                                 <th><?=$fanshineName?></th>

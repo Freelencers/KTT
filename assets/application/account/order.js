@@ -40,6 +40,14 @@ $(document).on("click", ".changeOrder", function(){
     window.open(base_url + "/Font-end/Account/Order/createOrder/" + ordId, '_blank');
 });
 
+$(document).on("click", ".payAlreadyBtn", function(){
+
+    var ordId = $(this).attr("ordId");
+    $.post(base_url + "/Account/Order/checkPayAlready", {"ordId" : ordId}, function(resp){
+
+        loadTable(currentPage, limitPage, "");
+    });
+});
 
 // Create button click
 $("#modalSaveButton").click(function(){
@@ -142,13 +150,18 @@ function loadTable(currentPage, limitPage, search){
                 "{ordId}" : row.ordId,
                 "{cusFullName}" : row.cusFullName,
                 "{ordCode}" : row.ordCode,
-                "{ordTotal}" : row.ordTotal,
+                "{ordTotal}" : moneyNumberFormat(row.ordTotal),
                 "{ordStatus}" : orderStatusLabel(row.ordStatus)
             }
 
             if(row.ordStatus != "WAIT-PAY"){
                 
                 replace["{hideRemoveIcon}"] = "hide";
+            }
+
+            if(row.ordPayAlready == 1){
+
+                replace["{hidePayCheck}"] = "hide";
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);

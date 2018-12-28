@@ -4,10 +4,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Dashboard extends CI_Controller {
     
     public function __construct()
-     {
-                parent::__construct();
-                // Your own constructor code
-                $this->load->model("M_dashboard");
+    {
+        parent::__construct();
+        // Your own constructor code
+        $this->load->model("M_dashboard");
+        $this->load->model("Fanshine/M_customer");
     }
 	public function index()
 	{
@@ -124,6 +125,7 @@ class Dashboard extends CI_Controller {
         $tree["name"]  = "Gatatong";
         $tree["cusId"] = 1;
         $tree["child"] = array();
+        $tree["numberOfChild"] = $this->M_dashboard->getFanshinelist()->num_rows();
         
         // find child level 1
         $parentId = 1;
@@ -144,7 +146,9 @@ class Dashboard extends CI_Controller {
                 $temp["name"]  = $customerList[$i]->cusFullName;
                 $temp["cusId"] = $customerList[$i]->cusId;
                 $temp["lv"] = $customerList[$i]->cusLevel;
+                $temp["numberOfChild"] = $this->M_customer->getLowerNumberOfThisId($temp["cusId"]);
                 $temp["child"] = $this->findDeepChild($customerList, $temp["cusId"]);
+                //echo "-------";
                 array_push($result, $temp);
                 $isNoChild = false;
             }

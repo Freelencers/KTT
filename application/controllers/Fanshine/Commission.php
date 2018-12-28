@@ -214,22 +214,14 @@ class Commission extends CI_controller {
         $settingValue = $this->M_general->getSettingValue();
 
         // calculate sum
+        $index = 0;
         foreach($tableData as $row)
 		{
-			//type
-			if($row->cmsTotalPrivatePoint){
-
-				$type = "องค์กร";
-				$point = $row->cmsTotalPublicPoint;
-			}else{
-				
-				$type = "ส่วนตัว";
-				$point = $row->cmsTotalPrivatePoint;
-			}
-
+            
 			$amountOfNumber["commission"] 	+= $row->cmsTotalCommission;
 			$amountOfNumber["privatePoint"]	+= $row->cmsTotalPrivatePoint;
-			$amountOfNumber["publicPoint"] 	+= $row->cmsTotalPublicPoint;
+            $amountOfNumber["publicPoint"] 	+= $row->cmsTotalPublicPoint;
+            $index++;
         }
         
         // print date

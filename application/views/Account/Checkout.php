@@ -27,7 +27,7 @@
                                         <p>จ.ชลบุรี</p>
                                         <p>20130</p>
                                         <p>089-936-8257</p>
-                                        <p>raty.ying@yahoo.com</p>
+                                        <p>patonggo.gtt@yahoo.com</p>
                                     </div>
                                     <!-- /.box-body -->
                                 </div>                       

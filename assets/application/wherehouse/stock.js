@@ -210,9 +210,9 @@ function loadTable(currentPage, limitPage, search){
                 "{matCode}" : row.matCode,
                 "{matId}" : row.matId,
                 "{matName}" : row.matName,
-                "{matType}" : row.matType,
-                "{stoActualStock}" : row.stoActualStock,
-                "{stoVirtualStock}" : row.stoVirtualStock,
+                "{matType}" : productStatusLabel(row.matType),
+                "{stoActualStock}" : moneyNumberFormat(row.stoActualStock),
+                "{stoVirtualStock}" : moneyNumberFormat(row.stoVirtualStock),
                 "{hightLight}" : Hightlight
             }
             no++;
@@ -265,11 +265,11 @@ function loadHistoryTable(currentPage, limitPage, search){
                 "{matCode}" : row.matCode,
                 "{matId}" : row.matId,
                 "{matName}" : row.matName,
-                "{matType}" : row.matType,
-                "{stoCost}" : row.stoCost,
+                "{matType}" : productStatusLabel(row.matType),
+                "{stoCost}" : moneyNumberFormat(row.stoCost),
                 "{locName}" : row.locName,
-                "{shtTotal}" : row.shtTotal,
-                "{shtAmount}" : row.shtAmount,
+                "{shtTotal}" : moneyNumberFormat(row.shtTotal),
+                "{shtAmount}" : moneyNumberFormat(row.shtAmount),
                 "{shtActionDate}" : row.shtActionDate,
                 "{shtType}" : shtType,
                 "{stoReason}" : row.stoReason
@@ -321,4 +321,30 @@ function loadStockRefils(){
 
         $("#stockRefils").text(resp.response.stockRefils);
     },"json");
+}
+
+
+function productStatusLabel(status){
+
+    if(language == "english"){
+
+        switch(status){
+
+            case "PRODUCT" : return "<span class='badge bg-purple'>Product</span>";
+                             break;
+
+            case "MATERIAL": return "<span class='badge bg-orange'>Material</span>";
+                             break;
+        }
+    }else{
+
+        switch(status){
+
+            case "PRODUCT" : return "<span class='badge bg-purple'>สำเร็จรูป</span>";
+                             break;
+
+            case "MATERIAL": return "<span class='badge bg-orange'>วัตถุดิบ</span>";
+                             break;
+        }
+    }
 }

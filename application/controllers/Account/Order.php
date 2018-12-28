@@ -160,11 +160,20 @@ class Order extends CI_controller {
         echo json_encode($json);
     }
 
+    public function checkPayAlready(){
 
-    public function complete($subTotal, $tax, $shipping, $isRedirect=true){
+        $ordId = $this->input->post("ordId");
+        $this->M_order->checkPayAlready($ordId);
+
+        $json["status"] = "success";
+        echo json_encode($json);
+    }
+
+    public function complete($subTotal, $tax, $shipping, $isRedirect=true, $totalPoint){
 
         $this->load->model("Wherehouse/M_stock");
 
+        $orderDetail["ordTotalPoint"] = $totalPoint;
         $orderDetail["ordSubTotal"] = $subTotal;
         $orderDetail["ordShipping"] = $shipping;
         $orderDetail["ordTax"]      = $tax;
@@ -238,13 +247,13 @@ class Order extends CI_controller {
    
         // Kratatong box
         $pdf->Text(10, 45, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderFrom")));
-        $pdf->Text(10, 50, iconv( 'UTF-8','TIS-620', 'ปาท่องโก๋กระทะมอง'));
+        $pdf->Text(10, 50, iconv( 'UTF-8','TIS-620', 'ปาท่องโก๋กระทะทอง'));
         $pdf->Text(10, 55, iconv( 'UTF-8','TIS-620', '249 ถ.สุขุมวิท ต.แสนสุข ตลาดหนองมน'));
         $pdf->Text(10, 60, iconv( 'UTF-8','TIS-620', 'อ.เมือง'));
         $pdf->Text(10, 65, iconv( 'UTF-8','TIS-620', 'จ.ชลบุรี'));
         $pdf->Text(10, 70, iconv( 'UTF-8','TIS-620', '20130'));
         $pdf->Text(10, 75, iconv( 'UTF-8','TIS-620', '089-936-8257'));
-        $pdf->Text(10, 80, iconv( 'UTF-8','TIS-620', 'raty.ying@yahoo.com'));
+        $pdf->Text(10, 80, iconv( 'UTF-8','TIS-620', 'patonggo.gtt@yahoo.com'));
 
 
         //echo json_encode($invoiceDetail);
@@ -304,8 +313,8 @@ class Order extends CI_controller {
         ), 0, 0,'L');
 
         // Right 1
-        $pdf->Cell( 120, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderSubTotal")), 0, 0,'R');
-        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordSubTotal), 0, 1,'R');
+        $pdf->Cell( 130, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderSubTotal")), 0, 0,'R');
+        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordSubTotal) . " THB", 0, 1,'R');
 
         // Left 2
         $pdf->Cell( 20, 5, iconv( 'UTF-8','TIS-620', 
@@ -314,8 +323,8 @@ class Order extends CI_controller {
         , 0, 0,'L');
 
         // Right 2
-        $pdf->Cell( 120, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderShipping")), 0, 0,'R');
-        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordShipping), 0, 1,'R');
+        $pdf->Cell( 130, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderShipping")), 0, 0,'R');
+        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordShipping) . " THB", 0, 1,'R');
         
         // Left 3
         $pdf->Cell( 20, 5, iconv( 'UTF-8','TIS-620',
@@ -324,8 +333,8 @@ class Order extends CI_controller {
         ), 0, 0,'L');
 
         // Right 3
-        $pdf->Cell( 120, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderTax")), 0, 0,'R');
-        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordTax), 0, 1,'R');
+        $pdf->Cell( 130, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderTax")), 0, 0,'R');
+        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordTax) . " THB", 0, 1,'R');
         
         // Left 5
         $pdf->Cell( 20, 5, iconv( 'UTF-8','TIS-620',
@@ -334,8 +343,8 @@ class Order extends CI_controller {
         ), 0, 0,'L');
 
         // Right 4
-        $pdf->Cell( 120, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderGrandTotal")), 0, 0,'R');
-        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordTotal), 0, 1,'R');
+        $pdf->Cell( 130, 5, iconv( 'UTF-8','TIS-620', $this->lang->line("accountOrderGrandTotal")), 0, 0,'R');
+        $pdf->Cell( 40, 5, number_format($invoiceDetail["OrderDetail"]->ordTotal) . " THB", 0, 1,'R');
 
         // Render
 		$pdf->Output("assets/tempPDF/invoice.pdf","I");

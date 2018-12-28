@@ -254,16 +254,16 @@ function loadScheduleTable(currentPage, limitPage, search){
                 "{no}"                  : no + 1,
                 "{dateStart}"           : convertDateToHuman(row.dateStart),
                 "{dateEnd}"             : convertDateToHuman(row.dateEnd),
-                "{moneyToPoint}"        : row.moneyToPoint,
-                "{pointToMoneyLevel-S}" : row.pointToMoneyLevelS,
-                "{pointToMoneyLevel-L}" : row.pointToMoneyLevelL,
-                "{tax}"                 : row.tax,
-                "{S-Fee}"               : row.sFee,
-                "{L-Fee}"               : row.lFee,
-                "{pounderWeight}"       : row.pounderWeight,
-                "{commission}"          : row.commission,
-                "{refer}"               : row.refer,
-                "{standardPoint}"       : row.standardPoint,
+                "{moneyToPoint}"        : moneyNumberFormat(row.moneyToPoint),
+                "{pointToMoneyLevel-S}" : moneyNumberFormat(row.pointToMoneyLevelS),
+                "{pointToMoneyLevel-L}" : moneyNumberFormat(row.pointToMoneyLevelL),
+                "{tax}"                 : moneyNumberFormat(row.tax),
+                "{S-Fee}"               : moneyNumberFormat(row.sFee),
+                "{L-Fee}"               : moneyNumberFormat(row.lFee),
+                "{pounderWeight}"       : moneyNumberFormat(row.pounderWeight),
+                "{commission}"          : moneyNumberFormat(row.commission),
+                "{refer}"               : moneyNumberFormat(row.refer),
+                "{standardPoint}"       : moneyNumberFormat(row.standardPoint),
                 "{disabled}"            : disabled
             }
             no++;
@@ -299,16 +299,16 @@ function loadHistoryTable(currentPage, limitPage, search){
             replace = {
                 "{no}"                  : no + 1,
                 "{date}"                : convertDateToHuman(row.dateStart),
-                "{moneyToPoint}"        : row.moneyToPoint,
-                "{pointToMoneyLevel-S}" : row.pointToMoneyLevelS,
-                "{pointToMoneyLevel-L}" : row.pointToMoneyLevelL,
-                "{tax}"                 : row.tax,
-                "{S-Fee}"               : row.sFee,
-                "{L-Fee}"               : row.lFee,
-                "{pounderWeight}"       : row.pounderWeight,
-                "{commission}"          : row.commission,
-                "{refer}"               : row.refer,
-                "{standardPoint}"       : row.standardPoint
+                "{moneyToPoint}"        : moneyNumberFormat(row.moneyToPoint),
+                "{pointToMoneyLevel-S}" : moneyNumberFormat(row.pointToMoneyLevelS),
+                "{pointToMoneyLevel-L}" : moneyNumberFormat(row.pointToMoneyLevelL),
+                "{tax}"                 : moneyNumberFormat(row.tax),
+                "{S-Fee}"               : moneyNumberFormat(row.sFee),
+                "{L-Fee}"               : moneyNumberFormat(row.lFee),
+                "{pounderWeight}"       : moneyNumberFormat(row.pounderWeight),
+                "{commission}"          : moneyNumberFormat(row.commission),
+                "{refer}"               : moneyNumberFormat(row.refer),
+                "{standardPoint}"       : moneyNumberFormat(row.standardPoint)
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);

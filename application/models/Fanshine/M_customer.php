@@ -358,6 +358,37 @@ class M_customer extends CI_Model {
         return $chainOfCusId;
     }
 
+    public function getLowerNumberOfThisId($cusId){
+
+        $allCustomerList = $this->db->select("cusId, cusReferId")
+                            ->from("customer")
+                            ->get()
+                            ->result();
+
+        $customerHashTable = array();
+        for($i=0;$i<count($allCustomerList);$i++){
+
+            $customerHashTable[$allCustomerList[$i]->cusId] = $allCustomerList[$i]->cusReferId;
+        }
+
+        $counter = 0;
+        $this->travelDownTree($cusId, $customerHashTable, $counter);
+
+        return $counter;
+    }
+
+    public function travelDownTree($cusId, $customerHashTable, &$counter){
+
+        foreach($customerHashTable as $index => $value){
+
+            if($value == $cusId){
+
+                $counter++;
+                $this->travelDownTree($index, $customerHashTable, $counter);
+            }
+        }
+    }
+
     public function isNewCustomer($cusId){
 
         $this->db->select("lvuDate")

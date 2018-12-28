@@ -1,8 +1,21 @@
 // On load
 
-loadTable();
+//loadTable();
 
 // on action
+
+$('.dataTable').DataTable({
+    'paging'      : true,
+    'lengthChange': false,
+    'searching'   : false,
+    'ordering'    : true,
+    'info'        : true,
+    'autoWidth'   : false,
+    "ajax": {
+        "url": base_url + "/Report/Growth/getGrowthList",
+        "type": "POST"
+    }
+});
 
 // defination
 
@@ -40,12 +53,10 @@ function loadTable(currentPage, limitPage, search){
                 }
 
                 avg += parseFloat(replace["{m" + i + "}"]);
-                console.log(replace["{m" + i + "}"]);
             }
 
             replace["{avg}"] = Math.round((avg / 12) * 100) / 100;
 
-            //console.log(replace);
             tbody += replaceAll(columnTemplate, replace);
         }
         $("#tableOfgrowth").html(tbody);

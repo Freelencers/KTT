@@ -1965,7 +1965,7 @@ class Fpdf
 			$this->Cell($w[1],8, iconv( 'UTF-8','TIS-620',$row->cmsDetail),'LR', 0, 'C');;
 
 			//type
-			if($row->cmsTotalPrivatePoint){
+			if($row->cmsTotalPrivatePoint <= 0){
 
 				$type = "องค์กร";
 				$point = $row->cmsTotalPublicPoint;

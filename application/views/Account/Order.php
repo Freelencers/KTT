@@ -36,7 +36,8 @@
                                         <i class="fa fa-fw fa-edit pointer changeOrder hide" ordId="{ordId}"></i>
                                         <i class="fa fa-fw fa-trash pointer {hideRemoveIcon}" onclick="deleteConfirmBox({ordId})"></i>
                                         <i class="fa fa-fw fa-mail-forward pointer nextStatus" ordId="{ordId}"></i> 
-                                        <i class="fa fa-fw fa-print pointer buttonGeneratePDF" ordId="{ordId}"></i> 
+                                        <i class="fa fa-fw fa-print pointer buttonGeneratePDF" ordId="{ordId}"></i>
+                                        <i class="fa fa-fw fa-money pointer payAlreadyBtn {hidePayCheck}" ordId="{ordId}"></i>
                                     </td>
                                 </tr>
                             </tbody>

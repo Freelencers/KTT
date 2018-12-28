@@ -79,10 +79,10 @@ function loadCommissionTable(currentPage, limitPage, search, cmsCmrId){
                 "{fanshineName}"  : row.cusFullName,
                 "{bank}"          : row.banName,
                 "{bankAccount}"   : row.bacNumber,
-                "{privatePoint}"  : row.cmsTotalPrivatePoint,
-                "{companyPoint}"  : row.cmsTotalPublicPoint,
-                "{amount}"        : row.cmsTotalPoint,
-                "{commission}"    : row.cmsTotalCommission,
+                "{privatePoint}"  : moneyNumberFormat(row.cmsTotalPrivatePoint),
+                "{companyPoint}"  : moneyNumberFormat(row.cmsTotalPublicPoint),
+                "{amount}"        : moneyNumberFormat(row.cmsTotalPoint),
+                "{commission}"    : moneyNumberFormat(row.cmsTotalCommission),
                 "{cmsId}"         : row.cusId,
                 "{cmsCmrId}"      : row.cmsCmrId,
                 "{cmsCusId}"      : row.cmsCusId,
@@ -139,7 +139,7 @@ function loadCommissionAmount(){
             $("#commissionAmount").text(0);
         }else{
 
-            $("#commissionAmount").text(resp.response.amount);
+            $("#commissionAmount").text(moneyNumberFormat(resp.response.amount));
         }
     }, "json");
 }

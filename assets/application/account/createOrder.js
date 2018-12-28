@@ -197,9 +197,9 @@ function loadProduct(){
             replace = {
                 "{code}" : row.matCode,
                 "{prdId}" : row.prdId,
-                "{point}" : row.prdPoint,
-                "{price}" : (row.prdFullPrice - row.prdDiscount),
-                "{stock}" : row.stoVirtualStock + " " + row.untName,
+                "{point}" : moneyNumberFormat(row.prdPoint),
+                "{price}" : moneyNumberFormat((row.prdFullPrice - row.prdDiscount)),
+                "{stock}" : moneyNumberFormat(row.stoVirtualStock) + " " + row.untName,
                 "{matName}" : row.matName,
                 "{matId}" : row.matId
             }
@@ -249,11 +249,11 @@ function loadMyOrder(){
                 "{code}" : row.matCode,
                 "{sodId}" : row.sodId,
                 "{prdId}" : row.prdId,
-                "{point}" : row.prdPoint,
-                "{price}" : (row.prdFullPrice - row.prdDiscount),
-                "{stock}" : row.stoVirtualStock,
+                "{point}" : moneyNumberFormat(row.prdPoint),
+                "{price}" : moneyNumberFormat(row.prdFullPrice - row.prdDiscount),
+                "{stock}" : moneyNumberFormat(row.stoVirtualStock),
                 "{matName}" : row.matName,
-                "{amount}" : row.sodQty,
+                "{amount}" : moneyNumberFormat(row.sodQty),
                 "{matId}" : row.matId,
                 "{untName}" : row.untName
             }
@@ -265,8 +265,8 @@ function loadMyOrder(){
         });
 
         $("#myProductCategory").html(cardList);
-        $("#sumPoint").text(sumPoint);
-        $("#sumPrice").text(sumPrice);
+        $("#sumPoint").text(moneyNumberFormat(sumPoint));
+        $("#sumPrice").text(moneyNumberFormat(sumPrice));
 
         // pagination
         var pagination = genPagination(resp.response.pagination);

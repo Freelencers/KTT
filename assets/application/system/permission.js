@@ -5,7 +5,6 @@ var limitPage = 10;
 loadTable(currentPage, limitPage, "");
 
 // on action
-
 $(document).on("click", ".permissionModal", function(){
 
     var accId = $(this).attr("data-accId");
@@ -43,8 +42,8 @@ $(document).on("click", ".permissionAssign", function(){
     
     },"json");
 });
-// Definition
 
+// Definition
 function loadTable(currentPage, limitPage, search){
 
     var json = {
@@ -70,7 +69,7 @@ function loadTable(currentPage, limitPage, search){
                 "{accFirstname}" : row.accFirstname,
                 "{accLastname}" : row.accLastname,
                 "{accUsername}" : row.accUsername,
-                "{accCreatedate}" : row.accCreatedate
+                "{accCreatedate}" : convertDateToHuman(row.accCreatedate)
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);
@@ -82,7 +81,6 @@ function loadTable(currentPage, limitPage, search){
         $(".paginationList").html(pagination);
     },"json");
 }
-
 
 function getModulePermission(accId){
 

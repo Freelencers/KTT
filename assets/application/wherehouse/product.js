@@ -83,9 +83,9 @@ function loadTable(currentPage, limitPage, search){
                 "{matName}" : row.matName,
                 "{locName}" : row.locName,
                 "{untName}" : row.untName,
-                "{matMin}" : row.matMin,
-                "{matMax}" : row.matMax,
-                "{matType}" : row.matType,
+                "{matMin}" : moneyNumberFormat(row.matMin),
+                "{matMax}" : moneyNumberFormat(row.matMax),
+                "{matType}" : productStatusLabel(row.matType),
             }
             no++;
             tbody += replaceAll(columnTemplate, replace);
@@ -191,4 +191,30 @@ function loadUnit(currentPage, limitPage, search){
         });
         $("#matUntId").html(options);
     },"json");
+}
+
+
+function productStatusLabel(status){
+
+    if(language == "english"){
+
+        switch(status){
+
+            case "PRODUCT" : return "<span class='badge bg-purple'>Product</span>";
+                             break;
+
+            case "MATERIAL": return "<span class='badge bg-orange'>Material</span>";
+                             break;
+        }
+    }else{
+
+        switch(status){
+
+            case "PRODUCT" : return "<span class='badge bg-purple'>สำเร็จรูป</span>";
+                             break;
+
+            case "MATERIAL": return "<span class='badge bg-orange'>วัตถุดิบ</span>";
+                             break;
+        }
+    }
 }

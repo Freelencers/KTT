@@ -45,8 +45,8 @@ function loadTable(currentPage, limitPage, search){
                 "{orderCode}" : row.ordCode,
                 "{ordId}" : row.ordId,
                 "{fanshineName}" : row.cusFullName,
-                "{amount}" : row.ordTotal,
-                "{status}" : row.ordStatus
+                "{amount}" : moneyNumberFormat(row.ordTotal),
+                "{status}" : orderStatusLabel(row.ordStatus)
             }
             tbody += replaceAll(columnTemplate, replace);
         });
@@ -56,4 +56,47 @@ function loadTable(currentPage, limitPage, search){
         var pagination = genPagination(resp.response.pagination);
         $(".paginationList").html(pagination);
     },"json");
+}
+
+function orderStatusLabel(status){
+
+    if(language == "english"){
+
+        switch(status){
+
+            case "WAIT-PAY" : return "<span class='badge bg-yellow'>Waiting Pay</span>";
+                              break;
+
+            case "PAYED"    : return "<span class='badge bg-teal'>Pay Already</span>";
+                              break;
+
+            case "SHIPPING" : return "<span class='badge bg-maroon'>Shipping</span>";
+                              break;
+
+            case "SHIPPED"  : return "<span class='badge bg-green'>Ship Already</span>"
+                              break;
+
+            case "SUCCESS"  : return "<span class='badge bg-green'>Order Complete</span>"
+                              break;
+        }
+    }else{
+
+        switch(status){
+
+            case "WAIT-PAY" : return "<span class='badge bg-yellow'>รอการชำระเงิน</span>";
+                              break;
+
+            case "PAYED"    : return "<span class='badge bg-teal'>จ่ายแล้ว</span>";
+                              break;
+
+            case "SHIPPING" : return "<span class='badge bg-maroon'>กำลังจัดส่ง</span>";
+                              break;
+
+            case "SHIPPED"  : return "<span class='badge bg-green'>จัดส่งเรียบร้อย</span>"
+                              break;
+
+            case "SUCCESS"  : return "<span class='badge bg-green'>เสร็จสิ้น</span>"
+                              break;
+        }
+    }
 }

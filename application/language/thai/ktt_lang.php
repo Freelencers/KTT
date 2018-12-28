@@ -30,7 +30,7 @@ $lang['moduleAccountOrder']         = 'รายการสั่งซื้�
 $lang['moduleAccountHistory']       = 'ประวัติการสั่งซื้อ';
 $lang['moduleAccountExpense']       = 'รายรับ-รายจ่าย';
 $lang['moduleReportBenefit']        = 'ผลกำไร';
-$lang['moduleReportGrowth']         = 'การเติมโต';
+$lang['moduleReportGrowth']         = 'การเติบโต';
 
 // General
 $lang["generalSave"]                = "บันทึก";

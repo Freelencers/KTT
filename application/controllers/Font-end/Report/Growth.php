@@ -59,7 +59,11 @@ class Growth extends CI_Controller {
 		$word["no"] 				= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Report/growth.js"];
+		$file["js"] = [
+			"assets/bower_components/datatables.net/js/jquery.dataTables.min.js",
+			"assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
+			"assets/application/Report/growth.js"
+		];
 		$this->load->view("Report/Growth", $word);
 		$this->load->view("footer", $file);
 	}

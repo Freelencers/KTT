@@ -5,6 +5,14 @@
         public function getGrowthList(){
 
 
+            // $data["data"][0] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+            // $data["data"][1] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+            // $data["data"][2] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+            // $data["data"][3] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+
+            // echo json_encode($data);
+            // die;
+
             $this->load->model("Report/M_growth");
             $result = $this->M_growth->getGrowthCurrentYear()->result();
             $lastYearRawData = $this->M_growth->getGrowthLastYear()->result();
@@ -45,7 +53,6 @@
                 }
             }
 
-
             // calculate percentage
             foreach($dataHashTable as $customer){
 
@@ -74,8 +81,27 @@
                 }
             }
 
-            $json["response"]["dataList"] = $dataHashTable;
-            echo json_encode($json);
+            // format for data table
+            $dataTable["data"] = array();
+            $temp = array();
+            foreach($dataHashTable as $cusCode => $detail){
+
+                $temp[0]    = $cusCode;
+                $temp[1]    = $detail["fullName"];
+                $temp[14]   = 0;
+                $index      = 2;
+                for($i=1;$i<=12;$i++){
+
+                    $temp[$index++]  = $detail["incomeOfMonth"][$i];
+                    $temp[14]       += $detail["incomeOfMonth"][$i];
+                }
+
+                $temp[14] = round($temp[14] / 12, 2);
+                array_push($dataTable["data"], $temp);
+            }
+
+            //$json["response"]["dataList"] = $dataHashTable;
+            echo json_encode($dataTable);
         }
     }
 ?>
