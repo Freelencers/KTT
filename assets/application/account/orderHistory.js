@@ -78,6 +78,9 @@ function orderStatusLabel(status){
 
             case "SUCCESS"  : return "<span class='badge bg-green'>Order Complete</span>"
                               break;
+
+            case "SHOPPING"  : return "<span class='badge bg-gray'>Order Not Complete</span>"
+                              break;
         }
     }else{
 
@@ -96,6 +99,9 @@ function orderStatusLabel(status){
                               break;
 
             case "SUCCESS"  : return "<span class='badge bg-green'>เสร็จสิ้น</span>"
+                              break;
+
+            case "SHOPPING"  : return "<span class='badge bg-gray'>การสั่งซื้อไม่สมบูรณ์</span>"
                               break;
         }
     }

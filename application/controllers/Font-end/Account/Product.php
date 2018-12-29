@@ -64,7 +64,7 @@ class Product extends CI_Controller {
 		$word["no"] 				= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Account/product.js"];
+		$file["js"] = ["assets/application/account/product.js"];
 		$this->load->view("Account/Product", $word);
 		$this->load->view("footer", $file);
 	}

@@ -48,4 +48,9 @@ class General extends CI_Controller {
 		
 		$this->M_general->resetData($password);
 	}
+
+	public function goToSignIn(){
+
+		redirect("/Font-end/Auth/signIn");
+	}
 }

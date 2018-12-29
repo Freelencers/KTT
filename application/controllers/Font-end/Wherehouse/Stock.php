@@ -82,7 +82,7 @@ class Stock extends CI_Controller {
 		$word["no"] 					= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Wherehouse/stock.js"];
+		$file["js"] = ["assets/application/wherehouse/stock.js"];
 		$this->load->view("Wherehouse/Stock", $word);
 		$this->load->view("footer", $file);
 	}

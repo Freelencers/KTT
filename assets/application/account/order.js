@@ -173,7 +173,6 @@ function loadTable(currentPage, limitPage, search){
         $(".paginationList").html(pagination);
     },"json");
 }
-
 function orderStatusLabel(status){
 
     if(language == "english"){
@@ -191,6 +190,12 @@ function orderStatusLabel(status){
 
             case "SHIPPED"  : return "<span class='badge bg-green'>Ship Already</span>"
                               break;
+
+            case "SUCCESS"  : return "<span class='badge bg-green'>Order Complete</span>"
+                              break;
+
+            case "SHOPPING"  : return "<span class='badge bg-gray'>Order Not Complete</span>"
+                              break;
         }
     }else{
 
@@ -206,6 +211,12 @@ function orderStatusLabel(status){
                               break;
 
             case "SHIPPED"  : return "<span class='badge bg-green'>จัดส่งเรียบร้อย</span>"
+                              break;
+
+            case "SUCCESS"  : return "<span class='badge bg-green'>เสร็จสิ้น</span>"
+                              break;
+
+            case "SHOPPING"  : return "<span class='badge bg-gray'>การสั่งซื้อไม่สมบูรณ์</span>"
                               break;
         }
     }

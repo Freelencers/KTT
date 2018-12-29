@@ -60,7 +60,7 @@ class Location extends CI_Controller {
 		$word["no"] 				= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Wherehouse/location.js"];
+		$file["js"] = ["assets/application/wherehouse/location.js"];
 		$this->load->view("Wherehouse/Location", $word);
 		$this->load->view("footer", $file);
 	}

@@ -429,7 +429,7 @@ class M_order extends CI_Model {
         $this->db->trans_start();
 
         $this->db->where("sodId", $sodId)
-        ->delete("suborder");
+        ->delete("subOrder");
 
         $this->db->trans_complete();
 

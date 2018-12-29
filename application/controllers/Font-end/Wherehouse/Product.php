@@ -63,7 +63,7 @@ class Product extends CI_Controller {
 		$word["no"] 				= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Wherehouse/product.js"];
+		$file["js"] = ["assets/application/wherehouse/product.js"];
 		$this->load->view("Wherehouse/Product", $word);
 		$this->load->view("footer", $file);
 	}

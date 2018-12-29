@@ -40,7 +40,7 @@ class Commission extends CI_Controller {
 	{
 		// generate Report
 		$this->load->model("Fanshine/M_commission");
-		$this->M_commission->generateCommissionReport();
+		//$this->M_commission->generateCommissionReport();
 
 		$session = $this->session->userdata();
 		

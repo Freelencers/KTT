@@ -109,7 +109,7 @@ class Order extends CI_Controller {
 		}
 
 		// JS file
-		$file["js"] = ["assets/application/Account/createOrder.js"];
+		$file["js"] = ["assets/application/account/createOrder.js"];
 		$this->load->view("Account/CreateOrder", $word);
 		$this->load->view("footer", $file);
 	}
@@ -164,7 +164,7 @@ class Order extends CI_Controller {
 		$word["no"] 			= $this->lang->line("generalNo");
 
 		// JS file
-		$file["js"] = ["assets/application/Account/checkout.js"];
+		$file["js"] = ["assets/application/account/checkout.js"];
 		$this->load->view("Account/Checkout", $word);
 		$this->load->view("footer", $file);
 	}
